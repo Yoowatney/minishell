@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 22:37:49 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/10/13 22:04:58 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/10/21 17:59:47 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,3 @@ int	ft_strncmp(const char *ptr1, const char *ptr2, size_t num)
 	}
 	return (0);
 }
-
-/*#include <stdio.h>
- *
- *int main(int argc, char *argv[])
- *{
- *    char *str;
- *    char *strr;
- *    
- *    str = "asd";
- *    strr = "as";
- *    int com = ft_strncmp(str, strr, 3);
- *    printf("%s %s %d\n", str, strr, com);
- *    return (0);
- *}*/
