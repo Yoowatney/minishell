@@ -1,0 +1,11 @@
+*.swp
+*.out
+*.o
+*.vscode
+
+*.gch
+*.pch
+
+*.dSYM/
+tags
+test*
