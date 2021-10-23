@@ -6,6 +6,7 @@
 #include <string.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <sys/errno.h>
 
 #define PARSE_ERROR -1
 #define MALLOC_ERROR -2
@@ -53,19 +54,5 @@ char	**allocate_envp(t_env *envp_data);
 void	delete_key(t_list **envp_data);
 int		env_size(t_env *env);
 t_env	*env_last(t_env *env);
+void	error_check();
 
-
-
-/* kypark */
-int		ft_strcmp(const char *s1, const char *s2);
-char *  ft_strcat(char *d, const char *s);
-int     ft_countrow(char *av[]);
-void    ft_echo(char *av[], t_list *envp_data);
-void	ft_cd(t_list **envp_data, char **cmd_table);
-void    ft_env(t_list *envp_data);
-char    *get_name(char *str);
-char    *get_value(char *str);
-void    ft_pwd(t_list *envp_data, char **cmd_table);
-void    ft_export(t_list **envp_data, char **cmd_table);
-int		ft_unset(t_list **envp_data, char **cmd_table);
-void	remove_envp(t_list **envp_data, char *cmd_table);

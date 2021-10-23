@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/14 16:19:06 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/10/21 15:22:47 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/10/21 18:41:06 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_list	*ft_lstnew(char *buf)
 	if (!ret)
 	{
 		ft_putstr_fd("malloc error\n", 1);
-		exit(MALLOC_ERROR);
+		exit(errno);
 		return (NULL);
 	}
 	ret->cmd_table = malloc(sizeof(char *) * 2);

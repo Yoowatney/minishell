@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/10/21 15:40:55 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/10/21 18:45:48 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int	init(int argc, char *argv[], char *envp[], t_env **env)
 	while (envp[i] != NULL)
 	{
 		new = malloc(sizeof(t_env));
+		error_check();
 		new -> next = NULL;
 		new -> prev = NULL;
 		new -> env_line = ft_strdup(envp[i]);
@@ -150,7 +151,7 @@ int main(int argc, char *av[], char *envp[])
 		error_num = tokenizer(cmdline);
 		rewind_list(&g_list);
 
-		/* error check errorno로 바꿔야함 */
+		/*quote가 안끝날 경우가 있기 때문에 error_num이 필요*/
 		if (error_num < 0)
 		{
 			ft_putstr_fd("pasing error\n", 2), ft_lstclear(&g_list);

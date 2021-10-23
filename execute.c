@@ -6,11 +6,12 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:48 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/10/21 04:09:46 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/10/21 18:40:09 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 
 void	execute_bin(t_list *g_list, char **envp, t_env *env)
 {
@@ -18,7 +19,6 @@ void	execute_bin(t_list *g_list, char **envp, t_env *env)
 	int i;
 	char **prefix;
 	char *file_name;
-	int	error_num;
 	int	pipe_open;
 
 	(void)envp;
@@ -30,25 +30,21 @@ void	execute_bin(t_list *g_list, char **envp, t_env *env)
 	if (g_list -> type == PIPE || (g_list -> prev && g_list -> prev -> type == PIPE))
 	{
 		pipe_open = 1;
-		error_num = pipe(g_list->pipe);
-		if (error_num < 0)
-		{
-			ft_putstr_fd("pipe error", 2);
-		}
+		pipe(g_list->pipe);
+		error_check();
 	}
 	if ((pid = fork()) < 0)
-		ft_putstr_fd("fork error\n", 2);
+		error_check();
+		/*ft_putstr_fd("fork error\n", 2);*/
 	else if (pid == 0)
 	{
 		if (g_list -> type == PIPE && dup2(g_list->pipe[1], 1) < 0)
 		{
-			ft_putstr_fd("dup2 error\n", 2);
-			error_num = -1;
+			error_check();
 		}
 		if (g_list -> prev && g_list -> prev ->type == PIPE && dup2(g_list -> prev -> pipe[0], 0) < 0)
 		{
-			ft_putstr_fd("dup2 error\n", 2);
-			error_num = -1;
+			error_check();
 		}
 		else
 		{

@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/14 22:31:07 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/09/27 15:53:56 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/10/21 18:36:00 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,10 @@ char	**ft_split(char const *str, char c)
 	row = 0;
 	ret = (char **)malloc(sizeof(char *) * (count_word((char *)str, c) + 1));
 	if (ret == NULL)
+	{
+		exit(errno);
 		return (NULL);
+	}
 	if (split_sub(ret, (char *)str, c, row) == 0)
 	{
 		free(ret);

@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:07 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/10/21 15:38:14 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/10/21 18:45:20 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	make_node(char **buf, int type)
 	if (*buf == NULL && g_list != NULL) // 공백과 pipe가 연달아 나올때
 	{
 		node = malloc(sizeof(t_list));
+		error_check();
 		node -> length = 0;
 		node -> cmd_table = NULL;
 		node -> type = 0;
@@ -62,6 +63,7 @@ int	add_arg(char **buf)
 	if (*buf == NULL)
 		return (1);
 	temp = malloc(sizeof(char *) * (g_list->length + 2));
+	error_check();
 	while (i < g_list->length)
 	{
 		temp[i] = g_list->cmd_table[i];
@@ -85,10 +87,12 @@ int	make_string(char c)
 	if (buf == NULL)
 	{
 		buf = malloc(sizeof(char));
+		error_check();
 		*buf = '\0';
 	}
 	size = ft_strlen(buf);
 	temp = malloc(sizeof(char) * (size + 2));
+	error_check();
 	ft_strlcpy(temp, buf, size + 1);
 	temp[size] = c;
 	temp[size + 1] = '\0';
@@ -152,8 +156,7 @@ int	is_white_space(char **line)
 	(*line)--;
 	return (0);
 }
-// make node : buf == NULL -> empty node 생성 
-// || buf != NULL ->  buf 들어간 node 생성
+
 int	tokenizer(char *line)
 {
 	int	error_num;

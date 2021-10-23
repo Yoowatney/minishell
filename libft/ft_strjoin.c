@@ -6,11 +6,10 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/11 17:56:18 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/09/27 18:09:31 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/10/21 18:34:17 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "libft.h"
 
 void	ft_strjoin_sub(char *s1, char *s2, char **ret)
@@ -42,7 +41,10 @@ char	*ft_strjoin(char *s1, char *s2)
 		return (!(s1) ? s2 : s1);
 	ret = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!ret)
+	{
+		exit(errno);
 		return (NULL);
+	}
 	ft_strjoin_sub(s1, s2, &ret);
 	free(s1);
 	return (ret);
