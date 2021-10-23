@@ -6,25 +6,13 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:07 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/10/21 18:45:20 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/10/23 14:32:22 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern	t_list	*g_list;
-static	char	*buf = NULL;
-
-void	link_node(char **buf, int type)
-{
-	t_list	*node;
-
-	node = ft_lstnew(*buf);
-	node -> length = 1;
-	node -> type = type;
-	*buf = NULL;
-	ft_lstadd_back(&g_list, node);
-}
+extern t_list *g_list;
 
 void	make_node(char **buf, int type)
 {
@@ -42,7 +30,7 @@ void	make_node(char **buf, int type)
 		g_list -> next = node;
 		return ;
 	}
-	else if (*buf == NULL) // "   ls"
+	else if (*buf == NULL)
 		return ;
 	node = ft_lstnew(*buf);
 	node -> length = 1;
@@ -79,29 +67,29 @@ int	add_arg(char **buf)
 	return (1);
 }
 
-int	make_string(char c)
+int	make_string(char c, char **buf)
 {
 	int			size;
 	char		*temp;
 
-	if (buf == NULL)
+	if (*buf == NULL)
 	{
-		buf = malloc(sizeof(char));
+		(*buf) = malloc(sizeof(char));
 		error_check();
-		*buf = '\0';
+		**buf = '\0';
 	}
-	size = ft_strlen(buf);
+	size = ft_strlen(*buf);
 	temp = malloc(sizeof(char) * (size + 2));
 	error_check();
-	ft_strlcpy(temp, buf, size + 1);
+	ft_strlcpy(temp, *buf, size + 1);
 	temp[size] = c;
 	temp[size + 1] = '\0';
-	free(buf);
-	buf = temp;
+	free(*buf);
+	*buf = temp;
 	return (1);
 }
 
-int	open_single_quote(char **line)
+int	open_single_quote(char **line, char **buf)
 {
 	(*line)++;
 	while (1)
@@ -115,13 +103,13 @@ int	open_single_quote(char **line)
 			return (-1); // error
 		}
 		else
-			make_string(**line);
+			make_string(**line, buf);
 		(*line)++;
 	}
 	return (1);
 }
 
-int	open_double_quote(char **line)
+int	open_double_quote(char **line, char **buf)
 {
 	(*line)++;
 	while (1)
@@ -136,19 +124,19 @@ int	open_double_quote(char **line)
 		}
 		else
 		{
-			make_string(**line);
+			make_string(**line, buf);
 		}
 		(*line)++;
 	}
 	return (1);
 }
 
-int	is_white_space(char **line)
+int	is_white_space(char **line, char **buf)
 {
 	if (g_list == NULL)
-		make_node(&buf, TOKEN_END);
+		make_node(buf, TOKEN_END);
 	else
-		add_arg(&buf);
+		add_arg(buf);
 	while (is_space(**line))
 	{
 		(*line)++;
@@ -160,7 +148,9 @@ int	is_white_space(char **line)
 int	tokenizer(char *line)
 {
 	int	error_num;
+	static	char	*buf;
 
+	buf = NULL;
 	while (*line)
 	{
 		if (g_list && g_list->type > TOKEN_END)
@@ -169,12 +159,12 @@ int	tokenizer(char *line)
 			g_list = g_list -> next;
 		}
 		if (*line == '\"')
-			error_num = open_double_quote(&line);
+			error_num = open_double_quote(&line, &buf);
 		else if (*line == '\'')
-			error_num = open_single_quote(&line);
+			error_num = open_single_quote(&line, &buf);
 		else if (*line == ' ')
 		{
-			error_num = is_white_space(&line);
+			error_num = is_white_space(&line, &buf);
 		}
 		else if (*line == ';' || *line == '\\')
 		{
@@ -194,13 +184,13 @@ int	tokenizer(char *line)
 		}
 		else
 		{
-			error_num = make_string(*line);
+			error_num = make_string(*line, &buf);
 		}
 		if (error_num < 0)
 			break ;
 		line++;
 	}
-	if (g_list == NULL) // 첫인자 생성
+	if (g_list == NULL)
 	{
 		make_node(&buf, TOKEN_END);
 	}

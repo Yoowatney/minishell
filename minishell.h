@@ -42,9 +42,9 @@ void	init_execute_bin(void);
 void	execute_bin(t_list *g_list, char *envp[], t_env *env);
 
 /* token fct */
-int		open_single_quote(char **line);
-int		open_double_quote(char **line);
-int		make_string(char c);
+int		open_single_quote(char **line, char **buf);
+int		open_double_quote(char **line, char **buf);
+int		make_string(char c, char **buf);
 int		tokenizer(char *line);
 
 /* utils */

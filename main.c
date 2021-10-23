@@ -6,13 +6,13 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/10/21 18:45:48 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/10/23 14:31:29 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_list	*g_list = NULL;
+t_list *g_list = NULL;
 
 char	*get_key(char *envp)
 {
