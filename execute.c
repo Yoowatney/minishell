@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:48 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/10/21 18:40:09 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/10/23 14:38:44 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	execute_bin(t_list *g_list, char **envp, t_env *env)
 	}
 	if ((pid = fork()) < 0)
 		error_check();
-		/*ft_putstr_fd("fork error\n", 2);*/
 	else if (pid == 0)
 	{
 		if (g_list -> type == PIPE && dup2(g_list->pipe[1], 1) < 0)

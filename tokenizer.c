@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:07 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/10/23 14:32:22 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/10/24 02:39:48 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ void	make_node(char **buf, int type)
 
 	if (*buf == NULL && g_list != NULL) // 공백과 pipe가 연달아 나올때
 	{
-		node = malloc(sizeof(t_list));
-		error_check();
+		node = malloc(sizeof(t_list)), error_check(); // malloc 해제
 		node -> length = 0;
 		node -> cmd_table = NULL;
 		node -> type = 0;
@@ -133,8 +132,16 @@ int	open_double_quote(char **line, char **buf)
 
 int	is_white_space(char **line, char **buf)
 {
+	if (**line == '\0')
+		return (-1);
+	if (is_space(**line) == 0)
+		return (1);
 	if (g_list == NULL)
 		make_node(buf, TOKEN_END);
+	else if (g_list -> type == REDIRECION)
+	{
+		make_node(buf, TOKEN_END);
+	}
 	else
 		add_arg(buf);
 	while (is_space(**line))
@@ -153,7 +160,7 @@ int	tokenizer(char *line)
 	buf = NULL;
 	while (*line)
 	{
-		if (g_list && g_list->type > TOKEN_END)
+		if (g_list && g_list->type == PIPE)
 		{
 			make_node(&buf, TOKEN_END);
 			g_list = g_list -> next;
@@ -172,7 +179,7 @@ int	tokenizer(char *line)
 		}
 		else if (*line == '|')
 		{
-			if ((buf == NULL && g_list == NULL) || *(line + 1) == '|')
+			if ((buf == NULL && g_list == NULL) || *(line + 1) == '|') // | 단일
 				return (-1);
 			if (g_list == NULL)
 				make_node(&buf, PIPE);
@@ -181,6 +188,26 @@ int	tokenizer(char *line)
 				add_arg(&buf);
 				g_list->type = PIPE;
 			}
+		}
+		else if (*line == '>' || *line == '<')
+		{
+			if (buf != NULL)
+				make_node(&buf, TOKEN_END);
+			line++;
+			error_num = is_white_space(&line, &buf);
+			if (error_num == 0)
+				line++;
+			if (*line != ' ' && *line != '\t' && *line != '<' && *line != '>' && *line != '|' && *line != '\0') // REDIR 뒤 글자 파싱
+			{
+				while (*line != ' ' && *line != '<' && *line != '>' && *line != '|' && *line != '\0') // REDIR 뒤 글자 파싱
+				{
+					make_string(*line, &buf);
+					line++;
+				}
+				make_node(&buf, REDIRECION);
+			}
+			else
+				return (-1);
 		}
 		else
 		{
@@ -194,9 +221,15 @@ int	tokenizer(char *line)
 	{
 		make_node(&buf, TOKEN_END);
 	}
-	else if (g_list -> type > TOKEN_END)
+	else if (buf == NULL)
+		return (error_num);
+	else if (g_list -> type == PIPE)
 	{
 		return (-1);
+	}
+	else if (g_list -> type == REDIRECION)
+	{
+		make_node(&buf, TOKEN_END);
 	}
 	else
 		add_arg(&buf);
