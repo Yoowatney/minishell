@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:07 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/10/24 02:39:48 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/10/27 20:43:09 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,27 +18,20 @@ void	make_node(char **buf, int type)
 {
 	t_list *node;
 
-	if (*buf == NULL && g_list != NULL) // 공백과 pipe가 연달아 나올때
-	{
-		node = malloc(sizeof(t_list)), error_check(); // malloc 해제
-		node -> length = 0;
-		node -> cmd_table = NULL;
-		node -> type = 0;
-		node -> next = NULL;
-		node -> prev = g_list;
-		g_list -> next = node;
-		return ;
-	}
-	else if (*buf == NULL)
-		return ;
+	if (*buf == NULL)
+	    return ;
 	node = ft_lstnew(*buf);
 	node -> length = 1;
 	node -> type = type;
 	*buf = NULL;
 	if (g_list == NULL)
+	{
 		g_list = node;
+	}
 	else
+	{
 		ft_lstadd_back(&g_list, node);
+	}
 }
 
 int	add_arg(char **buf)
@@ -49,20 +42,20 @@ int	add_arg(char **buf)
 	i = 0;
 	if (*buf == NULL)
 		return (1);
-	temp = malloc(sizeof(char *) * (g_list->length + 2));
+	temp = malloc(sizeof(char *) * (ft_lstlast(g_list)->length + 2));
 	error_check();
-	while (i < g_list->length)
+	while (i < ft_lstlast(g_list)->length)
 	{
-		temp[i] = g_list->cmd_table[i];
+		temp[i] = ft_lstlast(g_list)->cmd_table[i];
 		i++;
 	}
-	if (g_list->length > 0)
-		free(g_list->cmd_table);
+	if (ft_lstlast(g_list)->length > 0)
+		free(ft_lstlast(g_list)->cmd_table);
 	temp[i++] = *buf;
 	temp[i] = NULL;
 	*buf = NULL;
-	g_list->cmd_table = temp;
-	g_list->length++;
+	ft_lstlast(g_list)->cmd_table = temp;
+	ft_lstlast(g_list)->length++;
 	return (1);
 }
 
@@ -115,11 +108,11 @@ int	open_double_quote(char **line, char **buf)
 	{
 		if (**line == '\"')
 		{
-			return (0); // okay
+			return (0);
 		}
 		else if (**line == '\0')
 		{
-			return (-1); // error
+			return (-1);
 		}
 		else
 		{
@@ -136,14 +129,9 @@ int	is_white_space(char **line, char **buf)
 		return (-1);
 	if (is_space(**line) == 0)
 		return (1);
-	if (g_list == NULL)
-		make_node(buf, TOKEN_END);
-	else if (g_list -> type == REDIRECION)
-	{
-		make_node(buf, TOKEN_END);
-	}
-	else
+	if (g_list && ft_lstlast(g_list)->type == TOKEN_END)
 		add_arg(buf);
+	make_node(buf, TOKEN_END);
 	while (is_space(**line))
 	{
 		(*line)++;
@@ -160,11 +148,6 @@ int	tokenizer(char *line)
 	buf = NULL;
 	while (*line)
 	{
-		if (g_list && g_list->type == PIPE)
-		{
-			make_node(&buf, TOKEN_END);
-			g_list = g_list -> next;
-		}
 		if (*line == '\"')
 			error_num = open_double_quote(&line, &buf);
 		else if (*line == '\'')
@@ -179,17 +162,31 @@ int	tokenizer(char *line)
 		}
 		else if (*line == '|')
 		{
-			if ((buf == NULL && g_list == NULL) || *(line + 1) == '|') // | 단일
+			if ((buf == NULL && g_list == NULL) || *(line + 1) == '|')
 				return (-1);
-			if (g_list == NULL)
-				make_node(&buf, PIPE);
-			else
+			line++;
+			error_num = is_white_space(&line, &buf);
+			if (error_num == 0)
+				line++;
+			// white space나오기전까지 node생성
+			if (*line != ' ' && *line != '\t' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
 			{
-				add_arg(&buf);
-				g_list->type = PIPE;
+				while (*line != ' ' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
+				{
+					make_string(*line, &buf);
+					line++;
+				}
+				make_node(&buf, PIPE);
 			}
+			else
+				return (-1);
+			// 뭐에 하는 역할이더라..?
+			/*if (ft_lstlast(g_list)->type != L_REDIR && ft_lstlast(g_list)->type != R_REDIR)
+			 *{
+			 *    ft_lstlast(g_list)->type = PIPE;
+			 *}*/
 		}
-		else if (*line == '>' || *line == '<')
+		else if (*line == '<')
 		{
 			if (buf != NULL)
 				make_node(&buf, TOKEN_END);
@@ -197,14 +194,34 @@ int	tokenizer(char *line)
 			error_num = is_white_space(&line, &buf);
 			if (error_num == 0)
 				line++;
-			if (*line != ' ' && *line != '\t' && *line != '<' && *line != '>' && *line != '|' && *line != '\0') // REDIR 뒤 글자 파싱
+			if (*line != ' ' && *line != '\t' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
 			{
-				while (*line != ' ' && *line != '<' && *line != '>' && *line != '|' && *line != '\0') // REDIR 뒤 글자 파싱
+				while (*line != ' ' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
 				{
 					make_string(*line, &buf);
 					line++;
 				}
-				make_node(&buf, REDIRECION);
+				make_node(&buf, L_REDIR);
+			}
+			else
+				return (-1);
+		}
+		else if (*line == '>')
+		{
+			if (buf != NULL)
+				make_node(&buf, TOKEN_END);
+			line++;
+			error_num = is_white_space(&line, &buf);
+			if (error_num == 0)
+				line++;
+			if (*line != ' ' && *line != '\t' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
+			{
+				while (*line != ' ' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
+				{
+					make_string(*line, &buf);
+					line++;
+				}
+				make_node(&buf, R_REDIR);
 			}
 			else
 				return (-1);
@@ -217,21 +234,8 @@ int	tokenizer(char *line)
 			break ;
 		line++;
 	}
-	if (g_list == NULL)
-	{
-		make_node(&buf, TOKEN_END);
-	}
-	else if (buf == NULL)
-		return (error_num);
-	else if (g_list -> type == PIPE)
-	{
-		return (-1);
-	}
-	else if (g_list -> type == REDIRECION)
-	{
-		make_node(&buf, TOKEN_END);
-	}
-	else
+	if (g_list && ft_lstlast(g_list)->type == TOKEN_END)
 		add_arg(&buf);
+	make_node(&buf, TOKEN_END);
 	return (error_num);
 }

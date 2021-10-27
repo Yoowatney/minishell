@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/10/24 02:35:07 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/10/27 21:36:17 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,22 +149,43 @@ int main(int argc, char *av[], char *envp[])
 		}
 		add_history(cmdline);
 		error_num = tokenizer(cmdline);
-		/* tokenizer함수 진행 후 g_list에 명령어들이 차례차례 들어가 있는 상태 */
-/*ex : cmd == "< t1 cat < t2 < t3"
- *         g_list cmd = "t1"
- *         next_cmd = "cat"*/
-
-		rewind_list(&g_list);
 		if (error_num < 0)
 		{
 			ft_putstr_fd("pasing error\n", 2), ft_lstclear(&g_list);
 			free(cmdline);
 			continue ;
 		}
+
+        for (; g_list != NULL; g_list = g_list->next)
+		{
+			printf(" --- node ---\n");
+			for (int i = 0; g_list->cmd_table[i] != NULL; i++)
+				printf("%s %d\n", g_list->cmd_table[i], g_list->type);
+			if (g_list -> next == NULL)
+				break ;
+		}
+		rewind_list(&g_list);
+		re_parsing(&g_list);
+		rewind_list(&g_list);
+        printf("\n\n");
 		for(; g_list != NULL; g_list = g_list -> next)
-			printf("%s\n", g_list->cmd_table[0]);
+		{
+			printf(" === node ===\n");
+			if (g_list->cmd_table != NULL)
+			{
+				for (int i = 0; g_list->cmd_table[i] != NULL; i++)
+				{
+					printf("cmd : ||%s|| %d\n", g_list->cmd_table[i], g_list->type);
+				}
+			}
+			else
+			{
+				printf("file : ||%s|| %d\n", g_list->file_name, g_list->type);
+			}
+
+		}
 		continue ;
-		exit(0);
+        exit(0);
 		while (g_list != NULL)
 		{
 			execute_bin(g_list, envp, env);
@@ -177,10 +198,13 @@ int main(int argc, char *av[], char *envp[])
 				break ;
 			}
 		}
+		int fd = open("./t0", O_WRONLY);
+		printf("fd : %d\n", fd);
+		close(fd);
 		rewind_list(&g_list);
 		ft_lstclear(&g_list);
 		g_list = NULL;
 		free(cmdline);
-		system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");
+		/*system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");*/
 	}
 }

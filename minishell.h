@@ -8,18 +8,13 @@
 #include <readline/history.h>
 #include <sys/errno.h>
 
-#define PARSE_ERROR -1
-#define MALLOC_ERROR -2
-
 /* TYPE */
 
-#define TOKEN_ADD 498
 #define TOKEN_END 499
 #define PIPE 500
-#define REDIRECION 501
+#define L_REDIR 501
+#define R_REDIR 502
 
-
-#define END_WHITE 32
 #define NOT_EXECUTABLE	126
 #define NOT_FOUND		127
 
@@ -46,6 +41,7 @@ int		open_single_quote(char **line, char **buf);
 int		open_double_quote(char **line, char **buf);
 int		make_string(char c, char **buf);
 int		tokenizer(char *line);
+void	re_parsing(t_list **g_list);
 
 /* utils */
 void	rewind_list(t_list **list);

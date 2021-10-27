@@ -10,7 +10,7 @@ LIBFT_PATH	=	./libft
 
 LIBFT		=	$(LIBFT_PATH)/libft.a
 
-SRCS		=	./main.c ./signal.c ./execute.c ./tokenizer.c ./utils.c
+SRCS		=	./main.c ./signal.c ./execute.c ./tokenizer.c ./utils.c ./parsing.c
 
 OBJ			=	$(SRCS:.c=.o)
 
@@ -26,7 +26,7 @@ else
 	HEADER_DIR	=	-I./includes -I/Users/$(USER)/.brew/opt/readline/include
 endif
 
-all			: 	$(NAME)
+all			: 	$(NAME) ./minishell.h
 
 $(NAME)		: $(OBJ) LIBFT
 	@echo "libft compiling" \

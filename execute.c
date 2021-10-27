@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:48 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/10/23 14:38:44 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/10/27 21:36:05 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,21 +27,25 @@ void	execute_bin(t_list *g_list, char **envp, t_env *env)
 	char	**my_envp = allocate_envp(env);
 
 	pipe_open = 0;
-	if (g_list -> type == PIPE || (g_list -> prev && g_list -> prev -> type == PIPE))
+	
+	/*if (g_list->type == PIPE || (g_list->prev && g_list->prev->type == PIPE))*/
+	if ((g_list->next && g_list->next->type == PIPE))// || (g_list && g_list->type == PIPE))
 	{
 		pipe_open = 1;
 		pipe(g_list->pipe);
 		error_check();
 	}
 	if ((pid = fork()) < 0)
+	{
 		error_check();
+	}
 	else if (pid == 0)
 	{
-		if (g_list -> type == PIPE && dup2(g_list->pipe[1], 1) < 0)
+		if (g_list->next && g_list->next->type == PIPE && dup2(g_list->pipe[1], 1) < 0)
 		{
 			error_check();
 		}
-		if (g_list -> prev && g_list -> prev ->type == PIPE && dup2(g_list -> prev -> pipe[0], 0) < 0)
+		if (g_list->type == PIPE && dup2(g_list->prev->pipe[0], 0) < 0)
 		{
 			error_check();
 		}
@@ -89,15 +93,18 @@ void	execute_bin(t_list *g_list, char **envp, t_env *env)
 	}
 	else
 	{
-		waitpid(pid, &i, 0); // 여기가 문제인듯
+		// sleep 10 | ls 수정
+		waitpid(pid, &i, 0);
 		if (pipe_open)
 		{
-			close(g_list->pipe[1]);
-			if (!(g_list -> next) || g_list -> type == TOKEN_END)
+			close(g_list->pipe[1]); // EOF 전달
+			if (!(g_list->next))// || g_list->type == TOKEN_END)
 				close(g_list->pipe[0]);
 		}
-		if (g_list -> prev && g_list -> prev -> type == PIPE)
-			close(g_list -> prev -> pipe[0]);
+		if (g_list->type == PIPE)
+		{
+			close(g_list->prev->pipe[0]);
+		}
 		for (int j = 0; my_envp[j] != NULL; j++)
 			free(my_envp[j]);
 		free(my_envp);

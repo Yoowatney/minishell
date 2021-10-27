@@ -6,13 +6,13 @@
 #    By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/05 18:32:37 by yoyoo             #+#    #+#              #
-#    Updated: 2021/10/02 11:29:07 by yoyoo            ###   ########.fr        #
+#    Updated: 2021/10/25 17:41:19 by yoyoo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 HEADER = libft.h
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 CC = gcc
 AR = ar rc
 RM = rm -f
@@ -70,7 +70,7 @@ OBJS = $(SRCS:.c=.o)
 BOBJS = $(BSRCS:.c=.o)
 
 .c.o:
-	@$(CC) -c $(CFLAGS) $<
+	$(CC) -c $(CFLAGS) $<
 
 ifdef WITH_BONUS
     OBJ_FILES = $(OBJS) $(BOBJS)

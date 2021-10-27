@@ -6,11 +6,12 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/14 17:18:22 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/10/23 17:17:02 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/10/25 17:38:29 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdio.h>
 
 void	ft_lstadd_back(t_list **lst, t_list *new)
 {
