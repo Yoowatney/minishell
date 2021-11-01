@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:07 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/01 02:18:37 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/01 23:16:47 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,6 @@ int	tokenizer(char *line)
 			error_num = is_white_space(&line, &buf, &type);
 			if (error_num == 0)
 				line++;
-			// white space나오기전까지 node생성
 			if (*line == '|' && *line == '\0')
 				return (-1);
 			type = PIPE;
@@ -194,9 +193,6 @@ int	tokenizer(char *line)
 			if (buf != NULL)
 				make_node(&buf, TOKEN_END);
 			line++;
-/*            int redir_type;
- *
- *            redir_type = L_REDIR;*/
 			error_num = is_white_space(&line, &redir_buf, &type);
 			if (error_num == 0)
 				line++;
@@ -218,22 +214,43 @@ int	tokenizer(char *line)
 			if (buf != NULL)
 				make_node(&buf, TOKEN_END);
 			line++;
-
-			error_num = is_white_space(&line, &redir_buf, &type);
-			if (error_num == 0)
-				line++;
-			if (*line != ' ' && *line != '\t' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
+			if (*line == '>')
 			{
-				while (*line != ' ' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
-				{
-					make_string(*line, &buf);
+				line++;
+				error_num = is_white_space(&line, &redir_buf, &type);
+				if (error_num == 0)
 					line++;
+				if (*line != ' ' && *line != '\t' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
+				{
+					while (*line != ' ' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
+					{
+						make_string(*line, &buf);
+						line++;
+					}
+					make_node(&buf, A_REDIR);
+					line--;
 				}
-				make_node(&buf, R_REDIR);
-				line--;
+				else
+					return (-1);
 			}
 			else
-				return (-1);
+			{
+				error_num = is_white_space(&line, &redir_buf, &type);
+				if (error_num == 0)
+					line++;
+				if (*line != ' ' && *line != '\t' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
+				{
+					while (*line != ' ' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
+					{
+						make_string(*line, &buf);
+						line++;
+					}
+					make_node(&buf, R_REDIR);
+					line--;
+				}
+				else
+					return (-1);
+			}
 		}
 		else
 		{

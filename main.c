@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/01 18:48:01 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/02 00:05:32 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,8 @@ int main(int argc, char *av[], char *envp[])
 			free(cmdline);
 			continue ;
 		}
+		/*for (; g_list != NULL; g_list = g_list->next)
+		 *    printf("%s\n", g_list->cmd_table[0]);*/
 
 		rewind_list(&g_list);
 		re_parsing(&g_list);
@@ -220,18 +222,6 @@ int main(int argc, char *av[], char *envp[])
 		rewind_list(&cmd_head);
 		rewind_list(&g_list);
 		rewind_list(&redir_head);
-		while (cmd_head)
-		{
-			if (cmd_head->cmd_table == NULL)
-			{
-				error_num = -1;
-				break ;
-			}
-			if (cmd_head->next != NULL)
-				cmd_head = cmd_head->next;
-			else
-				break ;
-		}
 
 		if (error_num < 0)
 		{
@@ -257,8 +247,7 @@ int main(int argc, char *av[], char *envp[])
 			{
 				break ;
 			}
-			if (cmd_head->cmd_table != NULL)
-				execute_bin(cmd_head, envp, env);
+			execute_bin(cmd_head, envp, env);
 			dup2(copy[0], STDIN_FILENO);
 			dup2(copy[1], STDOUT_FILENO);
 			close(copy[0]);

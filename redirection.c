@@ -29,9 +29,9 @@ int	process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[])
 	int i;
 
 	i = 0;
+	fd = 0;
 	copy[0] = dup(STDIN_FILENO);
 	copy[1] = dup(STDOUT_FILENO);
-	fd = 0;
 	while (redir_head->cmd_table && redir_head->cmd_table[i])
 	{
 		if (redir_head->file_type_table[i] == L_REDIR)
@@ -61,6 +61,25 @@ int	process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[])
 				dup2(copy[1], STDOUT_FILENO);
 			}
 			fd = open(redir_head->cmd_table[i], O_CREAT | O_TRUNC | O_WRONLY, 0644);
+			error_check(redir_head->cmd_table[i]);
+			if (errno == 2)
+			{
+				close(copy[1]);
+				return (-1);
+			}
+			errno = 0;
+			cmd_head->outfile = fd;
+			dup2(fd, STDOUT_FILENO);
+			error_check("");
+		}
+		else if (redir_head->file_type_table[i] == A_REDIR)
+		{
+			if (fd != 0)
+			{
+				close(fd);
+				dup2(copy[1], STDOUT_FILENO);
+			}
+			fd = open(redir_head->cmd_table[i], O_CREAT |  O_WRONLY | O_APPEND, 0644);
 			error_check(redir_head->cmd_table[i]);
 			if (errno == 2)
 			{
