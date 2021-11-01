@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 18:45:34 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/10/25 00:15:04 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/01 18:24:35 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,15 @@
 typedef struct s_list
 {
 	char			**cmd_table; // cmd_table
-	char			*file_name; // redirec
 	struct s_list	*prev;
 	struct s_list	*next;
 	int				type;
 	int				length;
 	int				pipe[2];
 	int				exit_status;
+	int				*file_type_table;
+	int				infile;
+	int				outfile;
 }					t_list;
 
 typedef struct s_envp

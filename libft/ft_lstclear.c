@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/14 22:30:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/10/26 02:03:07 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/01 17:50:05 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,21 @@ void	ft_lstclear(t_list **lst)
 	while (*lst != NULL)
 	{
 		ptr = *lst;
-		
+
 		i = 0;
-		while (ptr->cmd_table[i] != NULL)
+		if (ptr->cmd_table)
 		{
-			free(ptr->cmd_table[i]);
-			ptr->cmd_table[i] = NULL;
-			i++;
+			while (ptr->cmd_table[i] != NULL)
+			{
+				free(ptr->cmd_table[i]);
+				ptr->cmd_table[i] = NULL;
+				i++;
+			}
+			free(ptr->cmd_table);
+			ptr->cmd_table = NULL;
 		}
-		free(ptr -> cmd_table);
-		ptr->cmd_table = NULL;
+		if (ptr->file_type_table)
+			free(ptr->file_type_table);
 		*lst = (*lst)->next;
 		free(ptr);
 		ptr = NULL;

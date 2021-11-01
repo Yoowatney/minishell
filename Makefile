@@ -4,13 +4,16 @@ CC			=	gcc
 
 INC			=	-I./includes/ -I/Users/$(USER)/.brew/opt/readline/include
 
-FLAGS		=	-Wall -Wextra -Werror -g #-fsanitize=address
+FLAGS		=	-Wall -Wextra -Werror -g -fsanitize=address
 
 LIBFT_PATH	=	./libft
 
 LIBFT		=	$(LIBFT_PATH)/libft.a
 
-SRCS		=	./main.c ./signal.c ./execute.c ./tokenizer.c ./utils.c ./parsing.c
+SRCS		=	./main.c ./signal.c ./execute.c ./tokenizer.c ./main_utils.c \
+				./redirection.c ./g_list_reparsing.c\
+				./split_list.c ./split_list_utils.c\
+
 
 OBJ			=	$(SRCS:.c=.o)
 
