@@ -17,7 +17,7 @@
 #define PIPE		500
 #define L_REDIR		501
 #define R_REDIR		502
-
+#define HEREDOC		503
 #define A_REDIR		504
 
 #define NOT_EXECUTABLE	126

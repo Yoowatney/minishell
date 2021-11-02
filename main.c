@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/02 00:05:32 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/02 19:12:55 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,7 @@ int main(int argc, char *av[], char *envp[])
 		 *ft_lstclear(&g_list);
 		 *g_list = NULL;
 		 *free(cmdline);
-		 *continue ;*/
+         *continue ;*/
 
 		rewind_list(&cmd_head);
 		rewind_list(&g_list);
@@ -260,7 +260,7 @@ int main(int argc, char *av[], char *envp[])
 			else
 				break ;
 		}
-		int fd = open("t0", O_WRONLY);
+		int fd = open("t0", O_RDONLY);
 		printf("fd : %d\n", fd);
 		close(fd);
 

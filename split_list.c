@@ -34,7 +34,7 @@ void	split_redir_node(t_list *go, t_list *ret)
 	size = 0;
 	while (go)
 	{
-		if (go->type == L_REDIR || go->type == R_REDIR || go->type == A_REDIR)
+		if (go->type == L_REDIR || go->type == R_REDIR || go->type == A_REDIR || go->type == HEREDOC)
 		{
 			i = 0;
 			size = get_size(ret->cmd_table);
