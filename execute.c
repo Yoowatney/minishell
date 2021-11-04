@@ -12,8 +12,9 @@
 
 #include "minishell.h"
 
+extern t_list	*g_list;
 
-void	execute_bin(t_list *cmd_head, char **envp, t_env *env)
+void	execute_bin(t_list *cmd_head, char **envp, t_env **env, char **cmdline)
 {
 	int pid;
 	int i;
@@ -25,7 +26,7 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env *env)
 	(void)envp;
 	init_execute_bin();
 
-	char	**my_envp = allocate_envp(env);
+	char	**my_envp = allocate_envp(*env);
 
 	pipe_open = 0;
 	fd = 0;
@@ -54,14 +55,41 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env *env)
 		{
 			exit(0);
 		}
+		else if (check_builtin(&cmd_head) == 1)
+		{
+			if (check_cmd(&g_list, cmdline, env, &cmd_head) == 3)
+			{
+				all_free(&g_list, cmdline);
+				exit(2);
+			}
+			all_free(&g_list, cmdline);
+			exit(1);
+			/*
+			while (g_list->cmd_list)
+			{
+				if (g_list->cmd_list->type == PIPE)
+				{
+					check_cmd(&g_list, cmdline, my_envp);
+					exit(1);
+					break ;
+				}
+				if (g_list->cmd_list->next != NULL)
+					g_list->cmd_list = g_list->cmd_list->next;
+				else
+				{
+					all_free(&g_list, cmdline);
+					exit(3);
+				}
+			}*/
+		}
 		else
 		{
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
-			while (env != NULL)
+			while ((*env) != NULL)
 			{
 				i = 0;
-				prefix = ft_split(env->value, ':');
+				prefix = ft_split((*env)->value, ':');
 				while (prefix[i] != NULL)
 				{
 					if (cmd_head->cmd_table[0][0] != '/')
@@ -88,7 +116,7 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env *env)
 					}
 				}
 				free(prefix);
-				env = env -> next; // env free
+				(*env) = (*env) -> next; // env free
 			}
 			ft_putstr_fd("command not found : ", 2);
 			ft_putstr_fd(cmd_head->cmd_table[0], 2);
@@ -108,7 +136,17 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env *env)
 		 *            continue ;
 		 *    break ;
 		 *}*/
-		waitpid(pid, &i, 0);
+		waitpid(pid, &g_list->exit_status, 0);
+		printf("exit : %d\n", g_list->exit_status);
+/*
+		if (g_list->exit_status == 256)
+		{
+			check_cmd(&g_list, cmdline, my_envp);
+		}*/
+		if (g_list->exit_status == 512)
+		{
+			check_cmd(&g_list, cmdline, env, &cmd_head);
+		}
 		if (pipe_open)
 		{
 			close(cmd_head->pipe[1]);

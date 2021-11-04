@@ -31,6 +31,8 @@ typedef struct s_list
 	int				*file_type_table;
 	int				infile;
 	int				outfile;
+	struct s_list	*redir_list;
+	struct s_list	*cmd_list;
 }					t_list;
 
 typedef struct s_envp

@@ -30,6 +30,7 @@ typedef struct s_env
 	char	*key;
 	char	*value;
 	char	*env_line;
+	char	*export_str;
 }				t_env;
 
 
@@ -60,7 +61,7 @@ t_list	*create_list(t_list *go);
 
 /* execute fct */
 
-void	execute_bin(t_list *g_list, char *envp[], t_env *env);
+void	execute_bin(t_list *g_list, char *envp[], t_env **env, char **cmdline);
 int		process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[]);
 
 
@@ -78,3 +79,34 @@ int		env_size(t_env *env);
 t_env	*env_last(t_env *env);
 void	error_check(char *str);
 
+
+/* check_cmd */
+int		check_builtin(t_list **cmd_head);
+int		check_cmd(t_list **g_list, char **cmdline, t_env **env, t_list **cmd_head);
+
+/* exit */
+void	all_free(t_list **g_list, char **cmdline);
+int		builtin_exit(t_list **g_list, char **cmdline);
+
+/* env */
+int		builtin_env(char **my_envp, t_list **cmd_head);
+
+/* ft_strcmp */
+int		ft_strcmp(char *s1, char *s2);
+
+/* echo */
+int		builtin_echo(t_list **cmd_head);
+
+/* pwd */
+int		builtin_pwd(t_list **cmd_head);
+
+/* cd */
+int		builtin_cd(t_list **g_list, t_list **cmd_head, char **my_envp);
+
+/* export */
+int		builtin_export(t_list **cmd_head, t_env **env);
+
+/* env관련 main */
+char	*get_key(char *envp);
+char	*get_value(char *envp);
+void	env_add_back(t_env **env, t_env *new);

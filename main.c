@@ -239,6 +239,9 @@ int main(int argc, char *av[], char *envp[])
 		rewind_list(&redir_head);
 		rewind_list(&g_list);
 
+		g_list->cmd_list = cmd_head;
+		g_list->redir_list = redir_head;
+
 		while (cmd_head != NULL)
 		{
 			int copy[2];
@@ -247,7 +250,7 @@ int main(int argc, char *av[], char *envp[])
 			{
 				break ;
 			}
-			execute_bin(cmd_head, envp, env);
+			execute_bin(cmd_head, envp, &env, &cmdline);
 			dup2(copy[0], STDIN_FILENO);
 			dup2(copy[1], STDOUT_FILENO);
 			close(copy[0]);
@@ -267,13 +270,9 @@ int main(int argc, char *av[], char *envp[])
 		rewind_list(&cmd_head);
 		rewind_list(&redir_head);
 		rewind_list(&g_list);
-		ft_lstclear(&cmd_head);
-		ft_lstclear(&redir_head);
-		ft_lstclear(&g_list);
-		g_list = NULL;
-		cmd_head = NULL;
-		redir_head = NULL;
-		free(cmdline);
+		
+
+		all_free(&g_list, &cmdline);
 		/*system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");*/
 	}
 }
