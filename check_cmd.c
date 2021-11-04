@@ -44,15 +44,15 @@ int	check_cmd(t_list **g_list, char **cmdline, t_env **env, t_list **cmd_head)
 	else if (ft_strcmp((*cmd_head)->cmd_table[0], "export") == 0)
 	{
 		printf("exexexexpopopopopo\n\n");
-		builtin_export(cmd_head, env);
+		builtin_export(cmd_head, env, g_list);
 	}
-	/*
+	
 	else if (ft_strcmp((*cmd_head)->cmd_table[0], "unset") == 0)
 	{
 		printf("unununununset\n\n");
-		builtin_unset ;
+		builtin_unset(cmd_head, env, g_list);
 	}
-	*/
+	
 	else if (ft_strcmp((*cmd_head)->cmd_table[0], "env") == 0)
 	{
 		printf("enenenenv\n\n");

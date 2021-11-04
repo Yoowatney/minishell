@@ -1,29 +1,31 @@
 #include "minishell.h"
 
-char	**export_string(t_env **env)
+char	**export_string(t_env *env)
 {
-	t_env	**change;
+	t_env	*change;
 	char	*key;
 	char	*value;
-	char	*result;
+	char	*result1;
+	char	*result2;
+	char	*result3;
 	char	**export_str;
 	char	**return_value;
 
 	change = env;
-	export_str = (char **)malloc(sizeof(char *) * (env_size(*env) + 1));
+	export_str = (char **)malloc(sizeof(char *) * (env_size(env) + 1));
 	if (!export_str)
 		return (NULL);
 	return_value = export_str;
-	while ((*change)->next)
+	while ((change)->next)
 	{
-		key = (*change)->key;
-		value = (*change)->value;
-		result = ft_strjoin(key, "=\"");
-		result = ft_strjoin(result, value);
-		result = ft_strjoin(result, "\"");
-		*export_str = ft_strdup(result);
+		key = ft_strdup((change)->key);
+		value = (change)->value;
+		result1 = ft_strjoin(key, "=\"");
+		result2 = ft_strjoin(result1, value);
+		result3 = ft_strjoin(result2, "\"");
+		*export_str = result3;
 		export_str++;
-		*change = (*change)->next;
+		change = (change)->next;
 	}
 	*export_str = NULL;
 	return (return_value);
@@ -56,54 +58,106 @@ char	**sort_list(char **export_str, int size)
 
 }
 
-char	*export_key(char **envp)
+int	check_equal_sign(char *cmd_table)
 {
-	char	*ret;
+	while (*cmd_table)
+	{
+		if (*cmd_table == '=')
+			return (1);
+		cmd_table++;
+	}
+	return (0);
+}
+
+t_env	*check_key(t_env *env, char *key)
+{
+	t_env	*env_key;
+
+	env_key = env;
+	while ((env_key)->key)
+	{
+		if (ft_strcmp((env_key)->key, key) == 0)
+			return (env_key);
+		if ((env_key)->next)
+			(env_key) = (env_key)->next;
+		else
+			break ;
+	}
+	return (NULL);
+}
+
+void	free_str(char **export_str)
+{
+	char	*temp;
 	int		i;
 
 	i = 0;
-	while (**envp != '=')
+	while (export_str[i])
 	{
-		(*envp)++;
+		temp = export_str[i];
+		free(temp);
+		i++;
 	}
-	**envp = '\0';
-	ret = ft_strdup(*envp);
-	**envp = '=';
-	return (ret);
+	free(export_str);
 }
 
-int	builtin_export(t_list **cmd_head, t_env **env)
+int	builtin_export(t_list **cmd_head, t_env **env, t_list **g_list)
 {
 	char	**export_str;
 	int		size;
 	char	**result;
 	t_env	*new;
 	char	*cmd_table;
+	char	*new_key;
 
 	(void)result;
 
 	size = env_size(*env);
+
+	rewind_list(g_list);
+	rewind_list(&(*g_list)->cmd_list);
+	while ((*g_list)->cmd_list)	
+	{
+		if ((*g_list)->cmd_list->type == PIPE)
+			return (1);
+		if ((*g_list)->cmd_list->next != NULL)
+			(*g_list)->cmd_list = (*g_list)->cmd_list->next;
+		else
+			break ;
+	}
 	
 	if ((*cmd_head)->cmd_table[1])
 	{
 		cmd_table = (*cmd_head)->cmd_table[1];
-		printf("export str : %s\n", (*cmd_head)->cmd_table[1]);
-		new = malloc(sizeof(t_env));
-		//error_check("");
-		new -> next = NULL;
-		new -> prev = NULL;
-		write(1, "ss", 2);
-		new -> env_line = ft_strdup((*cmd_head)->cmd_table[1]);
-		printf("new : %s\n", new->env_line);
-		
-		//new -> key = get_key(ft_strdup(cmd_table));
-		//new -> value = get_value((*cmd_head)->cmd_table[1]);
-		//env_add_back(env, new);
+		if (!check_equal_sign(cmd_table))
+			return (1);
+		new_key = get_key(cmd_table);
+		if ((new = check_key(*env, new_key)))
+		{
+			free(new->value);
+			free(new->env_line);
+			new->env_line = ft_strdup(cmd_table);
+			new->value = get_value(cmd_table);
+		}
+		else
+		{
+			new = malloc(sizeof(t_env));
+			error_check("");
+			new -> next = NULL;
+			new -> prev = NULL;
+			new -> env_line = ft_strdup(cmd_table);		
+			new -> key = get_key(cmd_table);
+			new -> value = get_value(cmd_table);
+			env_add_back(env, new);
+		}
 		return (1);
 	}
 	else
 	{
-		export_str = export_string(env);
+		char	**temp;
+
+		export_str = export_string(*env);
+		temp = export_str;
 		sort_list(export_str, size);
 		if ((*cmd_head)->next && (*cmd_head)->next->type == PIPE)
 		{	
@@ -114,7 +168,10 @@ int	builtin_export(t_list **cmd_head, t_env **env)
 				ft_putstr_fd("\n", (*cmd_head)->pipe[1]);
 				export_str++;
 				if (!*export_str)
+				{
+					
 					break ;
+				}	
 			}
 		}
 		else
@@ -129,6 +186,7 @@ int	builtin_export(t_list **cmd_head, t_env **env)
 					break ;
 			}
 		}
+		free_str(temp);
 	}
 	return (1);
 }

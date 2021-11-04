@@ -57,6 +57,18 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env, char **cmdline)
 		}
 		else if (check_builtin(&cmd_head) == 1)
 		{
+			t_list	*cmd_list;
+
+			cmd_list = g_list->cmd_list;
+			while (cmd_list)
+			{
+				if (cmd_list->type == PIPE)
+					break ;
+				if (cmd_list->next)
+					cmd_list = cmd_list->next;
+				else
+					exit(2);
+			}
 			if (check_cmd(&g_list, cmdline, env, &cmd_head) == 3)
 			{
 				all_free(&g_list, cmdline);

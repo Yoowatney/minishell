@@ -30,7 +30,7 @@ typedef struct s_env
 	char	*key;
 	char	*value;
 	char	*env_line;
-	char	*export_str;
+	
 }				t_env;
 
 
@@ -104,9 +104,12 @@ int		builtin_pwd(t_list **cmd_head);
 int		builtin_cd(t_list **g_list, t_list **cmd_head, char **my_envp);
 
 /* export */
-int		builtin_export(t_list **cmd_head, t_env **env);
+int		builtin_export(t_list **cmd_head, t_env **env, t_list **g_list);
 
 /* env관련 main */
 char	*get_key(char *envp);
 char	*get_value(char *envp);
 void	env_add_back(t_env **env, t_env *new);
+
+/* unset */
+int		builtin_unset(t_list **cmd_head, t_env **env, t_list **g_list);
