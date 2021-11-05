@@ -42,6 +42,12 @@ typedef struct s_envp
 	struct s_list	*next;
 }					t_envp;
 
+typedef struct s_dollar
+{
+	int		double_quote;
+	char	*cmd_table;
+}	t_dollar;
+
 
 long long			ft_atoi(const char *str);
 void				ft_bzero(void *ptr, size_t size);
@@ -70,6 +76,7 @@ char				**ft_split(char const *str, char c);
 char				*ft_strchr(char *str, int c);
 char				*ft_strdup(const char *s1);
 char				*ft_strjoin(char *s1, char *s2);
+void				ft_strjoin_sub(char *s1, char *s2, char **ret);
 
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
 size_t				ft_strlcpy(char *dest, char const *src, unsigned long size);

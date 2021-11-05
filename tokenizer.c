@@ -77,6 +77,7 @@ int	make_string(char c, char **buf)
 	temp[size] = c;
 	temp[size + 1] = '\0';
 	free(*buf);
+	
 	*buf = temp;
 	return (1);
 }
@@ -101,9 +102,10 @@ int	open_single_quote(char **line, char **buf)
 	return (1);
 }
 
-int	open_double_quote(char **line, char **buf)
+int	open_double_quote(char **line, char **buf, t_env **env)
 {
 	(*line)++;
+	//(void)env;
 	while (1)
 	{
 		if (**line == '\"')
@@ -113,6 +115,13 @@ int	open_double_quote(char **line, char **buf)
 		else if (**line == '\0')
 		{
 			return (-1);
+		}
+		else if (**line == '$')
+		{
+			//printf("fewf");
+			line = change_dollar(line, buf, *env);
+			if (*buf == NULL)
+				return (-1);
 		}
 		else
 		{
@@ -146,7 +155,118 @@ int	is_white_space(char **line, char **buf, int *type)
 	return (0);
 }
 
-int	tokenizer(char *line)
+char	**change_dollar(char **line, char **buf, t_env *env)
+{
+	char	*check;
+
+	
+	(*line)++;
+	if (!**line || **line == '\"')
+	{	
+		(*line)--;
+		return (line);
+	}
+	if (is_space(**line))
+	{
+		make_string('$', buf);
+		(*line)--;
+		return (line);
+	}
+	check = (char *)malloc(sizeof(char));
+	*check = 0;
+	
+	while ((!is_space(**line) || !**line) && **line != '\'')
+	{
+		if (!**line)
+		{
+			(*line)--;
+			free(check);
+			check = NULL;
+			return (line);
+		}
+		
+		if (**line == '\"')
+			break ;
+		
+		check = ft_strjoin_ch(check, **line);
+		
+		(*line)++;
+		if (**line == '\"')
+			break ;
+		
+		//else
+		//	break ;
+	}
+	//(void)buf;
+	//char *tmp;
+	while (env)
+	{
+		if (ft_strcmp(check, (env)->key) == 0)
+		{
+			
+			*buf = ft_strjoin(*buf, (env)->value);
+			free(check);
+			check = NULL;
+			//write(1, *buf, ft_strlen(*buf));
+			(*line)--;
+			return (line);
+		}
+		if ((env)->next)
+			env = (env)->next;
+		else
+			break ;
+		
+	}
+	
+	
+	free(check);
+	check = NULL;
+	(*line)--;
+	return (line);
+}
+
+int	is_dollar(char **line, char **buf)
+{
+	if ((*line)++ && **line == '\0')
+	{
+		make_string('$', buf);
+		(*line)--;
+		return (0);
+	}
+	if (is_space(**line) == 1 || **line == 0)
+	{
+		make_string('$', buf);
+		make_string(' ', buf);
+		while (is_space(**line))
+			(*line)++;
+		(*line)--;
+		return (0);
+	}
+	else
+	{
+		(*line)--;
+		while (1)
+		{
+			make_string(**line, buf);
+			if (**line != 0)
+				(*line)++;	
+			else
+			{
+				(*line)--;
+				break ;
+			}
+			if (is_space(**line))
+			{
+				(*line)--;
+				break ;
+			}	
+		}
+		
+	}
+	return (1);
+}
+
+int	tokenizer(char *line, t_env **env)
 {
 	int		error_num;
 	static	char	*buf;
@@ -159,7 +279,7 @@ int	tokenizer(char *line)
 	while (*line)
 	{
 		if (*line == '\"')
-			error_num = open_double_quote(&line, &buf);
+			error_num = open_double_quote(&line, &buf, env);
 		else if (*line == '\'')
 			error_num = open_single_quote(&line, &buf);
 		else if (*line == ' ')
@@ -169,6 +289,10 @@ int	tokenizer(char *line)
 		else if (*line == ';' || *line == '\\')
 		{
 			error_num = -1;
+		}
+		else if (*line == '$')
+		{
+			error_num = is_dollar(&line, &buf);
 		}
 		else if (*line == '|')
 		{

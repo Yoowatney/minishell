@@ -135,6 +135,7 @@ int main(int argc, char *av[], char *envp[])
 		signal(SIGINT, sig_handler);
 		signal(SIGQUIT, sig_handler);
 		cmdline = readline("bash> ");
+		//printf("%s\n", env->env_line);
 		if (cmdline == NULL)
 		{
 			ft_putstr_fd("\x1b[1A", 1);
@@ -148,13 +149,14 @@ int main(int argc, char *av[], char *envp[])
 			continue ;
 		}
 		add_history(cmdline);
-		error_num = tokenizer(cmdline);
+		error_num = tokenizer(cmdline, &env);
 		if (error_num < 0)
 		{
 			ft_putstr_fd("pasing error\n", 2), ft_lstclear(&g_list);
 			free(cmdline);
 			continue ;
 		}
+
 		/*for (; g_list != NULL; g_list = g_list->next)
 		 *    printf("%s\n", g_list->cmd_table[0]);*/
 
@@ -242,6 +244,9 @@ int main(int argc, char *av[], char *envp[])
 		g_list->cmd_list = cmd_head;
 		g_list->redir_list = redir_head;
 
+		//printf("%s\n", env->env_line);
+		//all_free(&g_list, &cmdline);
+		//continue ;
 		while (cmd_head != NULL)
 		{
 			int copy[2];

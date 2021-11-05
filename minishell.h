@@ -43,11 +43,12 @@ void	init_execute_bin(void);
 /* token fct */
 
 int		open_single_quote(char **line, char **buf);
-int		open_double_quote(char **line, char **buf);
+int		open_double_quote(char **line, char **buf, t_env **env);
 int		make_string(char c, char **buf);
-int		tokenizer(char *line);
+int		tokenizer(char *line, t_env **env);
 void	re_parsing(t_list **g_list);
 void	make_redir_node(char **buf, int type, t_list **redir_node);
+char	**change_dollar(char **line, char **buf, t_env *env);
 
 /* parsing fct */
 
@@ -86,13 +87,15 @@ int		check_cmd(t_list **g_list, char **cmdline, t_env **env, t_list **cmd_head);
 
 /* exit */
 void	all_free(t_list **g_list, char **cmdline);
-int		builtin_exit(t_list **g_list, char **cmdline);
+int		builtin_exit(t_list **g_list, char **cmdline, t_env **env);
 
 /* env */
 int		builtin_env(char **my_envp, t_list **cmd_head);
 
 /* ft_strcmp */
 int		ft_strcmp(char *s1, char *s2);
+char	*ft_strjoin_ch(char *s1, char c);
+char	*ft_strjoin_not(char *s1, char *s2);
 
 /* echo */
 int		builtin_echo(t_list **cmd_head);

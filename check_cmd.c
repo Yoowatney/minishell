@@ -61,7 +61,7 @@ int	check_cmd(t_list **g_list, char **cmdline, t_env **env, t_list **cmd_head)
 	else if (ft_strcmp((*cmd_head)->cmd_table[0], "exit") == 0)
 	{
 		printf("exexexexexexexex\n\n");
-		builtin_exit(g_list, cmdline);
+		builtin_exit(g_list, cmdline, env);
 	}
 
 	return (0);
