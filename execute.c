@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:48 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/05 18:02:18 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/05 21:44:20 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,25 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 		pipe(cmd_head->pipe);
 		error_check("");
 	}
-	if ((pid = fork()) < 0)
+	pid = fork();
+	if (pid < 0)
 	{
 		error_check("");
 	}
-	else if (pid == 0)
+	if (pid == 0)
 	{
-		if (cmd_head->next && cmd_head->next->type == PIPE && dup2(cmd_head->pipe[1], 1) < 0)
+		if (cmd_head->next && cmd_head->next->type == PIPE)
 		{
+			dup2(cmd_head->pipe[1], 1);
+			error_check("");
+			close(cmd_head->pipe[0]);
 			error_check("");
 		}
-		if (cmd_head->type == PIPE && cmd_head->infile == 0 && dup2(cmd_head->prev->pipe[0], 0) < 0)
+		if (cmd_head->type == PIPE && cmd_head->infile == 0)
 		{
+			dup2(cmd_head->prev->pipe[0], 0);
+			error_check("");
+			close(cmd_head->prev->pipe[1]);
 			error_check("");
 		}
 		if (cmd_head->cmd_table == NULL)
@@ -58,7 +65,6 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 		else if (check_builtin(&cmd_head) == 1)
 		{
 			t_list	*cmd_list;
-
 
 			cmd_list = g_list->cmd_list;
 			while (cmd_list)
@@ -79,23 +85,6 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 			}
 			all_free(&g_list);
 			exit(1);
-			/*
-			while (g_list->cmd_list)
-			{
-				if (g_list->cmd_list->type == PIPE)
-				{
-					check_cmd(&g_list, cmdline, my_envp);
-					exit(1);
-					break ;
-				}
-				if (g_list->cmd_list->next != NULL)
-					g_list->cmd_list = g_list->cmd_list->next;
-				else
-				{
-					all_free(&g_list, cmdline);
-					exit(3);
-				}
-			}*/
 		}
 		else
 		{
@@ -141,28 +130,9 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 	}
 	else
 	{
-		// sleep 10 | ls 수정
-		/*pid_t	dead;
-		 *while (1)
-		 *{
-		 *    dead = wait(&i);
-		 *    if (pid == dead || dead == -1)
-		 *        while (wait(NULL) != -1)
-		 *            continue ;
-		 *    break ;
-		 *}*/
-
-		/*printf("exit : %d\n", g_list->exit_status);*/
-/*
-		if (g_list->exit_status == 256)
-		{
-			check_cmd(&g_list, cmdline, my_envp);
-		}*/
 		if (pipe_open)
 		{
 			close(cmd_head->pipe[1]);
-			/*if (!(cmd_head->next))
-			 *    close(cmd_head->pipe[0]);*/
 		}
 		if (cmd_head->type == PIPE && cmd_head->prev)
 		{

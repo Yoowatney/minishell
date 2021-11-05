@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/05 18:29:31 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/05 21:45:23 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,33 +250,12 @@ int main(int argc, char *av[], char *envp[])
 				break ;
 		}
 		int pid;
-		/*int status;*/
 
 		rewind_list(&cmd_head);
-		/*while (cmd_head != NULL)
-		 *{
-		 *    close(cmd_head->pipe[0]);
-		 *    if (cmd_head->next != NULL)
-		 *        cmd_head = cmd_head->next;
-		 *    else
-		 *        break ;
-		 *}*/
 		while ((pid = waitpid(-1, &cmd_head->exit_status, 0)) > 0)
 		{
-			if (cmd_head->exit_status == 512)
-			{
-				check_cmd(&g_list, &env, &cmd_head);
-				printf("exit : %d\n", cmd_head->exit_status);
-			}
-			else if (cmd_head->exit_status == 256)
-			{
 				;
-			}
 		}
-		int fd = open("t0", O_RDONLY);
-		printf("fd : %d\n", fd);
-		close(fd);
-
 		rewind_list(&cmd_head);
 		rewind_list(&redir_head);
 		rewind_list(&g_list);
