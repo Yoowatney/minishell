@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 18:45:34 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/01 18:24:35 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/05 17:28:14 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_list
 	int				outfile;
 	struct s_list	*redir_list;
 	struct s_list	*cmd_list;
+	char			*cmdline;
 }					t_list;
 
 typedef struct s_envp

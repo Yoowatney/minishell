@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:48 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/02 17:59:14 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/05 18:02:18 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern t_list	*g_list;
 
-void	execute_bin(t_list *cmd_head, char **envp, t_env **env, char **cmdline)
+void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 {
 	int pid;
 	int i;
@@ -59,6 +59,7 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env, char **cmdline)
 		{
 			t_list	*cmd_list;
 
+
 			cmd_list = g_list->cmd_list;
 			while (cmd_list)
 			{
@@ -67,14 +68,16 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env, char **cmdline)
 				if (cmd_list->next)
 					cmd_list = cmd_list->next;
 				else
+				{
 					exit(2);
+				}
 			}
-			if (check_cmd(&g_list, cmdline, env, &cmd_head) == 3)
+			if (check_cmd(&g_list, env, &cmd_head) == 3)
 			{
-				all_free(&g_list, cmdline);
+				all_free(&g_list);
 				exit(2);
 			}
-			all_free(&g_list, cmdline);
+			all_free(&g_list);
 			exit(1);
 			/*
 			while (g_list->cmd_list)
@@ -148,22 +151,18 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env, char **cmdline)
 		 *            continue ;
 		 *    break ;
 		 *}*/
-		waitpid(pid, &g_list->exit_status, 0);
-		printf("exit : %d\n", g_list->exit_status);
+
+		/*printf("exit : %d\n", g_list->exit_status);*/
 /*
 		if (g_list->exit_status == 256)
 		{
 			check_cmd(&g_list, cmdline, my_envp);
 		}*/
-		if (g_list->exit_status == 512)
-		{
-			check_cmd(&g_list, cmdline, env, &cmd_head);
-		}
 		if (pipe_open)
 		{
 			close(cmd_head->pipe[1]);
-			if (!(cmd_head->next))
-				close(cmd_head->pipe[0]);
+			/*if (!(cmd_head->next))
+			 *    close(cmd_head->pipe[0]);*/
 		}
 		if (cmd_head->type == PIPE && cmd_head->prev)
 		{

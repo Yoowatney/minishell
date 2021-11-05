@@ -8,7 +8,6 @@ int	builtin_echo(t_list **cmd_head)
 	print++;
 	if ((*cmd_head)->next && (*cmd_head)->next->type == PIPE)
 	{
-		
 		while (*print)
 		{
 			ft_putstr_fd(*print, (*cmd_head)->pipe[1]);
@@ -17,7 +16,6 @@ int	builtin_echo(t_list **cmd_head)
 			if (*print == NULL)
 				break ;
 		}
-
 	}
 	else
 	{

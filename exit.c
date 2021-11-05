@@ -46,7 +46,7 @@ void	ft_envclear(t_env **env)
 	}
 }
 
-void	all_free(t_list **g_list, char **cmdline)
+void	all_free(t_list **g_list)
 {
 	rewind_list(g_list);
 	rewind_list(&((*g_list)->cmd_list));
@@ -54,18 +54,15 @@ void	all_free(t_list **g_list, char **cmdline)
 	
 	ft_lstclear(&((*g_list)->cmd_list));
 	ft_lstclear(&((*g_list)->redir_list));	
+	free((*g_list)->cmdline);
 	(*g_list)->cmd_list = NULL;
 	(*g_list)->redir_list = NULL;
 	ft_lstclear(g_list);
 	(*g_list) = NULL;
-	
-
-	
-	free(*cmdline);
 }
 
 
-int	builtin_exit(t_list **g_list, char **cmdline, t_env **env)
+int	builtin_exit(t_list **g_list, t_env **env)
 {
 	rewind_list(g_list);
 	rewind_list(&(*g_list)->cmd_list);
@@ -73,7 +70,7 @@ int	builtin_exit(t_list **g_list, char **cmdline, t_env **env)
 	{
 		if ((*g_list)->cmd_list->type == PIPE)
 		{
-			all_free(g_list, cmdline);
+			all_free(g_list);
 			exit (1); 
 		}	
 		if ((*g_list)->cmd_list->next != NULL)
@@ -81,7 +78,7 @@ int	builtin_exit(t_list **g_list, char **cmdline, t_env **env)
 		else
 			break ;
 	}
-	all_free(g_list, cmdline);
+	all_free(g_list);
 	(void)env;
 	//rewind_env(env);
 	//ft_envclear(env);

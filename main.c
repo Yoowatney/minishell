@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/02 19:12:55 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/05 18:29:31 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,11 +119,14 @@ int	all_white_space(char *cmdline)
 int main(int argc, char *av[], char *envp[])
 {
 	char	*cmdline;
-	t_list	*envp_data;
 	int		error_num;
-	t_env	*env = NULL;
+	t_env	*env;
+	t_list	*cmd_head;
+	t_list	*redir_head;
 
-	envp_data = NULL;
+	cmd_head = NULL;
+	redir_head = NULL;
+	env = NULL;
 	if (argc != 1)
 	{
 		ft_putstr_fd("error\n", 2);
@@ -132,45 +135,22 @@ int main(int argc, char *av[], char *envp[])
 	init(argc, av, envp, &env);
 	while (1)
 	{
-		signal(SIGINT, sig_handler);
-		signal(SIGQUIT, sig_handler);
-		cmdline = readline("bash> ");
-		//printf("%s\n", env->env_line);
-		if (cmdline == NULL)
-		{
-			ft_putstr_fd("\x1b[1A", 1);
-			ft_putstr_fd("\033[7C", 1);
-			ft_putstr_fd("exit\n", 1);
-			exit(0);
-		}
-		else if (cmdline[0] == '\0' || all_white_space(cmdline))
-		{
-			free(cmdline);
+		if (cmdline_start(&cmdline) == NULL)
 			continue ;
-		}
-		add_history(cmdline);
 		error_num = tokenizer(cmdline, &env);
 		if (error_num < 0)
 		{
 			ft_putstr_fd("pasing error\n", 2), ft_lstclear(&g_list);
-			free(cmdline);
+			all_free(&g_list);
 			continue ;
 		}
-
-		/*for (; g_list != NULL; g_list = g_list->next)
-		 *    printf("%s\n", g_list->cmd_table[0]);*/
-
 		rewind_list(&g_list);
 		re_parsing(&g_list);
 		rewind_list(&g_list);
 
-		t_list *cmd_head;
-
 		cmd_head = create_list(g_list);
 		split_cmd_node(g_list, cmd_head);
 		rewind_list(&cmd_head);
-
-		t_list *redir_head;
 
 		redir_head = create_list(g_list);
 		split_redir_node(g_list, redir_head);
@@ -247,6 +227,7 @@ int main(int argc, char *av[], char *envp[])
 		//printf("%s\n", env->env_line);
 		//all_free(&g_list, &cmdline);
 		//continue ;
+
 		while (cmd_head != NULL)
 		{
 			int copy[2];
@@ -255,7 +236,7 @@ int main(int argc, char *av[], char *envp[])
 			{
 				break ;
 			}
-			execute_bin(cmd_head, envp, &env, &cmdline);
+			execute_bin(cmd_head, envp, &env);
 			dup2(copy[0], STDIN_FILENO);
 			dup2(copy[1], STDOUT_FILENO);
 			close(copy[0]);
@@ -268,6 +249,30 @@ int main(int argc, char *av[], char *envp[])
 			else
 				break ;
 		}
+		int pid;
+		/*int status;*/
+
+		rewind_list(&cmd_head);
+		/*while (cmd_head != NULL)
+		 *{
+		 *    close(cmd_head->pipe[0]);
+		 *    if (cmd_head->next != NULL)
+		 *        cmd_head = cmd_head->next;
+		 *    else
+		 *        break ;
+		 *}*/
+		while ((pid = waitpid(-1, &cmd_head->exit_status, 0)) > 0)
+		{
+			if (cmd_head->exit_status == 512)
+			{
+				check_cmd(&g_list, &env, &cmd_head);
+				printf("exit : %d\n", cmd_head->exit_status);
+			}
+			else if (cmd_head->exit_status == 256)
+			{
+				;
+			}
+		}
 		int fd = open("t0", O_RDONLY);
 		printf("fd : %d\n", fd);
 		close(fd);
@@ -277,7 +282,7 @@ int main(int argc, char *av[], char *envp[])
 		rewind_list(&g_list);
 		
 
-		all_free(&g_list, &cmdline);
+		all_free(&g_list);
 		//system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");
 	}
 }

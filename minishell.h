@@ -49,6 +49,9 @@ int		tokenizer(char *line, t_env **env);
 void	re_parsing(t_list **g_list);
 void	make_redir_node(char **buf, int type, t_list **redir_node);
 char	**change_dollar(char **line, char **buf, t_env *env);
+int		all_white_space(char *cmdline);
+char	*cmdline_start(char	**cmdline);
+
 
 /* parsing fct */
 
@@ -62,7 +65,7 @@ t_list	*create_list(t_list *go);
 
 /* execute fct */
 
-void	execute_bin(t_list *g_list, char *envp[], t_env **env, char **cmdline);
+void	execute_bin(t_list *g_list, char *envp[], t_env **env);
 int		process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[]);
 
 
@@ -83,11 +86,11 @@ void	error_check(char *str);
 
 /* check_cmd */
 int		check_builtin(t_list **cmd_head);
-int		check_cmd(t_list **g_list, char **cmdline, t_env **env, t_list **cmd_head);
+int		check_cmd(t_list **g_list, t_env **env, t_list **cmd_head);
 
 /* exit */
-void	all_free(t_list **g_list, char **cmdline);
-int		builtin_exit(t_list **g_list, char **cmdline, t_env **env);
+void	all_free(t_list **g_list);
+int		builtin_exit(t_list **g_list, t_env **env);
 
 /* env */
 int		builtin_env(char **my_envp, t_list **cmd_head);
@@ -112,7 +115,7 @@ int		builtin_export(t_list **cmd_head, t_env **env, t_list **g_list);
 /* env관련 main */
 char	*get_key(char *envp);
 char	*get_value(char *envp);
-void	env_add_back(t_env **env, t_env *new);
+void	env_add_back(t_env **env, t_env *newe);
 
 /* unset */
 int		builtin_unset(t_list **cmd_head, t_env **env, t_list **g_list);
