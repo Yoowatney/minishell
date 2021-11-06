@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:03 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/05 21:33:02 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/06 10:01:28 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void	error_check(char *str)
 	else if (errno != 0 && errno != 4 && errno != 9 && errno != 22)
 	{
 		ft_putstr_fd("error : ", 2);
-		ft_putnbr_fd(errno, 2);
 		ft_putstr_fd(strerror(errno), 2);
 		exit(errno);
 	}

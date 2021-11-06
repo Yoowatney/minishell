@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:07 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/02 18:03:35 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/06 09:46:22 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ int	add_arg(char **buf)
 	if (*buf == NULL)
 		return (1);
 	temp = malloc(sizeof(char *) * (ft_lstlast(g_list)->length + 2));
-	error_check("");
+	if (temp == NULL)
+		error_check("");
 	while (i < ft_lstlast(g_list)->length)
 	{
 		temp[i] = ft_lstlast(g_list)->cmd_table[i];
@@ -67,12 +68,14 @@ int	make_string(char c, char **buf)
 	if (*buf == NULL)
 	{
 		(*buf) = malloc(sizeof(char));
-		error_check("");
+		if (*buf == NULL)
+			error_check("");
 		**buf = '\0';
 	}
 	size = ft_strlen(*buf);
 	temp = malloc(sizeof(char) * (size + 2));
-	error_check("");
+	if (temp == NULL)
+		error_check("");
 	ft_strlcpy(temp, *buf, size + 1);
 	temp[size] = c;
 	temp[size + 1] = '\0';
@@ -217,8 +220,6 @@ char	**change_dollar(char **line, char **buf, t_env *env)
 			break ;
 		
 	}
-	
-	
 	free(check);
 	check = NULL;
 	(*line)--;

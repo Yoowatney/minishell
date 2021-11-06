@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/05 21:45:23 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/06 10:24:31 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ int	init(int argc, char *argv[], char *envp[], t_env **env)
 	while (envp[i] != NULL)
 	{
 		new = malloc(sizeof(t_env));
-		error_check("");
+		if (new == NULL)
+			error_check("");
 		new -> next = NULL;
 		new -> prev = NULL;
 		new -> env_line = ft_strdup(envp[i]);
@@ -156,55 +157,6 @@ int main(int argc, char *av[], char *envp[])
 		split_redir_node(g_list, redir_head);
 		rewind_list(&redir_head);
 
-/*        printf("\n\t!!cmd_head node\n");
- *        for(; cmd_head != NULL; cmd_head = cmd_head -> next)
- *        {
- *            printf(" === cmd node ===\n");
- *            if (cmd_head->cmd_table != NULL)
- *            {
- *                for (int i = 0; cmd_head->cmd_table[i] != NULL; i++)
- *                {
- *                    printf("cmd : ||%s|| %d\n", cmd_head->cmd_table[i], cmd_head->type);
- *                }
- *            }
- *            else
- *            {
- *                printf("cmd : ||%s|| %d\n", (char *)cmd_head->cmd_table, cmd_head->type);
- *            }
- *            if (cmd_head -> next == NULL)
- *                break ;
- *
- *        }
- *        printf("\n\t!!redir_head node\n");
- *        for(; redir_head != NULL; redir_head = redir_head -> next)
- *        {
- *            printf(" === redir node ===\n");
- *            if (redir_head->cmd_table != NULL)
- *            {
- *                for (int i = 0; redir_head->cmd_table[i] != NULL; i++)
- *                {
- *                    printf("cmd : ||%s|| %d\n", redir_head->cmd_table[i], redir_head->file_type_table[i]);
- *                }
- *            }
- *            else
- *            {
- *                printf("file : ||%s|| %d\n", (char *)redir_head->cmd_table, redir_head->type);
- *            }
- *            if (redir_head -> next == NULL)
- *                break ;
- *        }*/
-
-		/*rewind_list(&cmd_head);
-		 *rewind_list(&g_list);
-		 *ft_lstclear(&g_list);
-		 *g_list = NULL;
-		 *free(cmdline);
-         *continue ;*/
-
-		rewind_list(&cmd_head);
-		rewind_list(&g_list);
-		rewind_list(&redir_head);
-
 		if (error_num < 0)
 		{
 			ft_putstr_fd("pasing error\n", 2);
@@ -217,17 +169,9 @@ int main(int argc, char *av[], char *envp[])
 			ft_lstclear(&g_list);
 			continue ;
 		}
-		rewind_list(&cmd_head);
-		rewind_list(&redir_head);
 		rewind_list(&g_list);
-
 		g_list->cmd_list = cmd_head;
 		g_list->redir_list = redir_head;
-
-		//printf("%s\n", env->env_line);
-		//all_free(&g_list, &cmdline);
-		//continue ;
-
 		while (cmd_head != NULL)
 		{
 			int copy[2];
@@ -254,12 +198,11 @@ int main(int argc, char *av[], char *envp[])
 		rewind_list(&cmd_head);
 		while ((pid = waitpid(-1, &cmd_head->exit_status, 0)) > 0)
 		{
-				;
+			;
 		}
 		rewind_list(&cmd_head);
 		rewind_list(&redir_head);
 		rewind_list(&g_list);
-		
 
 		all_free(&g_list);
 		//system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");

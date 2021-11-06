@@ -41,17 +41,16 @@ int	process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[])
 				close(fd);
 				dup2(copy[0], STDIN_FILENO);
 			}
-			fd = open(redir_head->cmd_table[i], O_RDONLY);
-			error_check(redir_head->cmd_table[i]);
+			if ((fd = open(redir_head->cmd_table[i], O_RDONLY)) == -1)
+				error_check(redir_head->cmd_table[i]);
 			if (errno == 2)
 			{
 				close(copy[0]);
 				return (-1);
 			}
-			errno = 0;
 			cmd_head->infile = fd;
-			dup2(fd, STDIN_FILENO);
-			error_check("");
+			if (dup2(fd, STDIN_FILENO) == -1)
+				error_check("");
 		}
 		else if (redir_head->file_type_table[i] == HEREDOC)
 		{
@@ -60,10 +59,11 @@ int	process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[])
 			if (fd != 0)
 			{
 				close(fd);
-				dup2(copy[0], STDIN_FILENO);
+				if (dup2(copy[0], STDIN_FILENO) == -1)
+					error_check("");
 			}
-			fd = open("/tmp/heredoc", O_RDWR | O_CREAT | O_TRUNC, 0644);
-			error_check("");
+			if ((fd = open("/tmp/.heredoc", O_RDWR | O_CREAT | O_TRUNC, 0644)) == -1)
+				error_check("");
 			while (1)
 			{
 				str = readline("heredoc> ");
@@ -75,23 +75,24 @@ int	process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[])
 				write(fd, "\n", 1);
 			}
 			close(fd);
-			fd = open("/tmp/heredoc", O_RDONLY);
+			fd = open("/tmp/.heredoc", O_RDONLY);
 			cmd_head->infile = fd;
-			dup2(fd, STDIN_FILENO);
-			error_check("");
+			if (dup2(fd, STDIN_FILENO) == -1)
+				error_check("");
 		}
 		else if (redir_head->file_type_table[i] == R_REDIR)
 		{
 			if (fd != 0)
 			{
 				close(fd);
-				dup2(copy[1], STDOUT_FILENO);
+				if (dup2(copy[1], STDOUT_FILENO) == -1)
+					error_check("");
 			}
-			fd = open(redir_head->cmd_table[i], O_CREAT | O_TRUNC | O_WRONLY, 0644);
-			error_check("");
+			if ((fd = open(redir_head->cmd_table[i], O_CREAT | O_TRUNC | O_WRONLY, 0644)) == -1)
+				error_check("");
 			cmd_head->outfile = fd;
-			dup2(fd, STDOUT_FILENO);
-			error_check("");
+			if (dup2(fd, STDOUT_FILENO) == -1)
+				error_check("");
 		}
 		else if (redir_head->file_type_table[i] == A_REDIR)
 		{
@@ -100,11 +101,11 @@ int	process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[])
 				close(fd);
 				dup2(copy[1], STDOUT_FILENO);
 			}
-			fd = open(redir_head->cmd_table[i], O_CREAT |  O_WRONLY | O_APPEND, 0644);
-			error_check("");
+			if ((fd = open(redir_head->cmd_table[i], O_CREAT |  O_WRONLY | O_APPEND, 0644) == -1))
+				error_check("");
 			cmd_head->outfile = fd;
-			dup2(fd, STDOUT_FILENO);
-			error_check("");
+			if (dup2(fd, STDOUT_FILENO) == -1)
+				error_check("");
 		}
 		i++;
 	}

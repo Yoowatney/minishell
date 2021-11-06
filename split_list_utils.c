@@ -6,7 +6,8 @@ t_list	*empty_node(void)
 	int		i;
 
 	node = malloc(sizeof(t_list));
-	error_check("");
+	if (node == NULL)
+		error_check("");
 	i = 0;
 	node->cmd_table = NULL;
 	node->prev = NULL;
@@ -31,6 +32,8 @@ char	**duplicate_table(char **cmd_table)
 		size++;
 	}
 	ret = malloc(sizeof(char *) * (size + 1));
+	if (ret == NULL)
+		error_check("");
 	size = 0;
 	while (cmd_table[size] != NULL)
 	{

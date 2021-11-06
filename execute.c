@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:48 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/05 21:44:20 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/06 10:55:31 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,33 +34,33 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 	if (cmd_head->next && cmd_head->next->type == PIPE)
 	{
 		pipe_open = 1;
-		pipe(cmd_head->pipe);
-		error_check("");
+		if (pipe(cmd_head->pipe) == -1)
+			error_check("");
 	}
 	pid = fork();
 	if (pid < 0)
 	{
 		error_check("");
 	}
-	if (pid == 0)
+	else if (pid == 0)
 	{
-		if (cmd_head->next && cmd_head->next->type == PIPE)
+		if (cmd_head->next && cmd_head->next->type == PIPE && cmd_head->outfile == 0)
 		{
-			dup2(cmd_head->pipe[1], 1);
-			error_check("");
-			close(cmd_head->pipe[0]);
-			error_check("");
+			if (dup2(cmd_head->pipe[1], 1) == -1)
+				error_check("");
+			if (close(cmd_head->pipe[0]) == -1)
+				error_check("");
 		}
 		if (cmd_head->type == PIPE && cmd_head->infile == 0)
 		{
-			dup2(cmd_head->prev->pipe[0], 0);
-			error_check("");
-			close(cmd_head->prev->pipe[1]);
-			error_check("");
+			if (dup2(cmd_head->prev->pipe[0], 0) == -1)
+				error_check("");
+			if (close(cmd_head->prev->pipe[1]) == -1)
+				error_check("");
 		}
 		if (cmd_head->cmd_table == NULL)
 		{
-			exit(0);
+			exit(70);
 		}
 		else if (check_builtin(&cmd_head) == 1)
 		{
@@ -79,7 +79,6 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 					exit(0);
 				}
 			}
-			//printf("fwefwefwefwe\n");
 			check_cmd(&g_list, env, &cmd_head);			
 			all_free(&g_list);
 			exit(0);
@@ -96,7 +95,7 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 				{
 					if (cmd_head->cmd_table[0][0] != '/')
 					{
-						prefix[i] = ft_strjoin(prefix[i], "/"); // prefix free됨
+						prefix[i] = ft_strjoin(prefix[i], "/");
 						file_name = ft_strjoin(prefix[i], cmd_head->cmd_table[0]);
 					}
 					else
@@ -113,7 +112,7 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 					i++;
 					if (execve(file_name, cmd_head->cmd_table, my_envp) < 0)
 					{
-						free(file_name); // file_name[0] free
+						free(file_name);
 						continue ;
 					}
 				}
@@ -128,7 +127,7 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 	}
 	else
 	{
-		if (cmd_head->type != PIPE)
+		if (cmd_head->type != PIPE && cmd_head->cmd_table)
 			check_cmd(&g_list, env, &cmd_head);
 		if (pipe_open)
 		{

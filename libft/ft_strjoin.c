@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/11 17:56:18 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/10/21 18:34:17 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/06 10:17:09 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (!ret)
 	{
 		exit(errno);
-		return (NULL);
 	}
 	ft_strjoin_sub(s1, s2, &ret);
 	free(s1);
