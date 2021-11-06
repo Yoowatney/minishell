@@ -62,7 +62,7 @@ int	builtin_unset(t_list **cmd_head, t_env **env, t_list **g_list)
 	}
 
 	//(void)cmd_head;
-	(void)env;
+	
 	char	*unset_key;
 	int		i;
 

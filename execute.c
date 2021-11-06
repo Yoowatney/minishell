@@ -69,22 +69,20 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 			cmd_list = g_list->cmd_list;
 			while (cmd_list)
 			{
-				if (cmd_list->type == PIPE)
+				if (cmd_list->type == PIPE && cmd_head->type == PIPE)
 					break ;
 				if (cmd_list->next)
 					cmd_list = cmd_list->next;
 				else
 				{
-					exit(2);
+					all_free(&g_list);
+					exit(0);
 				}
 			}
-			if (check_cmd(&g_list, env, &cmd_head) == 3)
-			{
-				all_free(&g_list);
-				exit(2);
-			}
+			//printf("fwefwefwefwe\n");
+			check_cmd(&g_list, env, &cmd_head);			
 			all_free(&g_list);
-			exit(1);
+			exit(0);
 		}
 		else
 		{
@@ -130,6 +128,8 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 	}
 	else
 	{
+		if (cmd_head->type != PIPE)
+			check_cmd(&g_list, env, &cmd_head);
 		if (pipe_open)
 		{
 			close(cmd_head->pipe[1]);

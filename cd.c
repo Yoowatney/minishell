@@ -64,18 +64,18 @@ int	builtin_cd(t_list **g_list, t_list **cmd_head, char **my_envp)
 	if ((*cmd_head)->cmd_table[1])
 	{
 		if (chdir((*cmd_head)->cmd_table[1]) == 0)
-			return (3);
+			return (1);
 		else if (ft_strcmp((*cmd_head)->cmd_table[1], "~") == 0)
 		{
 			if (!(check_home(my_envp)))
-				return (1);
+				return (0);
 			chdir(check_home(my_envp));
-			return (3);
+			return (1);
 		}
 		else if (ft_strcmp((*cmd_head)->cmd_table[1], "/") == 0)
 		{
 			chdir("/");
-			return (3);
+			return (1);
 		}
 		else if (ft_strcmp((*cmd_head)->cmd_table[1], ".") == 0)
 			return (1);
@@ -87,19 +87,19 @@ int	builtin_cd(t_list **g_list, t_list **cmd_head, char **my_envp)
 			if (!updir)
 			{
 				free(updir);
-				return (1);
+				return (0);
 			}
 			chdir(updir);
 			free(updir);
-			return (3);
+			return (1);
 		}
 	}
 	else
 	{
 		if (!(check_home(my_envp)))
-			return (1);
+			return (0);
 		chdir(check_home(my_envp));
-		return (3);
+		return (1);
 	}
-	return (1);
+	return (0);
 }

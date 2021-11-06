@@ -116,21 +116,21 @@ int	builtin_export(t_list **cmd_head, t_env **env, t_list **g_list)
 
 	rewind_list(g_list);
 	rewind_list(&(*g_list)->cmd_list);
-	while ((*g_list)->cmd_list)	
-	{
-		if ((*g_list)->cmd_list->type == PIPE)
-			return (1);
-		if ((*g_list)->cmd_list->next != NULL)
-			(*g_list)->cmd_list = (*g_list)->cmd_list->next;
-		else
-			break ;
-	}
 	
 	if ((*cmd_head)->cmd_table[1])
 	{
+		while ((*g_list)->cmd_list)	
+		{
+			if ((*g_list)->cmd_list->type == PIPE)
+				return (1);
+			if ((*g_list)->cmd_list->next != NULL)
+				(*g_list)->cmd_list = (*g_list)->cmd_list->next;
+			else
+				break ;
+		}
 		cmd_table = (*cmd_head)->cmd_table[1];
 		if (!check_equal_sign(cmd_table))
-			return (1);
+			return (0);
 		new_key = get_key(cmd_table);
 		if ((new = check_key(*env, new_key)))
 		{
@@ -150,13 +150,13 @@ int	builtin_export(t_list **cmd_head, t_env **env, t_list **g_list)
 			new -> value = get_value(cmd_table);
 			env_add_back(env, new);
 		}
-		return (1);
 	}
 	else
 	{
 		char	**temp;
 
-		export_str = export_string(*env);
+		if (!(export_str = export_string(*env)))
+			return (0);
 		temp = export_str;
 		sort_list(export_str, size);
 		if ((*cmd_head)->next && (*cmd_head)->next->type == PIPE)
@@ -167,11 +167,8 @@ int	builtin_export(t_list **cmd_head, t_env **env, t_list **g_list)
 				ft_putstr_fd(*export_str, (*cmd_head)->pipe[1]);
 				ft_putstr_fd("\n", (*cmd_head)->pipe[1]);
 				export_str++;
-				if (!*export_str)
-				{
-					
+				if (!*export_str)					
 					break ;
-				}	
 			}
 		}
 		else

@@ -69,18 +69,14 @@ int	builtin_exit(t_list **g_list, t_env **env)
 	while ((*g_list)->cmd_list)
 	{
 		if ((*g_list)->cmd_list->type == PIPE)
-		{
-			all_free(g_list);
-			exit (1); 
-		}	
+			return (1);
 		if ((*g_list)->cmd_list->next != NULL)
 			(*g_list)->cmd_list = (*g_list)->cmd_list->next;
 		else
 			break ;
 	}
 	all_free(g_list);
-	(void)env;
-	//rewind_env(env);
-	//ft_envclear(env);
-	exit(2);
+	rewind_env(env);
+	ft_envclear(env);
+	exit(0);
 }
