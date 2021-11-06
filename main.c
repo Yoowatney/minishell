@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/06 10:24:31 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/06 11:29:08 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,11 +138,12 @@ int main(int argc, char *av[], char *envp[])
 	{
 		if (cmdline_start(&cmdline) == NULL)
 			continue ;
-		error_num = tokenizer(cmdline, &env);
+		error_num = tokenizer(cmdline, &env), g_list->cmdline = cmdline;
 		if (error_num < 0)
 		{
-			ft_putstr_fd("pasing error\n", 2), ft_lstclear(&g_list);
-			all_free(&g_list);
+			ft_putstr_fd("pasing error\n", 2);
+			if (g_list != NULL)
+				all_free(&g_list);
 			continue ;
 		}
 		rewind_list(&g_list);
@@ -156,22 +157,16 @@ int main(int argc, char *av[], char *envp[])
 		redir_head = create_list(g_list);
 		split_redir_node(g_list, redir_head);
 		rewind_list(&redir_head);
-
-		if (error_num < 0)
-		{
-			ft_putstr_fd("pasing error\n", 2);
-			free(cmdline);
-			rewind_list(&cmd_head);
-			rewind_list(&redir_head);
-			rewind_list(&g_list);
-			ft_lstclear(&cmd_head);
-			ft_lstclear(&redir_head);
-			ft_lstclear(&g_list);
-			continue ;
-		}
 		rewind_list(&g_list);
 		g_list->cmd_list = cmd_head;
 		g_list->redir_list = redir_head;
+		if (error_num < 0)
+		{
+			ft_putstr_fd("pasing error\n", 2);
+			all_free(&g_list);
+			free(cmdline);
+			continue ;
+		}
 		while (cmd_head != NULL)
 		{
 			int copy[2];
@@ -193,18 +188,11 @@ int main(int argc, char *av[], char *envp[])
 			else
 				break ;
 		}
-		int pid;
-
-		rewind_list(&cmd_head);
-		while ((pid = waitpid(-1, &cmd_head->exit_status, 0)) > 0)
+		while (waitpid(-1, &cmd_head->exit_status, 0) > 0)
 		{
 			;
 		}
-		rewind_list(&cmd_head);
-		rewind_list(&redir_head);
-		rewind_list(&g_list);
-
 		all_free(&g_list);
-		//system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");
+		system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");
 	}
 }
