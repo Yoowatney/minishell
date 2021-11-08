@@ -3,9 +3,20 @@
 int	builtin_echo(t_list **cmd_head)
 {
 	char	**print;
+	int		n_flag;
 
 	print = (*cmd_head)->cmd_table;
-	print++;
+	if (*(print+1))
+		print++;
+	else
+		return (0);
+	n_flag = 0;
+	if (ft_strcmp(*print, "-n") == 0)
+	{
+		while (ft_strcmp(*print, "-n") == 0)
+			print++;
+		n_flag = 1;
+	}
 	if ((*cmd_head)->next && (*cmd_head)->next->type == PIPE)
 	{
 		while (*print)
@@ -14,7 +25,11 @@ int	builtin_echo(t_list **cmd_head)
 			ft_putchar_fd(' ', (*cmd_head)->pipe[1]);
 			print++;
 			if (*print == NULL)
+			{
+				if (n_flag == 0)
+					ft_putchar_fd('\n', (*cmd_head)->pipe[1]);
 				break ;
+			}
 		}
 	}
 	else
@@ -25,7 +40,11 @@ int	builtin_echo(t_list **cmd_head)
 			ft_putchar_fd(' ', 1);
 			print++;
 			if (*print == NULL)
+			{
+				if (n_flag == 0)
+					ft_putchar_fd('\n', 1);
 				break ;
+			}	
 		}
 	}
 	return (1);

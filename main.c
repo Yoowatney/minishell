@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/06 15:39:43 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/08 15:35:53 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,10 +124,12 @@ int main(int argc, char *av[], char *envp[])
 	t_env	*env;
 	t_list	*cmd_head;
 	t_list	*redir_head;
+	unsigned char	exit_status;
 
 	cmd_head = NULL;
 	redir_head = NULL;
 	env = NULL;
+	exit_status = 0;
 	if (argc != 1)
 	{
 		ft_putstr_fd("error\n", 2);
@@ -138,7 +140,7 @@ int main(int argc, char *av[], char *envp[])
 	{
 		if (cmdline_start(&cmdline) == NULL)
 			continue ;
-		error_num = tokenizer(cmdline, &env);
+		error_num = tokenizer(cmdline, &env, exit_status);
 		if (error_num < 0)
 		{
 			ft_putstr_fd("pasing error\n", 2);
@@ -149,7 +151,7 @@ int main(int argc, char *av[], char *envp[])
 			}
 			else
 				free(cmdline);
-			system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");
+			/*system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");*/
 			continue ;
 		}
 		rewind_list(&g_list);
@@ -194,11 +196,14 @@ int main(int argc, char *av[], char *envp[])
 			else
 				break ;
 		}
-		while (waitpid(-1, &cmd_head->exit_status, 0) > 0)
+		rewind_list(&cmd_head);
+		while (waitpid(cmd_head->pid, &cmd_head->exit_status, 0) > 0)
 		{
-			;
+			if (cmd_head->next)
+				cmd_head = cmd_head->next;
 		}
+		exit_status = (unsigned char)(cmd_head->exit_status/256);
 		all_free(&g_list);
-		system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");
+		/*system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");*/
 	}
 }

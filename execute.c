@@ -14,6 +14,23 @@
 
 extern t_list	*g_list;
 
+int	pipe_exist(void)
+{
+	t_list	*cmd_list;
+
+	cmd_list = g_list->cmd_list;
+	while (cmd_list)
+	{
+		if (cmd_list->type == PIPE)
+			return (1);
+		if (cmd_list->next)
+			cmd_list = cmd_list->next;
+		else
+			break ;
+	}
+	return (0);
+}
+
 void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 {
 	int pid;
@@ -38,6 +55,7 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 			error_check("");
 	}
 	pid = fork();
+	cmd_head->pid = pid;
 	if (pid < 0)
 	{
 		error_check("");
@@ -58,26 +76,20 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 		}
 		if (cmd_head->cmd_table == NULL)
 		{
-			exit(70);
+			exit(0);
 		}
 		else if (check_builtin(&cmd_head) == 1)
 		{
-			t_list	*cmd_list;
-
-			cmd_list = g_list->cmd_list;
-			while (cmd_list)
+			int	pipe;
+		
+			pipe = pipe_exist();
+			
+			if (pipe == 1)
 			{
-				if (cmd_list->type == PIPE && cmd_head->type == PIPE)
-					break ;
-				if (cmd_list->next)
-					cmd_list = cmd_list->next;
-				else
-				{
-					all_free(&g_list);
-					exit(0);
-				}
-			}
-			check_cmd(&g_list, env, &cmd_head);			
+				check_cmd(&g_list, env, &cmd_head);
+				all_free(&g_list);
+				exit(0);
+			}			
 			all_free(&g_list);
 			exit(0);
 		}
@@ -125,8 +137,14 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 	}
 	else
 	{
-		if (cmd_head->type != PIPE && cmd_head->cmd_table)
+		int	pipe;
+
+		pipe = pipe_exist();
+		if (pipe != 1 && cmd_head->type != PIPE && cmd_head->cmd_table)
+		{
 			check_cmd(&g_list, env, &cmd_head);
+			//ft_putstr_fd(strerror(errno), 2);
+		}	
 		if (pipe_open)
 		{
 			close(cmd_head->pipe[1]);

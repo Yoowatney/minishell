@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:07 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/06 17:42:28 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/08 15:27:06 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int	open_single_quote(char **line, char **buf)
 	return (1);
 }
 
-int	open_double_quote(char **line, char **buf, t_env **env)
+int	open_double_quote(char **line, char **buf, t_env **env, unsigned char exit_status)
 {
 	(*line)++;
 	while (1)
@@ -121,7 +121,9 @@ int	open_double_quote(char **line, char **buf, t_env **env)
 		else if (**line == '$')
 		{
 			//printf("fewf");
-			line = change_dollar(line, buf, *env);
+			line = change_dollar(line, buf, *env, exit_status);
+			if (**line == '\"')
+				(*line)--;
 			if (*buf == NULL)
 				return (-1);
 		}
@@ -157,14 +159,14 @@ int	is_white_space(char **line, char **buf, int *type)
 	return (0);
 }
 
-char	**change_dollar(char **line, char **buf, t_env *env)
+char	**change_dollar(char **line, char **buf, t_env *env, unsigned char exit_status)
 {
 	char	*check;
-
 	
 	(*line)++;
 	if (!**line || **line == '\"')
 	{	
+		make_string('$', buf);
 		(*line)--;
 		return (line);
 	}
@@ -174,9 +176,23 @@ char	**change_dollar(char **line, char **buf, t_env *env)
 		(*line)--;
 		return (line);
 	}
+	if (**line == '?')
+	{
+		char	*exit_str;
+		int		i;
+
+		exit_str = ft_itoa((int)exit_status);
+		i = 0;
+		while (exit_str[i])
+		{
+			make_string(exit_str[i], buf);
+			i++;
+		}
+		free(exit_str);
+		return (line);
+	}
 	check = (char *)malloc(sizeof(char));
-	*check = 0;
-	
+	*check = 0;	
 	while ((!is_space(**line) || !**line) && **line != '\'')
 	{
 		if (!**line)
@@ -185,13 +201,10 @@ char	**change_dollar(char **line, char **buf, t_env *env)
 			free(check);
 			check = NULL;
 			return (line);
-		}
-		
+		}		
 		if (**line == '\"')
-			break ;
-		
-		check = ft_strjoin_ch(check, **line);
-		
+			break ;		
+		check = ft_strjoin_ch(check, **line);		
 		(*line)++;
 		if (**line == '\"')
 			break ;
@@ -213,13 +226,78 @@ char	**change_dollar(char **line, char **buf, t_env *env)
 			break ;
 		
 	}
+	make_string(' ', buf);
 	free(check);
 	check = NULL;
-	(*line)--;
+	if (!**line)
+		(*line)--;
 	return (line);
 }
 
-int	is_dollar(char **line, char **buf)
+char	**change_dollar2(char **line, char **buf, t_env *env, unsigned char exit_status)
+{
+	char	*check;
+	
+	(*line)++;
+	
+	if (!**line)
+	{	
+		(*line)--;
+		return (line);
+	}
+	if (is_space(**line))
+	{
+		make_string('$', buf);
+		(*line)--;
+		return (line);
+	}
+	if (**line == '?')
+	{
+		char	*exit_str;
+		int		i;
+
+		exit_str = ft_itoa((int)exit_status);
+		i = 0;
+		while (exit_str[i])
+		{
+			make_string(exit_str[i], buf);
+			i++;
+		}
+		free(exit_str);
+		return (line);
+	}
+	check = (char *)malloc(sizeof(char));
+	*check = 0;	
+	while (!is_space(**line) && **line)
+	{		
+		check = ft_strjoin_ch(check, **line);		
+		(*line)++;
+	}
+	while (env)
+	{
+		if (ft_strcmp(check, (env)->key) == 0)
+		{			
+			*buf = ft_strjoin(*buf, (env)->value);
+			free(check);
+			check = NULL;
+			(*line)--;
+			return (line);
+		}
+		if ((env)->next)
+			env = (env)->next;
+		else
+			break ;
+		
+	}
+	make_string('\0', buf);
+	free(check);
+	check = NULL;
+	if (!**line)
+		(*line)--;
+	return (line);
+}
+
+int	is_dollar(char **line, char **buf, t_env **env, unsigned char exit_status)
 {
 	if ((*line)++ && **line == '\0')
 	{
@@ -230,37 +308,20 @@ int	is_dollar(char **line, char **buf)
 	if (is_space(**line) == 1 || **line == 0)
 	{
 		make_string('$', buf);
-		make_string(' ', buf);
-		while (is_space(**line))
-			(*line)++;
 		(*line)--;
 		return (0);
 	}
 	else
 	{
 		(*line)--;
-		while (1)
-		{
-			make_string(**line, buf);
-			if (**line != 0)
-				(*line)++;	
-			else
-			{
-				(*line)--;
-				break ;
-			}
-			if (is_space(**line))
-			{
-				(*line)--;
-				break ;
-			}	
-		}
-		
+		line = change_dollar2(line, buf, *env, exit_status);
+		if (*buf == NULL)
+			return (-1);
 	}
 	return (1);
 }
 
-int	tokenizer(char *line, t_env **env)
+int	tokenizer(char *line, t_env **env, unsigned char exit_status)
 {
 	int		error_num;
 	static	char	*buf;
@@ -273,7 +334,7 @@ int	tokenizer(char *line, t_env **env)
 	while (*line)
 	{
 		if (*line == '\"')
-			error_num = open_double_quote(&line, &buf, env);
+			error_num = open_double_quote(&line, &buf, env, exit_status);
 		else if (*line == '\'')
 			error_num = open_single_quote(&line, &buf);
 		else if (*line == ' ')
@@ -286,7 +347,7 @@ int	tokenizer(char *line, t_env **env)
 		}
 		else if (*line == '$')
 		{
-			error_num = is_dollar(&line, &buf);
+			error_num = is_dollar(&line, &buf, env, exit_status);
 		}
 		else if (*line == '|')
 		{
@@ -397,7 +458,7 @@ int	tokenizer(char *line, t_env **env)
 			error_num = make_string(*line, &buf);
 		}
 		if (error_num < 0)
-			break ;
+			return (-1);
 		line++;
 	}
 	if (g_list && (ft_lstlast(g_list)->type == TOKEN_END || ft_lstlast(g_list)->type == PIPE) && type != PIPE)

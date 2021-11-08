@@ -46,12 +46,12 @@ void	init_execute_bin(void);
 /* token fct */
 
 int		open_single_quote(char **line, char **buf);
-int		open_double_quote(char **line, char **buf, t_env **env);
+int		open_double_quote(char **line, char **buf, t_env **env, unsigned char exit_status);
 int		make_string(char c, char **buf);
-int		tokenizer(char *line, t_env **env);
+int		tokenizer(char *line, t_env **env, unsigned char exit_status);
 void	re_parsing(t_list **g_list);
 void	make_redir_node(char **buf, int type, t_list **redir_node);
-char	**change_dollar(char **line, char **buf, t_env *env);
+char	**change_dollar(char **line, char **buf, t_env *env, unsigned char exit_status);
 int		all_white_space(char *cmdline);
 char	*cmdline_start(char	**cmdline);
 
@@ -73,12 +73,15 @@ void	init_redir_node(char ***redir_table, int **redir_type_table);
 void	execute_bin(t_list *g_list, char *envp[], t_env **env);
 int		process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[]);
 
+/* redirection utils */
+void	right_redir(t_list *cmd_head, t_list *redir_head, int fd, int copy[], int i);
+void	append_redir(t_list *cmd_head, t_list *redir_head, int fd, int copy[], int i);
 
 void	split_cmd_node(t_list *go, t_list *ret);
 void	split_redir_node(t_list *go, t_list *ret);
 t_list	*create_list(t_list *go);
 
-/* utils */
+/* usual utils */
 
 void	rewind_list(t_list **list);
 int		is_space(int c);
@@ -95,7 +98,7 @@ int		check_cmd(t_list **g_list, t_env **env, t_list **cmd_head);
 
 /* exit */
 void	all_free(t_list **g_list);
-int		builtin_exit(t_list **g_list, t_env **env);
+int		builtin_exit(t_list **g_list, t_env **env, t_list **cmd_head);
 
 /* env */
 int		builtin_env(char **my_envp, t_list **cmd_head);
@@ -115,7 +118,7 @@ int		builtin_pwd(t_list **cmd_head);
 int		builtin_cd(t_list **g_list, t_list **cmd_head, char **my_envp);
 
 /* export */
-int		builtin_export(t_list **cmd_head, t_env **env, t_list **g_list);
+int		builtin_export(t_list **cmd_head, t_env **env);
 
 /* env관련 main */
 char	*get_key(char *envp);
@@ -123,4 +126,10 @@ char	*get_value(char *envp);
 void	env_add_back(t_env **env, t_env *newe);
 
 /* unset */
-int		builtin_unset(t_list **cmd_head, t_env **env, t_list **g_list);
+int		builtin_unset(t_list **cmd_head, t_env **env);
+
+/* builtin util */
+int	check_equal_sign(char *cmd_table);
+int	check_alpha(char *cmd_table);
+int	check_num(char *cmd_table);
+int	check_identifier(char *cmd_table);

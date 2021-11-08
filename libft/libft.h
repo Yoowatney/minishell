@@ -34,6 +34,7 @@ typedef struct s_list
 	struct s_list	*redir_list;
 	struct s_list	*cmd_list;
 	char			*cmdline;
+	int				pid;
 }					t_list;
 
 typedef struct s_envp

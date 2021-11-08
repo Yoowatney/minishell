@@ -20,6 +20,7 @@ void	sig_handler(int signum)
 		rl_on_new_line(); // regenerate the prompt but hide
 		rl_replace_line("", 0);
 		rl_redisplay(); // display prompt
+		
 	}
 }
 
@@ -30,6 +31,7 @@ void	bin_sig_handler(int signum)
 	if (signum == SIGINT)
 	{
 		ft_putstr_fd("\n", 1);
+		
 	}
 	else if (signum == SIGQUIT)
 	{

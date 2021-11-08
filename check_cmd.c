@@ -25,41 +25,28 @@ int	check_builtin(t_list **cmd_head)
 int	check_cmd(t_list **g_list, t_env **env, t_list **cmd_head)
 {
 	char	**my_envp = allocate_envp(*env);
+	int		ret;
 
+	ret = 0;
 	if (ft_strcmp((*cmd_head)->cmd_table[0], "echo") == 0)
-	{
-		builtin_echo(cmd_head);
-	}
-
+		ret = builtin_echo(cmd_head);
 	else if (ft_strcmp((*cmd_head)->cmd_table[0], "cd") == 0)
-	{
-		return (builtin_cd(g_list, cmd_head, my_envp));
-	}
+		ret = builtin_cd(g_list, cmd_head, my_envp);
 	else if (ft_strcmp((*cmd_head)->cmd_table[0], "pwd") == 0)
-	{
-		builtin_pwd(cmd_head);
-	}
-
+		ret = builtin_pwd(cmd_head);
 	else if (ft_strcmp((*cmd_head)->cmd_table[0], "export") == 0)
-	{
-		builtin_export(cmd_head, env, g_list);
-	}
-
+		ret = builtin_export(cmd_head, env);
 	else if (ft_strcmp((*cmd_head)->cmd_table[0], "unset") == 0)
-	{
-		builtin_unset(cmd_head, env, g_list);
-	}
-
+		ret = builtin_unset(cmd_head, env);
 	else if (ft_strcmp((*cmd_head)->cmd_table[0], "env") == 0)
-	{
-		builtin_env(my_envp, cmd_head);
-	}
+		ret = builtin_env(my_envp, cmd_head);
 	else if (ft_strcmp((*cmd_head)->cmd_table[0], "exit") == 0)
 	{
-		builtin_exit(g_list, env);
+		ret = builtin_exit(g_list, env, cmd_head);
+		//exit(0);
 	}
 	for (int j = 0; my_envp[j] != NULL; j++)
 		free(my_envp[j]);
 	free(my_envp);
-	return (0);
+	return (ret);
 }
