@@ -101,7 +101,7 @@ int	process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[])
 				close(fd);
 				dup2(copy[1], STDOUT_FILENO);
 			}
-			if ((fd = open(redir_head->cmd_table[i], O_CREAT |  O_WRONLY | O_APPEND, 0644) == -1))
+			if ((fd = open(redir_head->cmd_table[i], O_CREAT |  O_WRONLY | O_APPEND, 0644)) == -1)
 				error_check("");
 			cmd_head->outfile = fd;
 			if (dup2(fd, STDOUT_FILENO) == -1)

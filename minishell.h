@@ -32,6 +32,9 @@ typedef struct s_env
 	char	*env_line;
 	
 }				t_env;
+/* sys call */
+
+void	*ft_malloc(int size);
 
 
 /* signal fct */
@@ -62,6 +65,8 @@ void	split_redir_node(t_list *go, t_list *ret);
 char	**duplicate_table(char **cmd_table);
 int		get_file_size(int *files);
 t_list	*create_list(t_list *go);
+int		choice_condition(int type);
+void	init_redir_node(char ***redir_table, int **redir_type_table);
 
 /* execute fct */
 

@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:07 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/06 09:46:22 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/06 17:42:28 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,11 +92,11 @@ int	open_single_quote(char **line, char **buf)
 	{
 		if (**line == '\'')
 		{
-			return (0); // okay
+			return (0);
 		}
 		else if (**line == '\0')
 		{
-			return (-1); // error
+			return (-1);
 		}
 		else
 			make_string(**line, buf);
@@ -108,7 +108,6 @@ int	open_single_quote(char **line, char **buf)
 int	open_double_quote(char **line, char **buf, t_env **env)
 {
 	(*line)++;
-	//(void)env;
 	while (1)
 	{
 		if (**line == '\"')
@@ -196,12 +195,7 @@ char	**change_dollar(char **line, char **buf, t_env *env)
 		(*line)++;
 		if (**line == '\"')
 			break ;
-		
-		//else
-		//	break ;
 	}
-	//(void)buf;
-	//char *tmp;
 	while (env)
 	{
 		if (ft_strcmp(check, (env)->key) == 0)
@@ -210,7 +204,6 @@ char	**change_dollar(char **line, char **buf, t_env *env)
 			*buf = ft_strjoin(*buf, (env)->value);
 			free(check);
 			check = NULL;
-			//write(1, *buf, ft_strlen(*buf));
 			(*line)--;
 			return (line);
 		}
@@ -355,24 +348,6 @@ int	tokenizer(char *line, t_env **env)
 				else
 					return (-1);
 			}
-			/*if (buf != NULL)
-			 *    make_node(&buf, TOKEN_END);
-			 *line++;
-			 *error_num = is_white_space(&line, &redir_buf, &type);
-			 *if (error_num == 0)
-			 *    line++;
-			 *if (*line != ' ' && *line != '\t' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
-			 *{
-			 *    while (*line != ' ' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
-			 *    {
-			 *        make_string(*line, &buf);
-			 *        line++;
-			 *    }
-			 *    make_node(&buf, L_REDIR);
-			 *    line--;
-			 *}
-			 *else
-			 *    return (-1);*/
 		}
 		else if (*line == '>')
 		{

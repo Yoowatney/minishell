@@ -57,7 +57,6 @@ int	builtin_cd(t_list **g_list, t_list **cmd_head, char **my_envp)
 		else
 			break ;
 	}
-
 	char	*pwd;
 
 	pwd = getcwd(NULL, BUFSIZ);

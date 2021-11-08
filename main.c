@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/06 11:29:08 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/06 15:39:43 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,12 +138,18 @@ int main(int argc, char *av[], char *envp[])
 	{
 		if (cmdline_start(&cmdline) == NULL)
 			continue ;
-		error_num = tokenizer(cmdline, &env), g_list->cmdline = cmdline;
+		error_num = tokenizer(cmdline, &env);
 		if (error_num < 0)
 		{
 			ft_putstr_fd("pasing error\n", 2);
 			if (g_list != NULL)
+			{
+				g_list->cmdline = cmdline;
 				all_free(&g_list);
+			}
+			else
+				free(cmdline);
+			system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");
 			continue ;
 		}
 		rewind_list(&g_list);
@@ -160,11 +166,11 @@ int main(int argc, char *av[], char *envp[])
 		rewind_list(&g_list);
 		g_list->cmd_list = cmd_head;
 		g_list->redir_list = redir_head;
+		g_list->cmdline = cmdline;
 		if (error_num < 0)
 		{
 			ft_putstr_fd("pasing error\n", 2);
 			all_free(&g_list);
-			free(cmdline);
 			continue ;
 		}
 		while (cmd_head != NULL)

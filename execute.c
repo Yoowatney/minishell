@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:48 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/06 10:55:31 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/08 13:52:31 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 		if (cmd_head->type == PIPE && cmd_head->infile == 0)
 		{
 			if (dup2(cmd_head->prev->pipe[0], 0) == -1)
-				error_check("");
-			if (close(cmd_head->prev->pipe[1]) == -1)
 				error_check("");
 		}
 		if (cmd_head->cmd_table == NULL)

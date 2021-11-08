@@ -2,7 +2,7 @@
 
 t_list	*empty_node(void)
 {
-	t_list *node;
+	t_list	*node;
 	int		i;
 
 	node = malloc(sizeof(t_list));
@@ -46,7 +46,7 @@ char	**duplicate_table(char **cmd_table)
 
 int	count_pipe(t_list *go)
 {
-	int size;
+	int	size;
 
 	size = 0;
 	while (go)
@@ -65,7 +65,7 @@ t_list	*create_list(t_list *go)
 {
 	int		size;
 	t_list	*head;
-	
+
 	size = count_pipe(go) + 1;
 	head = NULL;
 	while (size--)
@@ -75,9 +75,9 @@ t_list	*create_list(t_list *go)
 	return (head);
 }
 
-int		get_file_size(int *files)
+int	get_file_size(int *files)
 {
-	int size;
+	int	size;
 
 	size = 0;
 	if (files == NULL)

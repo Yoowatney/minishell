@@ -2,7 +2,7 @@
 
 void	split_cmd_node(t_list *go, t_list *ret)
 {
-	while (go) 
+	while (go)
 	{
 		if (go->type == TOKEN_END || go->type == PIPE)
 		{
@@ -23,58 +23,74 @@ void	split_cmd_node(t_list *go, t_list *ret)
 	return ;
 }
 
+void	free_cmd_table(char **cmd_table)
+{
+	int	i;
+
+	i = 0;
+	while (cmd_table && cmd_table[i] != NULL)
+	{
+		free(cmd_table[i]);
+		cmd_table[i] = NULL;
+		i++;
+	}
+	free(cmd_table);
+}
+
+void	fill_redir_node(char **redir_table, char **cmd_table, char *element)
+{
+	int	i;
+
+	i = 0;
+	while (cmd_table && cmd_table[i] != NULL)
+	{
+		redir_table[i] = ft_strdup(cmd_table[i]);
+		i++;
+	}
+	redir_table[i++] = ft_strdup(element);
+	redir_table[i] = NULL;
+}
+
+void	fill_type_table(int *new, int *old, int element)
+{
+	int	i;
+
+	i = 0;
+	while (old && old[i])
+	{
+		new[i] = old[i];
+		i++;
+	}
+	new[i++] = element;
+	new[i] = 0;
+	free(old);
+}
+
 void	split_redir_node(t_list *go, t_list *ret)
 {
 	char	**redir_table;
 	int		*redir_type_table;
-	int		size;
-	int		i;
 
-	redir_table = NULL;
-	size = 0;
+	init_redir_node(&redir_table, &redir_type_table);
 	while (go)
 	{
-		if (go->type == L_REDIR || go->type == R_REDIR || go->type == A_REDIR || go->type == HEREDOC)
+		if (choice_condition(go->type) == 1)
 		{
-			i = 0;
-			size = get_size(ret->cmd_table);
-			redir_table = malloc(sizeof(char *) * (size + 2));
-			while (ret->cmd_table && ret->cmd_table[i] != NULL)
-			{
-				redir_table[i] = ft_strdup(ret->cmd_table[i]);
-				i++;
-			}
-			redir_table[i++] = ft_strdup(go->cmd_table[0]);
-			redir_table[i] = NULL;
-			for (int j = 0; ret->cmd_table && ret->cmd_table[j] != NULL; j++)
-			{
-				free(ret->cmd_table[j]);
-				ret->cmd_table[j] = NULL;
-			}
-			free(ret->cmd_table);
+			redir_table = ft_malloc(sizeof(char *)
+					* (get_size(ret->cmd_table) + 2));
+			fill_redir_node(redir_table, ret->cmd_table, go->cmd_table[0]);
+			free_cmd_table(ret->cmd_table), ret->cmd_table = NULL;
 			ret->cmd_table = redir_table;
-			
-			i = 0;
-			size = get_file_size(ret->file_type_table);
-			redir_type_table = malloc(sizeof(int) * (size + 2));
-			while (ret->file_type_table && ret->file_type_table[i])
-			{
-				redir_type_table[i] = ret->file_type_table[i];
-				i++;
-			}
-			redir_type_table[i++] = go->type;
-			redir_type_table[i] = 0;
-			free(ret->file_type_table);
+			redir_type_table = ft_malloc(sizeof(int)
+					* (get_file_size(ret->file_type_table) + 2));
+			fill_type_table(redir_type_table, ret->file_type_table, go->type);
 			ret->file_type_table = redir_type_table;
-			ret->type = go->type;
 		}
-		else if (go->type == CRITERIA)
+		else if (choice_condition(go->type) == 0)
 			ret = ret->next;
 		if (go->next != NULL)
 			go = go->next;
 		else
 			break ;
 	}
-	return ;
 }
-
