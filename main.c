@@ -183,7 +183,7 @@ int main(int argc, char *av[], char *envp[])
 			{
 				break ;
 			}
-			execute_bin(cmd_head, envp, &env);
+			execute_bin(cmd_head, envp, &env, &exit_status);
 			dup2(copy[0], STDIN_FILENO);
 			dup2(copy[1], STDOUT_FILENO);
 			close(copy[0]);
@@ -202,7 +202,8 @@ int main(int argc, char *av[], char *envp[])
 			if (cmd_head->next)
 				cmd_head = cmd_head->next;
 		}
-		exit_status = (unsigned char)(cmd_head->exit_status/256);
+		if (exit_status == 0)
+			exit_status = (unsigned char)(cmd_head->exit_status/256);
 		all_free(&g_list);
 		/*system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");*/
 	}

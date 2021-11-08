@@ -31,7 +31,7 @@ int	pipe_exist(void)
 	return (0);
 }
 
-void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
+void	execute_bin(t_list *cmd_head, char **envp, t_env **env, unsigned char *exit_status)
 {
 	int pid;
 	int i;
@@ -86,9 +86,9 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 			
 			if (pipe == 1)
 			{
-				check_cmd(&g_list, env, &cmd_head);
+				*exit_status = (unsigned char)check_cmd(&g_list, env, &cmd_head);
 				all_free(&g_list);
-				exit(0);
+				exit((int)(*exit_status));
 			}			
 			all_free(&g_list);
 			exit(0);
@@ -129,8 +129,9 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 				free(prefix);
 				(*env) = (*env) -> next; // env free
 			}
-			ft_putstr_fd("command not found : ", 2);
+			ft_putstr_fd("bash: ", 2);
 			ft_putstr_fd(cmd_head->cmd_table[0], 2);
+			ft_putstr_fd(": command not found", 2);
 			ft_putstr_fd("\n", 2);
 			exit(NOT_FOUND);
 		}
@@ -141,18 +142,11 @@ void	execute_bin(t_list *cmd_head, char **envp, t_env **env)
 
 		pipe = pipe_exist();
 		if (pipe != 1 && cmd_head->type != PIPE && cmd_head->cmd_table)
-		{
-			check_cmd(&g_list, env, &cmd_head);
-			//ft_putstr_fd(strerror(errno), 2);
-		}	
+			*exit_status = (unsigned char)check_cmd(&g_list, env, &cmd_head);
 		if (pipe_open)
-		{
 			close(cmd_head->pipe[1]);
-		}
 		if (cmd_head->type == PIPE && cmd_head->prev)
-		{
 			close(cmd_head->prev->pipe[0]);
-		}
 		if (cmd_head->infile != 0)
 			close(cmd_head->infile);
 		else if (cmd_head->outfile != 0)

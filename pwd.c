@@ -6,7 +6,7 @@ int	builtin_pwd(t_list **cmd_head)
 
 	pwd = getcwd(NULL, BUFSIZ);
 	if (!pwd)
-		return (0);
+		return (1);
 	if ((*cmd_head)->next && (*cmd_head)->next->type == PIPE)
 	{
 		ft_putstr_fd(pwd, (*cmd_head)->pipe[1]);
@@ -18,5 +18,5 @@ int	builtin_pwd(t_list **cmd_head)
 		ft_putchar_fd('\n', 1);
 	}
 	free(pwd);
-	return (1);
+	return (0);
 }

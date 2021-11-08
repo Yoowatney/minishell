@@ -70,7 +70,7 @@ void	init_redir_node(char ***redir_table, int **redir_type_table);
 
 /* execute fct */
 
-void	execute_bin(t_list *g_list, char *envp[], t_env **env);
+void	execute_bin(t_list *g_list, char *envp[], t_env **env, unsigned char *exit_status);
 int		process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[]);
 
 /* redirection utils */
@@ -119,7 +119,7 @@ int		builtin_echo(t_list **cmd_head);
 int		builtin_pwd(t_list **cmd_head);
 
 /* cd */
-int		builtin_cd(t_list **g_list, t_list **cmd_head, char **my_envp);
+int		builtin_cd(t_list **g_list, t_list **cmd_head, char **my_envp, t_env **env);
 
 /* export */
 int		builtin_export(t_list **cmd_head, t_env **env);
@@ -137,3 +137,13 @@ int	check_equal_sign(char *cmd_table);
 int	check_alpha(char *cmd_table);
 int	check_num(char *cmd_table);
 int	check_identifier(char *cmd_table);
+
+/* error_print */
+void	print_valid(t_list **cmd_head, char *cmd_table);
+void	no_file_cd(t_list **cmd_head);
+void	no_file_env(t_list **cmd_head, char *cmd_table);
+void	error_exit1(t_list **cmd_head);
+void	error_exit2(t_list **cmd_head);
+
+/* pipe_exist */
+int	pipe_exist(void);

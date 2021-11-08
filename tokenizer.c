@@ -289,11 +289,11 @@ char	**change_dollar2(char **line, char **buf, t_env *env, unsigned char exit_st
 			break ;
 		
 	}
-	make_string('\0', buf);
+	if (*buf != NULL)
+		make_string('\0', buf);
 	free(check);
 	check = NULL;
-	if (!**line)
-		(*line)--;
+	(*line)--;
 	return (line);
 }
 
