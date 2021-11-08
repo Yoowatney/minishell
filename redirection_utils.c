@@ -22,7 +22,7 @@ void	right_redir(t_list *cmd_head, t_list *redir_head, int fd, int i)
 
 void	append_redir(t_list *cmd_head, t_list *redir_head, int fd, int i)
 {
-	fd = open(redir_head->cmd_table[i], O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	fd = open(redir_head->cmd_table[i], O_CREAT | O_APPEND | O_WRONLY, 0644);
 	if (fd == -1)
 		error_check("");
 	cmd_head->outfile = fd;
