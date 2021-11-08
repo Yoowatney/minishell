@@ -124,10 +124,12 @@ int main(int argc, char *av[], char *envp[])
 	t_env	*env;
 	t_list	*cmd_head;
 	t_list	*redir_head;
+	unsigned char	exit_status;
 
 	cmd_head = NULL;
 	redir_head = NULL;
 	env = NULL;
+	exit_status = 0;
 	if (argc != 1)
 	{
 		ft_putstr_fd("error\n", 2);
@@ -138,7 +140,7 @@ int main(int argc, char *av[], char *envp[])
 	{
 		if (cmdline_start(&cmdline) == NULL)
 			continue ;
-		error_num = tokenizer(cmdline, &env), g_list->cmdline = cmdline;
+		error_num = tokenizer(cmdline, &env, exit_status), g_list->cmdline = cmdline;
 		if (error_num < 0)
 		{
 			ft_putstr_fd("pasing error\n", 2);
@@ -188,10 +190,20 @@ int main(int argc, char *av[], char *envp[])
 			else
 				break ;
 		}
-		while (waitpid(-1, &cmd_head->exit_status, 0) > 0)
+		rewind_list(&cmd_head);
+		while (waitpid(cmd_head->pid, &cmd_head->exit_status, 0) > 0)
 		{
-			;
+			//printf("cmd_table : %s\n", cmd_head->cmd_table[0]);
+			//printf("exit_status : %d\n", cmd_head->exit_status);
+			if (cmd_head->next)
+				cmd_head = cmd_head->next;
+			
 		}
+		
+		
+		exit_status = (unsigned char)(cmd_head->exit_status/256);
+		//printf("final_cmd_table : %s\n", cmd_head->cmd_table[0]);
+		//printf("final_exit_status : %d\n", (int)exit_status);
 		all_free(&g_list);
 		system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");
 	}

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	delete_env(t_env *env, char *unset_key)
+int	delete_env(t_env *env, char *unset_key)
 {
 	t_env	*check;
 	t_env	*tmp;
@@ -9,9 +9,7 @@ void	delete_env(t_env *env, char *unset_key)
 	while (check)
 	{
 		if (ft_strcmp((check)->key, unset_key) == 0)
-		{
-			printf("%s %s\n", unset_key, (check)->key);
-			
+		{			
 			if ((check)->prev && (check)->next)
 			{
 				(check)->prev->next = (check)->next;
@@ -43,39 +41,67 @@ void	delete_env(t_env *env, char *unset_key)
 		if ((check)->next)
 			(check) = (check)->next;
 		else
-			break ;
+			return (-1);
 	}
+	return (1);
 }
 
-int	builtin_unset(t_list **cmd_head, t_env **env, t_list **g_list)
+int	check_unset_alpha(char *cmd_table)
 {
-	rewind_list(g_list);
-	rewind_list(&(*g_list)->cmd_list);
-	while ((*g_list)->cmd_list)	
-	{
-		if ((*g_list)->cmd_list->type == PIPE)
-			return (1);
-		if ((*g_list)->cmd_list->next != NULL)
-			(*g_list)->cmd_list = (*g_list)->cmd_list->next;
-		else
-			break ;
-	}
-
-	//(void)cmd_head;
+	int	i;
 	
+	i = 0;
+	while (cmd_table[i])
+	{
+		if ((cmd_table[i] >= 65 && cmd_table[i] <= 90)
+		|| (cmd_table[i] >= 97 && cmd_table[i] <= 122)
+		|| (cmd_table[i] >= 48 && cmd_table[i] <= 57))
+		{
+			i++;
+			continue ;
+		}
+		if (cmd_table[i])
+			return (-1);
+	}
+	return (1);
+}
+
+int	builtin_unset(t_list **cmd_head, t_env **env)
+{
 	char	*unset_key;
 	int		i;
-
-	//(void)unset_key;
-	//(void)i;
+	char	**cmd_table;
 	
-	if ((*cmd_head)->cmd_table[1])
+	i = 1;
+	cmd_table = (*cmd_head)->cmd_table;
+	
+	if ((*cmd_head)->cmd_table[i])
 	{
-		i = 1;
+		
 		while ((*cmd_head)->cmd_table[i])
 		{
+			
+			if (check_num(cmd_table[i]) == -1)
+			{
+				ft_putstr_fd(strerror(errno), 2);
+				if ((*cmd_head)->cmd_table[i+1])
+					i++;
+				else
+					break ;
+				continue ;
+			}
+			if (check_unset_alpha(cmd_table[i]) == -1)
+			{
+				ft_putstr_fd(strerror(errno), 2);
+				if ((*cmd_head)->cmd_table[i+1])
+					i++;
+				else
+					break ;
+				continue ;
+			}
 			unset_key = (*cmd_head)->cmd_table[i];
 			delete_env(*env, unset_key);
+			
 			if ((*cmd_head)->cmd_table[i+1])
 				i++;
 			else

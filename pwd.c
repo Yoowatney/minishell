@@ -17,5 +17,6 @@ int	builtin_pwd(t_list **cmd_head)
 		ft_putstr_fd(pwd, 1);
 		ft_putchar_fd('\n', 1);
 	}
+	free(pwd);
 	return (1);
 }
