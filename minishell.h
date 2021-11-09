@@ -67,6 +67,10 @@ int		get_file_size(int *files);
 t_list	*create_list(t_list *go);
 int		choice_condition(int type);
 void	init_redir_node(char ***redir_table, int **redir_type_table);
+void	reparse_rewind(t_list **g_list);
+void	split_cmd(t_list **cmd_head, t_list *g_list);
+void	split_redir(t_list **redir_head, t_list *g_list);
+
 
 /* execute fct */
 
@@ -85,7 +89,7 @@ void	split_cmd_node(t_list *go, t_list *ret);
 void	split_redir_node(t_list *go, t_list *ret);
 t_list	*create_list(t_list *go);
 
-/* usual utils */
+/* main utils */
 
 void	rewind_list(t_list **list);
 int		is_space(int c);
@@ -94,6 +98,12 @@ void	delete_key(t_list **envp_data);
 int		env_size(t_env *env);
 t_env	*env_last(t_env *env);
 void	error_check(char *str);
+char	*get_key(char *envp);
+char	*get_value(char	*envp);
+t_env	*env_last(t_env *env);
+int		env_size(t_env *env);
+void	env_add_back(t_env **env, t_env *newe);
+void	free_cmd_table(char **cmd_table);
 
 
 /* check_cmd */

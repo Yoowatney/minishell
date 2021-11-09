@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:07 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/08 15:27:06 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/09 15:51:32 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -458,7 +458,11 @@ int	tokenizer(char *line, t_env **env, unsigned char exit_status)
 			error_num = make_string(*line, &buf);
 		}
 		if (error_num < 0)
+		{
+			free(buf);
+			buf = NULL;
 			return (-1);
+		}
 		line++;
 	}
 	if (g_list && (ft_lstlast(g_list)->type == TOKEN_END || ft_lstlast(g_list)->type == PIPE) && type != PIPE)

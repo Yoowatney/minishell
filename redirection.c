@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 16:16:43 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/08 16:16:44 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/09 16:13:20 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int	process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[])
 			close_fd(fd, copy);
 			if (left_redir(redir_head, fd, i, copy) == -1)
 				return (-1);
+			printf("process fd : %d\n", fd);
 			cmd_head->infile = fd;
 		}
 		else if (redir_head->file_type_table[i] == HEREDOC)
