@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:07 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 03:38:31 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 03:46:02 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -327,8 +327,7 @@ int	tokenizer(char *line, t_env **env, unsigned char exit_status)
 	static	char	*buf;
 	int		type;
 
-	buf = NULL;
-	type = TOKEN_END;
+	buf = NULL, type = TOKEN_END;
 	while (*line)
 	{
 		if (*line == '\"')
@@ -336,37 +335,19 @@ int	tokenizer(char *line, t_env **env, unsigned char exit_status)
 		else if (*line == '\'')
 			error_num = open_single_quote(&line, &buf);
 		else if (*line == ' ')
-		{
 			error_num = is_white_space(&line, &buf, &type);
-		}
 		else if (*line == ';' || *line == '\\')
-		{
 			error_num = -1;
-		}
 		else if (*line == '$')
-		{
 			error_num = is_dollar(&line, &buf, env, exit_status);
-		}
 		else if (*line == '|')
-		{
 			error_num = make_pipe_node(&buf, &g_list, &line, &type);
-		}
 		else if (*line == '<')
-		{
 			error_num = make_L_redir_node(&buf, &line, &type);
-			/*if (make_L_redir_node(&buf, &line, &type) < 0)
-			 *    return (-1);*/
-		}
 		else if (*line == '>')
-		{
 			error_num = make_R_redir_node(&buf, &line, &type);
-			/*if (make_R_redir_node(&buf, &line, &type) < 0)
-			 *    return (-1);*/
-		}
 		else
-		{
 			error_num = make_string(*line, &buf);
-		}
 		if (error_num < 0)
 		{
 			free(buf), buf = NULL;

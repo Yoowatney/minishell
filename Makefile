@@ -18,7 +18,7 @@ SRCS		=	./main.c ./signal.c ./execute.c ./tokenizer.c ./main_utils.c \
 				./export.c ./unset.c ./ft_strjoin_ch.c\
 				./cmdline.c ./split_list2.c ./sys_call.c ./redirection_utils.c\
 				./error_print.c ./main_utils2.c ./reparse_rewind.c \
-				./tokenizer2.c ./redirection_utils2.c
+				./tokenizer2.c ./redirection_utils2.c ./execute2.c
 
 
 

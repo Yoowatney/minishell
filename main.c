@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 03:43:11 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 05:04:10 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,25 +81,19 @@ int	main(int argc, char *av[], char *envp[])
 			continue ;
 		}
 		reparse_rewind(&g_list);
-		
+
 		split_cmd(&cmd_head, g_list), split_redir(&redir_head, g_list);
 		g_list->cmd_list = cmd_head;
 		g_list->redir_list = redir_head;
 		g_list->cmdline = cmdline;
-		/*cmd_head = create_list(g_list);
-		 *split_cmd_node(g_list, cmd_head);
-		 *rewind_list(&cmd_head);*/
 
-		/*redir_head = create_list(g_list);
-		 *split_redir_node(g_list, redir_head);
-		 *rewind_list(&redir_head);*/
 		while (cmd_head != NULL)
 		{
 			int copy[2];
 
 			if (process_redir_node(redir_head, cmd_head, copy) < 0)
 				break ;
-			execute_bin(cmd_head, envp, &env, &exit_status);
+			execute_bin(cmd_head, &env, &exit_status);
 			dup2(copy[0], STDIN_FILENO);
 			dup2(copy[1], STDOUT_FILENO);
 			close(copy[0]);
@@ -118,11 +112,11 @@ int	main(int argc, char *av[], char *envp[])
 		if (exit_status == 0)
 			exit_status = (unsigned char)(cmd_head->exit_status/256);
 		all_free(&g_list);
-        int fd;
 
-		fd = open("t0", O_WRONLY);
-		printf("%d\n", fd);
+		int fd;
+		fd = open("Makefile", O_WRONLY);
+		printf("\ncheck fd is 3 : %d\n\n", fd);
 		close(fd);
-        system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");
+		system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");
 	}
 }

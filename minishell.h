@@ -79,8 +79,9 @@ void	split_redir(t_list **redir_head, t_list *g_list);
 
 /* execute fct */
 
-void	execute_bin(t_list *g_list, char *envp[], t_env **env, unsigned char *exit_status);
+void	execute_bin(t_list *g_list, t_env **env, unsigned char *exit_status);
 int		process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[]);
+void	execute(t_list *cmd_head, t_list *g_list, t_env  **env, char **my_envp);
 
 /* redirection utils */
 void	close_L_fd(int fd, int copy[]);
@@ -98,6 +99,7 @@ t_list	*create_list(t_list *go);
 /* main utils */
 
 void	rewind_list(t_list **list);
+void	rewind_env(t_env **env);
 int		is_space(int c);
 char	**allocate_envp(t_env *envp_data);
 void	delete_key(t_list **envp_data);
@@ -147,6 +149,7 @@ void	env_add_back(t_env **env, t_env *newe);
 
 /* unset */
 int		builtin_unset(t_list **cmd_head, t_env **env);
+void	free_env(t_env **check, t_env **tmp);
 
 /* builtin util */
 int	check_equal_sign(char *cmd_table);
