@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 16:03:31 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 01:44:19 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 03:26:38 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,11 @@ void	heredoc_redir(t_list *cmd_head, t_list *redir_head, int fd, int i)
 		if (str == NULL || ft_strncmp(str, redir_head->cmd_table[i],
 				ft_strlen(redir_head->cmd_table[i])) == 0)
 		{
+			free(str);
 			break ;
 		}
-		write(fd, str, ft_strlen(str));
-		write(fd, "\n", 1);
+		write(fd, str, ft_strlen(str)), write(fd, "\n", 1);
+		free(str);
 	}
 	close(fd);
 	fd = open("/tmp/.heredoc", O_RDONLY);

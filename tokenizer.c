@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:07 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 03:11:30 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 03:38:31 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -353,13 +353,15 @@ int	tokenizer(char *line, t_env **env, unsigned char exit_status)
 		}
 		else if (*line == '<')
 		{
-			if (make_L_redir_node(&buf, &line, &type) < 0)
-				return (-1);
+			error_num = make_L_redir_node(&buf, &line, &type);
+			/*if (make_L_redir_node(&buf, &line, &type) < 0)
+			 *    return (-1);*/
 		}
 		else if (*line == '>')
 		{
-			if (make_R_redir_node(&buf, &line, &type) < 0)
-				return (-1);
+			error_num = make_R_redir_node(&buf, &line, &type);
+			/*if (make_R_redir_node(&buf, &line, &type) < 0)
+			 *    return (-1);*/
 		}
 		else
 		{

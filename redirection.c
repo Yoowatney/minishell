@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 16:16:43 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/09 17:15:55 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 03:34:41 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,17 @@ int	process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[])
 	{
 		if (redir_head->file_type_table[i] == L_REDIR)
 		{
-			close_fd(fd, copy);
+			close_L_fd(fd, copy);
 			if (left_redir(redir_head, &fd, i, copy) == -1)
 				return (-1);
 			cmd_head->infile = fd;
 		}
 		else if (redir_head->file_type_table[i] == HEREDOC)
-			close_fd(fd, copy), heredoc_redir(cmd_head, redir_head, fd, i);
+			close_L_fd(fd, copy), heredoc_redir(cmd_head, redir_head, fd, i);
 		else if (redir_head->file_type_table[i] == R_REDIR)
-			close_fd(fd, copy), right_redir(cmd_head, redir_head, fd, i);
+			close_R_fd(fd, copy), right_redir(cmd_head, redir_head, fd, i);
 		else if (redir_head->file_type_table[i] == A_REDIR)
-			close_fd(fd, copy), append_redir(cmd_head, redir_head, fd, i);
+			close_R_fd(fd, copy), append_redir(cmd_head, redir_head, fd, i);
 		i++;
 	}
 	return (1);

@@ -83,7 +83,8 @@ void	execute_bin(t_list *g_list, char *envp[], t_env **env, unsigned char *exit_
 int		process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[]);
 
 /* redirection utils */
-void	close_fd(int fd, int copy[]);
+void	close_L_fd(int fd, int copy[]);
+void	close_R_fd(int fd, int copy[]);
 
 void	right_redir(t_list *cmd_head, t_list *redir_head, int fd, int i);
 void	append_redir(t_list *cmd_head, t_list *redir_head, int fd, int i);

@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 03:12:43 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 03:39:12 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,11 @@ int	main(int argc, char *av[], char *envp[])
 				g_list->cmdline = cmdline, all_free(&g_list);
 			else
 				free(cmdline);
-			system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");
+			/*system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");*/
 			continue ;
 		}
 		reparse_rewind(&g_list);
+		
 		split_cmd(&cmd_head, g_list), split_redir(&redir_head, g_list);
 		g_list->cmd_list = cmd_head;
 		g_list->redir_list = redir_head;
@@ -121,7 +122,7 @@ int	main(int argc, char *av[], char *envp[])
  *
  *        fd = open("t0", O_WRONLY);
  *        printf("%d\n", fd);
- *        close(fd);*/
-		/*system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");*/
+ *        close(fd);
+ *        system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");*/
 	}
 }
