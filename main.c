@@ -6,25 +6,24 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/09 17:00:27 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 03:12:43 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_list *g_list = NULL;
+t_list	*g_list = NULL;
 
 int	init(int argc, char *argv[], char *envp[], t_env **env)
 {
-	extern int rl_catch_signals;
-	int i;
+	extern int	rl_catch_signals;
+	int			i;
+	t_env		*new;
 
 	i = 0;
 	rl_catch_signals = 0;
 	(void)argc;
 	(void)argv;
-	t_env	*new;
-
 	while (envp[i] != NULL)
 	{
 		new = malloc(sizeof(t_env));
@@ -52,7 +51,7 @@ int	all_white_space(char *cmdline)
 	return (1);
 }
 
-int main(int argc, char *av[], char *envp[])
+int	main(int argc, char *av[], char *envp[])
 {
 	char	*cmdline;
 	t_env	*env;

@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:07 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/09 16:45:58 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 03:11:30 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -325,11 +325,9 @@ int	tokenizer(char *line, t_env **env, unsigned char exit_status)
 {
 	int		error_num;
 	static	char	*buf;
-	static	char	*redir_buf;
 	int		type;
 
 	buf = NULL;
-	redir_buf = NULL;
 	type = TOKEN_END;
 	while (*line)
 	{
@@ -351,107 +349,17 @@ int	tokenizer(char *line, t_env **env, unsigned char exit_status)
 		}
 		else if (*line == '|')
 		{
-			// | 먼저 나왔을 경우, || 방지
-			if ((buf == NULL && g_list == NULL) || *(line + 1) == '|')
-				return (-1);
-			else if (buf != NULL)
-				make_node(&buf, TOKEN_END);
-			buf = ft_strdup("|");
-			make_node(&buf, CRITERIA);
-			line++;
-			error_num = is_white_space(&line, &buf, &type);
-			if (error_num == 0)
-				line++;
-			if (*line == '|' && *line == '\0')
-				return (-1);
-			type = PIPE;
-			line--;
+			error_num = make_pipe_node(&buf, &g_list, &line, &type);
 		}
 		else if (*line == '<')
 		{
-			if (buf != NULL)
-				make_node(&buf, TOKEN_END);
-			line++;
-			if (*line == '<')
-			{
-				line++;
-				error_num = is_white_space(&line, &redir_buf, &type);
-				if (error_num == 0)
-					line++;
-				if (*line != ' ' && *line != '\t' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
-				{
-					while (*line != ' ' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
-					{
-						make_string(*line, &buf);
-						line++;
-					}
-					make_node(&buf, HEREDOC);
-					line--;
-				}
-				else
-					return (-1);
-			}
-			else
-			{
-				error_num = is_white_space(&line, &redir_buf, &type);
-				if (error_num == 0)
-					line++;
-				if (*line != ' ' && *line != '\t' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
-				{
-					while (*line != ' ' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
-					{
-						make_string(*line, &buf);
-						line++;
-					}
-					make_node(&buf, L_REDIR);
-					line--;
-				}
-				else
-					return (-1);
-			}
+			if (make_L_redir_node(&buf, &line, &type) < 0)
+				return (-1);
 		}
 		else if (*line == '>')
 		{
-			if (buf != NULL)
-				make_node(&buf, TOKEN_END);
-			line++;
-			if (*line == '>')
-			{
-				line++;
-				error_num = is_white_space(&line, &redir_buf, &type);
-				if (error_num == 0)
-					line++;
-				if (*line != ' ' && *line != '\t' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
-				{
-					while (*line != ' ' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
-					{
-						make_string(*line, &buf);
-						line++;
-					}
-					make_node(&buf, A_REDIR);
-					line--;
-				}
-				else
-					return (-1);
-			}
-			else
-			{
-				error_num = is_white_space(&line, &redir_buf, &type);
-				if (error_num == 0)
-					line++;
-				if (*line != ' ' && *line != '\t' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
-				{
-					while (*line != ' ' && *line != '<' && *line != '>' && *line != '|' && *line != '\0')
-					{
-						make_string(*line, &buf);
-						line++;
-					}
-					make_node(&buf, R_REDIR);
-					line--;
-				}
-				else
-					return (-1);
-			}
+			if (make_R_redir_node(&buf, &line, &type) < 0)
+				return (-1);
 		}
 		else
 		{
@@ -459,8 +367,7 @@ int	tokenizer(char *line, t_env **env, unsigned char exit_status)
 		}
 		if (error_num < 0)
 		{
-			free(buf);
-			buf = NULL;
+			free(buf), buf = NULL;
 			return (-1);
 		}
 		line++;

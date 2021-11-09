@@ -54,6 +54,11 @@ void	make_redir_node(char **buf, int type, t_list **redir_node);
 char	**change_dollar(char **line, char **buf, t_env *env, unsigned char exit_status);
 int		all_white_space(char *cmdline);
 char	*cmdline_start(char	**cmdline);
+void	make_node(char **buf, int type);
+int		is_white_space(char **line, char **buf, int *type);
+int		make_pipe_node(char **buf, t_list **g_list, char **line, int *type);
+int		make_L_redir_node(char **buf, char **line, int *type);
+int		make_R_redir_node(char **buf, char **line, int *type);
 
 
 /* parsing fct */
