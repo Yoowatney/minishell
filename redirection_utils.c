@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 16:03:31 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/09 16:03:32 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/09 17:13:16 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,17 @@ void	append_redir(t_list *cmd_head, t_list *redir_head, int fd, int i)
 		error_check("");
 }
 
-int	left_redir(t_list *redir_head, int fd, int i, int copy[])
+int	left_redir(t_list *redir_head, int *fd, int i, int copy[])
 {
-	fd = open(redir_head->cmd_table[i], O_RDONLY);
-	if (fd == -1)
+	*fd = open(redir_head->cmd_table[i], O_RDONLY);
+	if (*fd == -1)
 		error_check(redir_head->cmd_table[i]);
 	if (errno == 2)
 	{
 		close(copy[0]);
 		return (-1);
 	}
-	if (dup2(fd, STDIN_FILENO) == -1)
+	if (dup2(*fd, STDIN_FILENO) == -1)
 		error_check("");
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:07 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/09 15:51:32 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/09 16:45:58 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	make_node(char **buf, int type)
 	t_list *node;
 
 	if (*buf == NULL)
-	    return ;
+		return ;
 	node = ft_lstnew(*buf);
 	node -> length = 1;
 	node -> type = type;

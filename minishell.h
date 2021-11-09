@@ -83,7 +83,7 @@ void	close_fd(int fd, int copy[]);
 void	right_redir(t_list *cmd_head, t_list *redir_head, int fd, int i);
 void	append_redir(t_list *cmd_head, t_list *redir_head, int fd, int i);
 void	heredoc_redir(t_list *cmd_head, t_list *redir_head, int fd, int i);
-int		left_redir(t_list *redir_head, int fd, int i, int copy[]);
+int		left_redir(t_list *redir_head, int *fd, int i, int copy[]);
 
 void	split_cmd_node(t_list *go, t_list *ret);
 void	split_redir_node(t_list *go, t_list *ret);
