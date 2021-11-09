@@ -39,16 +39,10 @@ endif
 all			: 	$(NAME) ./minishell.h
 
 $(NAME)		: $(OBJ) LIBFT
-	@echo "libft compiling" \
-		&& echo "... loading ..."
-	@make bonus -C libft
-	@echo "libft succesfully compiled."
-	@echo "minishell compiling" \
-		&& make process
+	make process
 
 process		: ./minishell.h
 	$(CC)  $(LIBS) $(FLAGS) $(HEADER_DIR) -o $(NAME) $(OBJ) $(LIBFT)
-	echo "minishell succesfully compiled."
 
 %.o			: %.c
 	$(CC) $(FLAGS) $(HEADER_DIR) -o $@ -c $<
