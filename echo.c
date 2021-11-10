@@ -6,7 +6,7 @@
 /*   By: jlim <jlim@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 17:30:05 by jlim              #+#    #+#             */
-/*   Updated: 2021/11/09 17:30:06 by jlim             ###   ########.fr       */
+/*   Updated: 2021/11/10 18:48:35 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,26 +106,27 @@ int	builtin_echo(t_list **cmd_head)
 {
 	char	**print;
 	int		n_flag;
+	int		i;
 
-	print = (*cmd_head)->cmd_table;
-	if (*(print + 1))
-		print++;
-	else
+	i = 0;
+	if ((*cmd_head)->cmd_table[1] == NULL)
 		return (0);
 	n_flag = 0;
-	print = delete_null(cmd_head);
-	print++;
-	if (ft_strcmp(*print, "-n") == 0)
+	print = delete_null(cmd_head), print++, i++;
+	while (ft_strcmp(*print, "-n") == 0)
 	{
-		while (ft_strcmp(*print, "-n") == 0 && *(print + 1))
-			print++;
-		if (ft_strcmp(*print, "-n") == 0)
+		print++;
+		i++, n_flag = 1;
+		if (*print == NULL)
+		{
+			free_cmd_table(print - i);
 			return (0);
-		n_flag = 1;
+		}
 	}
 	if (echo_util(cmd_head, print, n_flag) == 1)
 		return (0);
 	else
 		echo_util2(print, n_flag);
+	free_cmd_table(print - i);
 	return (0);
 }
