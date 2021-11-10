@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-extern unsigned char	exit_status;
+extern unsigned char	g_exit_status;
 
 int	pipe_exist(t_list *g_list)
 {
@@ -81,9 +81,9 @@ void	execute_bin(t_list *cmd_head, t_env **env, t_list **g_list)
 			
 			if (pipe == 1)
 			{
-				exit_status = (unsigned char)check_cmd(g_list, env, &cmd_head, my_envp);
+				g_exit_status = (unsigned char)check_cmd(g_list, env, &cmd_head, my_envp);
 				all_free(g_list);
-				exit((int)(exit_status));
+				exit((int)(g_exit_status));
 			}			
 			all_free(g_list);
 			exit(0);
@@ -99,7 +99,7 @@ void	execute_bin(t_list *cmd_head, t_env **env, t_list **g_list)
 
 		pipe = pipe_exist(*g_list);
 		if (pipe != 1 && cmd_head->type != PIPE && cmd_head->cmd_table)
-			exit_status = (unsigned char)check_cmd(g_list, env, &cmd_head, my_envp);
+			g_exit_status = (unsigned char)check_cmd(g_list, env, &cmd_head, my_envp);
 		if (pipe_open)
 			close(cmd_head->pipe[1]);
 		if (cmd_head->type == PIPE && cmd_head->prev)

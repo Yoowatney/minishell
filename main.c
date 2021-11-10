@@ -12,8 +12,7 @@
 
 #include "minishell.h"
 
-t_list	*g_list = NULL;
-unsigned char	exit_status;
+unsigned char	g_exit_status;
 
 int	init(int argc, char *argv[], char *envp[], t_env **env)
 {
@@ -58,11 +57,13 @@ int	main(int argc, char *av[], char *envp[])
 	t_env	*env;
 	t_list	*cmd_head;
 	t_list	*redir_head;
+	t_list	*g_list;
 
 	cmd_head = NULL;
+	g_list = NULL;
 	redir_head = NULL;
 	env = NULL;
-	exit_status = 0;
+	g_exit_status = 0;
 	if (argc != 1)
 		ft_putstr_fd("Usage : \"./minishell\"\n", 2), exit(0);
 	init(argc, av, envp, &env);
@@ -73,6 +74,7 @@ int	main(int argc, char *av[], char *envp[])
 		if (tokenizer(cmdline, &env, &g_list) < 0)
 		{
 			ft_putstr_fd("pasing error\n", 2);
+			g_exit_status = 200;
 			if (g_list != NULL)
 				g_list->cmdline = cmdline, all_free(&g_list);
 			else
@@ -109,8 +111,8 @@ int	main(int argc, char *av[], char *envp[])
 			if (cmd_head->next)
 				cmd_head = cmd_head->next;
 		}
-		if (exit_status == 0)
-			exit_status = (unsigned char)(cmd_head->exit_status/256);
+		if (g_exit_status == 0)
+			g_exit_status = (unsigned char)(cmd_head->exit_status/256);
 		all_free(&g_list);
 
 		int fd;
