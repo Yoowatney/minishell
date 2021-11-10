@@ -26,7 +26,7 @@ void	no_file_cd(char **cd_cmd, char *check_home)
 	ft_putstr_fd("bash: ", 2);
 	ft_putstr_fd(cd_cmd[0], 2);
 	ft_putstr_fd(": ", 2);
-	if (cd_cmd[1]&& check_home == NULL)
+	if (cd_cmd[1] && check_home == NULL)
 		ft_putstr_fd(cd_cmd[1], 2);
 	else if (check_home != NULL)
 		ft_putstr_fd(check_home, 2);
