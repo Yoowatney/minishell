@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:48 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 05:01:04 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 05:13:13 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int	pipe_exist(void)
 	return (0);
 }
 
-// envp 삭제
 void	execute_bin(t_list *cmd_head, t_env **env, unsigned char *exit_status)
 {
 	int		pid;
@@ -108,9 +107,7 @@ void	execute_bin(t_list *cmd_head, t_env **env, unsigned char *exit_status)
 			close(cmd_head->infile);
 		else if (cmd_head->outfile != 0)
 			close(cmd_head->outfile);
-		for (int j = 0; my_envp[j] != NULL; j++)
-			free(my_envp[j]);
-		free(my_envp);
+		free_cmd_table(my_envp);
 	}
 	return ;
 }

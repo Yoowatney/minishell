@@ -9,8 +9,6 @@
 #include <sys/errno.h>
 
 /* TYPE */
-
-
 #define EMPTY		497
 #define CRITERIA	498
 #define TOKEN_END	499
@@ -32,19 +30,16 @@ typedef struct s_env
 	char	*env_line;
 	
 }				t_env;
-/* sys call */
 
+/* sys call */
 void	*ft_malloc(int size);
 
-
 /* signal fct */
-
 void	sig_handler(int signum);
 void	bin_sig_handler(int signum);
 void	init_execute_bin(void);
 
 /* token fct */
-
 int		open_single_quote(char **line, char **buf);
 int		open_double_quote(char **line, char **buf, t_env **env, unsigned char exit_status);
 int		make_string(char c, char **buf);
@@ -62,7 +57,6 @@ int		make_R_redir_node(char **buf, char **line, int *type);
 
 
 /* parsing fct */
-
 int		get_size(char **cmd_table);
 void	re_parsing(t_list **g_list);
 void	split_cmd_node(t_list *go, t_list *ret);
@@ -78,7 +72,6 @@ void	split_redir(t_list **redir_head, t_list *g_list);
 
 
 /* execute fct */
-
 void	execute_bin(t_list *g_list, t_env **env, unsigned char *exit_status);
 int		process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[]);
 void	execute(t_list *cmd_head, t_list *g_list, t_env  **env, char **my_envp);
@@ -97,7 +90,6 @@ void	split_redir_node(t_list *go, t_list *ret);
 t_list	*create_list(t_list *go);
 
 /* main utils */
-
 void	rewind_list(t_list **list);
 void	rewind_env(t_env **env);
 int		is_space(int c);
@@ -165,4 +157,4 @@ void	error_exit1(t_list **cmd_head);
 void	error_exit2(t_list **cmd_head);
 
 /* pipe_exist */
-int	pipe_exist(void);
+int		pipe_exist(void);

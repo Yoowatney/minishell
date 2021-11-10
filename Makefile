@@ -20,8 +20,6 @@ SRCS		=	./main.c ./signal.c ./execute.c ./tokenizer.c ./main_utils.c \
 				./error_print.c ./main_utils2.c ./reparse_rewind.c \
 				./tokenizer2.c ./redirection_utils2.c ./execute2.c
 
-
-
 OBJ			=	$(SRCS:.c=.o)
 
 
@@ -39,7 +37,8 @@ endif
 all			: 	$(NAME) ./minishell.h
 
 $(NAME)		: $(OBJ) LIBFT
-	make process
+	@make bonus -C libft \
+		&& make process
 
 process		: ./minishell.h
 	$(CC)  $(LIBS) $(FLAGS) $(HEADER_DIR) -o $(NAME) $(OBJ) $(LIBFT)
