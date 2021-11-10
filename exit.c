@@ -1,4 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jlim <jlim@student.42seoul.kr>             +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/10 13:59:30 by jlim              #+#    #+#             */
+/*   Updated: 2021/11/10 13:59:32 by jlim             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
+
+extern unsigned char	exit_status;
 
 void	rewind_env(t_env **env)
 {
@@ -12,7 +26,7 @@ void	ft_envclear(t_env **env)
 
 	if (!*env)
 		return ;
-	while (*env != NULL)
+	while ((*env)->next)
 	{
 		ptr = *env;
 		if (ptr)
@@ -23,25 +37,10 @@ void	ft_envclear(t_env **env)
 			ptr->key = NULL;
 			free(ptr->value);
 			ptr->value = NULL;
-			
 		}
-		if ((*env)->next)
-			*env = (*env)->next;
-		else
-			break ;
+		*env = (*env)->next;
 		free(ptr);
 		ptr = NULL;
-	}
-	if (*env)
-	{
-		free((*env)->env_line);
-		(*env)->env_line = NULL;
-		free((*env)->key);
-		(*env)->key = NULL;
-		free((*env)->value);
-		(*env)->value = NULL;
-		free(*env);
-		*env = NULL;
 	}
 }
 
@@ -50,9 +49,8 @@ void	all_free(t_list **g_list)
 	rewind_list(g_list);
 	rewind_list(&((*g_list)->cmd_list));
 	rewind_list(&((*g_list)->redir_list));
-	
 	ft_lstclear(&((*g_list)->cmd_list));
-	ft_lstclear(&((*g_list)->redir_list));	
+	ft_lstclear(&((*g_list)->redir_list));
 	free((*g_list)->cmdline);
 	(*g_list)->cmd_list = NULL;
 	(*g_list)->redir_list = NULL;
@@ -77,24 +75,16 @@ int	check_exit_num(char *cmd_table)
 
 int	builtin_exit(t_list **g_list, t_env **env, t_list **cmd_head)
 {
-	unsigned char	exit_status;
-
 	exit_status = 0;
 	if ((*cmd_head)->cmd_table[1] && (*cmd_head)->cmd_table[2])
 	{
 		if (check_exit_num((*cmd_head)->cmd_table[1]) == 1)
-		{
-			error_exit1(cmd_head);
-			return (1); //too_many_argument;
-		}
+			return (error_exit1(cmd_head));
 	}
 	if ((*cmd_head)->cmd_table[1])
 	{
 		if (check_exit_num((*cmd_head)->cmd_table[1]) == -1)
-		{
-			error_exit2(cmd_head);
-			exit_status = 255;
-		}
+			exit_status = error_exit2(cmd_head);
 		else
 			exit_status = (unsigned char)(ft_atoi((*cmd_head)->cmd_table[1]));
 	}

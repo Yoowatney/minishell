@@ -194,8 +194,8 @@ int	check_identifier(char *cmd_table, t_list **cmd_head, int *ret);
 void	print_valid(t_list **cmd_head, char *cmd_table);
 void	no_file_cd(t_list **cmd_head);
 void	no_file_env(t_list **cmd_head, char *cmd_table);
-void	error_exit1(t_list **cmd_head);
-void	error_exit2(t_list **cmd_head);
+int		error_exit1(t_list **cmd_head);
+int		error_exit2(t_list **cmd_head);
 
 /* pipe_exist */
 int	pipe_exist(void);
