@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:50:27 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 15:54:50 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 16:40:10 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,9 @@ void	execute(t_list *cmd_head, t_list *g_list, t_env **env, char **my_envp);
 void	execute_process(t_list **cmd_head, t_env **env,
 			t_list **g_list, t_list **redir_head);
 void	wait_process(t_list **cmd_head, t_list **g_list);
+
+/* execute utils */
+void	execute_init(int *pipe_open, int *fd);
 
 /* redirection utils */
 void	close_L_fd(int fd, int copy[]);
