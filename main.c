@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 18:31:02 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 19:32:25 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	init(int argc, char *argv[], char *envp[], t_env **env)
 	(void)argv;
 	while (envp[i] != NULL)
 	{
-		new = malloc(sizeof(t_env));
+		new = ft_malloc(sizeof(t_env));
 		if (new == NULL)
 			error_check("");
 		new -> next = NULL;
@@ -66,23 +66,23 @@ int	main(int argc, char *av[], char *envp[])
 	t_env	*env;
 	t_list	*cmd_head;
 	t_list	*redir_head;
-	t_list	*g_list;
+	t_list	*list;
 
-	init_main(&cmd_head, &g_list, &redir_head, &env);
+	init_main(&cmd_head, &list, &redir_head, &env);
 	if (argc != 1)
 		ft_putstr_fd("Usage : \"./minishell\"\n", 2), exit(0);
 	init(argc, av, envp, &env);
 	while (1)
 	{
-		if (main_tokenizer(&cmdline, &env, &g_list) == 1)
+		if (main_tokenizer(&cmdline, &env, &list) == 1)
 			continue ;
-		split_list(&cmd_head, &redir_head, g_list, cmdline);
-		execute_process(&cmd_head, &env, &g_list, &redir_head);
-		wait_process(&cmd_head, &g_list);
-		int fd;
-		fd = open("Makefile", O_WRONLY);
-		printf("\ncheck fd is 3 : %d\n\n", fd);
-		close(fd);
-		system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");
+		split_list(&cmd_head, &redir_head, list, cmdline);
+		execute_process(&cmd_head, &env, &list, &redir_head);
+		wait_process(&cmd_head, &list);
+		/*int fd;
+		 *fd = open("Makefile", O_WRONLY);
+		 *printf("\ncheck fd is 3 : %d\n\n", fd);
+		 *close(fd);
+		 *system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");*/
 	}
 }

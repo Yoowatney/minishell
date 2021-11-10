@@ -6,13 +6,13 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:07 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 16:14:19 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 18:55:31 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_token2(char **line, char **buf, t_env **env)
+int	check_token1(char **line, char **buf, t_env **env)
 {
 	int	error_num;
 
@@ -28,7 +28,7 @@ int	check_token2(char **line, char **buf, t_env **env)
 	return (error_num);
 }
 
-int	check_token1(char **line, char **buf, int *type, t_list **g_list)
+int	check_token2(char **line, char **buf, int *type, t_list **g_list)
 {
 	int	error_num;
 
@@ -56,9 +56,9 @@ int	tokenizer(char *line, t_env **env, t_list **g_list)
 	type = TOKEN_END;
 	while (*line)
 	{
-		error_num = check_token2(&line, &buf, env);
+		error_num = check_token1(&line, &buf, env);
 		if (error_num == -2)
-			error_num = check_token1(&line, &buf, &type, g_list);
+			error_num = check_token2(&line, &buf, &type, g_list);
 		if (error_num < 0)
 		{
 			free(buf), buf = NULL;

@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:16 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 14:40:59 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 19:07:36 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	bin_sig_handler(int signum)
 	if (signum == SIGINT)
 	{
 		ft_putstr_fd("\n", 1);
-		g_exit_status = 1;
+		g_exit_status = 130;
 	}
 	else if (signum == SIGQUIT)
 	{

@@ -6,7 +6,7 @@
 /*   By: jlim <jlim@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:11:29 by jlim              #+#    #+#             */
-/*   Updated: 2021/11/10 15:06:06 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 19:36:15 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char	**change_dollar(char **line, char **buf, t_env *env)
 
 	(*line)++;
 	change_dollar_util(line, buf);
-	check = (char *)malloc(sizeof(char));
+	check = ft_malloc(sizeof(char));
 	*check = 0;
 	while ((!is_space(**line) || !**line) && **line != '\'')
 	{
