@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 16:16:01 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 16:16:32 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 19:35:03 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	add_arg(char **buf, t_list *g_list)
 	i = 0;
 	if (*buf == NULL)
 		return (1);
-	temp = malloc(sizeof(char *) * (ft_lstlast(g_list)->length + 2));
+	temp = ft_malloc(sizeof(char *) * (ft_lstlast(g_list)->length + 2));
 	if (temp == NULL)
 		error_check("");
 	while (i < ft_lstlast(g_list)->length)
@@ -65,13 +65,13 @@ int	make_string(char c, char **buf)
 
 	if (*buf == NULL)
 	{
-		(*buf) = malloc(sizeof(char));
+		(*buf) = ft_malloc(sizeof(char));
 		if (*buf == NULL)
 			error_check("");
 		**buf = '\0';
 	}
 	size = ft_strlen(*buf);
-	temp = malloc(sizeof(char) * (size + 2));
+	temp = ft_malloc(sizeof(char) * (size + 2));
 	if (temp == NULL)
 		error_check("");
 	ft_strlcpy(temp, *buf, size + 1);

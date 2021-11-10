@@ -6,7 +6,7 @@
 /*   By: jlim <jlim@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 21:10:04 by jlim              #+#    #+#             */
-/*   Updated: 2021/11/09 21:10:06 by jlim             ###   ########.fr       */
+/*   Updated: 2021/11/10 19:35:54 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	save_oldpwd(t_env **env)
 	t_env	*tmp;
 
 	pwd = getcwd(NULL, BUFSIZ);
-	oldpwd = malloc(sizeof(t_env));
+	oldpwd = ft_malloc(sizeof(t_env));
 	if (oldpwd == NULL)
 		error_check("");
 	tmp = check_oldpwd(env);

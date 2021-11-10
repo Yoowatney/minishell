@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 15:33:20 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/08 15:33:21 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 19:31:05 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_list	*empty_node(void)
 	t_list	*node;
 	int		i;
 
-	node = malloc(sizeof(t_list));
+	node = ft_malloc(sizeof(t_list));
 	if (node == NULL)
 		error_check("");
 	i = 0;
@@ -43,9 +43,7 @@ char	**duplicate_table(char **cmd_table)
 	{
 		size++;
 	}
-	ret = malloc(sizeof(char *) * (size + 1));
-	if (ret == NULL)
-		error_check("");
+	ret = ft_malloc(sizeof(char *) * (size + 1));
 	size = 0;
 	while (cmd_table[size] != NULL)
 	{

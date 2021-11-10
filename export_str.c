@@ -6,7 +6,7 @@
 /*   By: jlim <jlim@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 20:16:48 by jlim              #+#    #+#             */
-/*   Updated: 2021/11/09 20:16:49 by jlim             ###   ########.fr       */
+/*   Updated: 2021/11/10 19:37:11 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	**export_string(t_env *env)
 	char	*str;
 
 	change = env;
-	export_str = (char **)malloc(sizeof(char *) * (env_size(env) + 1));
+	export_str = ft_malloc(sizeof(char *) * (env_size(env) + 1));
 	return_value = export_str;
 	while (1)
 	{

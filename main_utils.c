@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:03 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/08 16:07:54 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 19:34:15 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,7 @@ char	**allocate_envp(t_env *env)
 
 	size = env_size(env);
 	i = 0;
-	ret = malloc(sizeof(char *) * (size + 1));
-	if (ret == NULL)
-	{
-		ft_putstr_fd("malloc error\n", 2);
-		exit(MALLOC_ERROR);
-	}
+	ret = ft_malloc(sizeof(char *) * (size + 1));
 	while (i < size)
 	{
 		ret[i] = ft_strdup(env->env_line);

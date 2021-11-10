@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:36:21 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 16:12:52 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 19:00:23 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main_tokenizer(char **cmdline, t_env **env, t_list **g_list)
 	if (tokenizer(*cmdline, env, g_list) < 0)
 	{
 		ft_putstr_fd("pasing error\n", 2);
-		g_exit_status = 200;
+		g_exit_status = PARSE;
 		if (*g_list != NULL)
 			(*g_list)->cmdline = *cmdline, all_free(g_list);
 		else

@@ -6,7 +6,7 @@
 /*   By: jlim <jlim@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 17:30:05 by jlim              #+#    #+#             */
-/*   Updated: 2021/11/10 18:48:35 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 19:45:02 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	**delete_null(t_list **cmd_head)
 
 	count = delete_null_util(cmd_head);
 	i = 0;
-	cmd = malloc(sizeof(char *) * (count + 1));
+	cmd = ft_malloc(sizeof(char *) * (count + 1));
 	count = 0;
 	while (1)
 	{
@@ -110,13 +110,15 @@ int	builtin_echo(t_list **cmd_head)
 
 	i = 0;
 	if ((*cmd_head)->cmd_table[1] == NULL)
+	{
+		ft_putstr_fd("\n", 1);
 		return (0);
+	}
 	n_flag = 0;
 	print = delete_null(cmd_head), print++, i++;
 	while (ft_strcmp(*print, "-n") == 0)
 	{
-		print++;
-		i++, n_flag = 1;
+		n_flag = 1, print++, i++;
 		if (*print == NULL)
 		{
 			free_cmd_table(print - i);

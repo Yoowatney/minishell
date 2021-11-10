@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 16:15:37 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 16:15:38 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 19:49:14 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	close_L_fd(int fd, int copy[])
 {
 	if (fd != 0)
 	{
-		close(fd);
+		ft_close(fd);
 		if (dup2(copy[0], STDIN_FILENO) == -1)
 			error_check("");
 	}
@@ -26,7 +26,7 @@ void	close_R_fd(int fd, int copy[])
 {
 	if (fd != 0)
 	{
-		close(fd);
+		ft_close(fd);
 		if (dup2(copy[1], STDOUT_FILENO) == -1)
 			error_check("");
 	}

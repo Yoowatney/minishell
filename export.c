@@ -6,7 +6,7 @@
 /*   By: jlim <jlim@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 20:17:23 by jlim              #+#    #+#             */
-/*   Updated: 2021/11/09 20:17:24 by jlim             ###   ########.fr       */
+/*   Updated: 2021/11/10 19:37:04 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	get_new_key(char *cmd_table, t_env **new, char *new_key, t_env **env)
 {
 	char	*tmp;
 
-	*new = malloc(sizeof(t_env));
+	*new = ft_malloc(sizeof(t_env));
 	error_check("");
 	(*new)->next = NULL;
 	(*new)->prev = NULL;

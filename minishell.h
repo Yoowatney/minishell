@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:50:27 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 16:40:10 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 19:49:20 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 
 # define NOT_EXECUTABLE	126
 # define NOT_FOUND		127
+# define PARSE			200
 
 typedef struct s_env
 {
@@ -47,6 +48,9 @@ typedef struct s_env
 
 /* sys call */
 void	*ft_malloc(int size);
+void	ft_dup2(int old, int newe);
+int		ft_dup(int fd);
+void	ft_close(int fd);
 
 /* signal fct */
 void	sig_handler(int signum);
