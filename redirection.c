@@ -26,13 +26,9 @@ void	make_redir_node(char **buf, int type, t_list **redir_node)
 	node->type = type;
 	*buf = NULL;
 	if (*redir_node == NULL)
-	{
 		*redir_node = node;
-	}
 	else
-	{
 		ft_lstadd_back(redir_node, node);
-	}
 }
 
 int	process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[])
@@ -42,8 +38,8 @@ int	process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[])
 
 	i = 0;
 	fd = 0;
-	copy[0] = dup(STDIN_FILENO);
-	copy[1] = dup(STDOUT_FILENO);
+	copy[0] = ft_dup(STDIN_FILENO);
+	copy[1] = ft_dup(STDOUT_FILENO);
 	while (redir_head->cmd_table && redir_head->cmd_table[i])
 	{
 		if (redir_head->file_type_table[i] == L_REDIR)

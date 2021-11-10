@@ -53,8 +53,8 @@ void	execute_process(t_list **cmd_head, t_env **env, t_list **g_list,
 		if (process_redir_node(*redir_head, *cmd_head, copy) < 0)
 			break ;
 		execute_bin(*cmd_head, env, g_list);
-		dup2(copy[0], STDIN_FILENO);
-		dup2(copy[1], STDOUT_FILENO);
+		ft_dup2(copy[0], STDIN_FILENO);
+		ft_dup2(copy[1], STDOUT_FILENO);
 		close(copy[0]);
 		close(copy[1]);
 		if ((*cmd_head)->next)

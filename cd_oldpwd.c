@@ -59,9 +59,7 @@ void	save_oldpwd(t_env **env)
 	t_env	*tmp;
 
 	pwd = getcwd(NULL, BUFSIZ);
-	oldpwd = malloc(sizeof(t_env));
-	if (oldpwd == NULL)
-		error_check("");
+	oldpwd = ft_malloc(sizeof(t_env));
 	tmp = check_oldpwd(env);
 	oldpwd->env_line = ft_strjoin(ft_strdup("OLDPWD="), pwd);
 	oldpwd->key = ft_strdup("OLDPWD");

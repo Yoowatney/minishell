@@ -78,16 +78,12 @@ void	child_process(t_list **cmd_head, t_list **g_list,
 	if ((*cmd_head)->next && (*cmd_head)->next->type == PIPE
 		&& (*cmd_head)->outfile == 0)
 	{
-		if (dup2((*cmd_head)->pipe[1], 1) == -1)
-			error_check("");
+		ft_dup2((*cmd_head)->pipe[1], 1);
 		if (close((*cmd_head)->pipe[0]) == -1)
 			error_check("");
 	}
 	if ((*cmd_head)->type == PIPE && (*cmd_head)->infile == 0)
-	{
-		if (dup2((*cmd_head)->prev->pipe[0], 0) == -1)
-			error_check("");
-	}
+		ft_dup2((*cmd_head)->prev->pipe[0], 0);
 	if ((*cmd_head)->cmd_table == NULL)
 		exit(0);
 	else if (check_builtin(cmd_head) == 1)

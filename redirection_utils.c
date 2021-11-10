@@ -17,8 +17,7 @@ void	close_fd(int fd, int copy[])
 	if (fd != 0)
 	{
 		close(fd);
-		if (dup2(copy[1], STDOUT_FILENO) == -1)
-			error_check("");
+		ft_dup2(copy[1], STDOUT_FILENO);
 	}
 }
 
@@ -28,8 +27,7 @@ void	right_redir(t_list *cmd_head, t_list *redir_head, int fd, int i)
 	if (fd == -1)
 		error_check("");
 	cmd_head->outfile = fd;
-	if (dup2(fd, STDOUT_FILENO) == -1)
-		error_check("");
+	ft_dup2(fd, STDOUT_FILENO);
 }
 
 void	append_redir(t_list *cmd_head, t_list *redir_head, int fd, int i)
@@ -38,8 +36,7 @@ void	append_redir(t_list *cmd_head, t_list *redir_head, int fd, int i)
 	if (fd == -1)
 		error_check("");
 	cmd_head->outfile = fd;
-	if (dup2(fd, STDOUT_FILENO) == -1)
-		error_check("");
+	ft_dup2(fd, STDOUT_FILENO);
 }
 
 int	left_redir(t_list *redir_head, int *fd, int i, int copy[])
@@ -52,8 +49,7 @@ int	left_redir(t_list *redir_head, int *fd, int i, int copy[])
 		close(copy[0]);
 		return (-1);
 	}
-	if (dup2(*fd, STDIN_FILENO) == -1)
-		error_check("");
+	ft_dup2(*fd, STDIN_FILENO);
 	return (0);
 }
 
@@ -79,6 +75,5 @@ void	heredoc_redir(t_list *cmd_head, t_list *redir_head, int fd, int i)
 	close(fd);
 	fd = open("/tmp/.heredoc", O_RDONLY);
 	cmd_head->infile = fd;
-	if (dup2(fd, STDIN_FILENO) == -1)
-		error_check("");
+	ft_dup2(fd, STDIN_FILENO);
 }

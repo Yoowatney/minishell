@@ -20,8 +20,6 @@ int	cd_cmd_swung(t_list **cmd_head, char **my_envp, t_env **env)
 	if (ft_strlen((*cmd_head)->cmd_table[1]) > 1)
 	{
 		user = ft_strdup(&(*cmd_head)->cmd_table[1][1]);
-		if (!user)
-			error_check("");
 		user_home = check_user(my_envp, user);
 		if (!user_home)
 		{

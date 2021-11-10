@@ -85,11 +85,6 @@ char	*check_user(char **my_envp, char *user)
 	check = check_end_slash(home);
 	check++;
 	user_home = ft_strdup(&home[check]);
-	if (!user_home)
-	{
-		ft_putstr_fd("malloc error\n", 2);
-		return (NULL);
-	}
 	if (ft_strcmp(user_home, user) == 0)
 	{
 		free(user_home);
