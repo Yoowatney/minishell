@@ -35,7 +35,6 @@
 
 # define NOT_EXECUTABLE	126
 # define NOT_FOUND		127
-# define PARSE			200
 
 typedef struct s_env
 {
@@ -149,7 +148,7 @@ void	free_cmd_table(char **cmd_table);
 
 /* check_cmd */
 int		check_builtin(t_list **cmd_head);
-int		check_cmd(t_list **g_list, t_env **env,
+int		cmd_builtin(t_list **g_list, t_env **env,
 			t_list **cmd_head, char **my_envp);
 
 /* exit */
@@ -223,7 +222,7 @@ int		check_identifier(char *cmd_table, t_list **cmd_head, int *ret);
 
 /* error_print */
 void	print_valid(t_list **cmd_head, char *cmd_table);
-void	no_file_cd(t_list **cmd_head);
+void	no_file_cd(t_list **cmd_head, char *check_home);
 void	no_file_env(t_list **cmd_head, char *cmd_table);
 int		error_exit1(t_list **cmd_head);
 int		error_exit2(t_list **cmd_head);

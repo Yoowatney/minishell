@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-extern unsigned char	g_exit_status;
+extern unsigned int	g_exit_status;
 
 int	pipe_exist(t_list *list)
 {
@@ -40,7 +40,7 @@ void	parent_process(t_list **list, t_list **cmd_head,
 	my_envp = allocate_envp(*env);
 	pipe = pipe_exist(*list);
 	if (pipe != 1 && (*cmd_head)->type != PIPE && (*cmd_head)->cmd_table)
-		g_exit_status = (unsigned char)check_cmd(list, env,
+		g_exit_status = (unsigned int)cmd_builtin(list, env,
 				&(*cmd_head), my_envp);
 	if (*pipe_open)
 		ft_close((*cmd_head)->pipe[1]);
@@ -61,7 +61,7 @@ int	execute_builtin(t_list **cmd_head, t_list **list,
 	pipe = pipe_exist(*list);
 	if (pipe == 1)
 	{
-		g_exit_status = (unsigned char)check_cmd(list, env,
+		g_exit_status = (unsigned int)cmd_builtin(list, env,
 				cmd_head, my_envp);
 		all_free(list);
 		free_cmd_table(my_envp);

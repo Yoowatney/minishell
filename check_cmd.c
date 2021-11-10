@@ -31,7 +31,7 @@ int	check_builtin(t_list **cmd_head)
 	return (0);
 }
 
-int	check_cmd(t_list **list, t_env **env, t_list **cmd_head, char **my_envp)
+int	cmd_builtin(t_list **list, t_env **env, t_list **cmd_head, char **my_envp)
 {
 	int		ret;
 

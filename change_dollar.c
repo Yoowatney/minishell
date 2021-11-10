@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-extern unsigned char	g_exit_status;
+extern unsigned int	g_exit_status;
 
 char	**change_dollar_util(char **line, char **buf)
 {
@@ -29,9 +29,9 @@ char	**change_dollar_util(char **line, char **buf)
 		make_string('$', buf), (*line)--;
 	if (**line == '?')
 	{
-		if (g_exit_status == 200)
-			exit_str = ft_itoa(258);
-		else
+		//if (g_exit_status == 200)
+		//	exit_str = ft_itoa(258);
+		//else
 			exit_str = ft_itoa((int)g_exit_status);
 		while (exit_str[i])
 		{
@@ -75,7 +75,7 @@ char	**change_dollar(char **line, char **buf, t_env *env)
 	change_dollar_util(line, buf);
 	check = ft_malloc(sizeof(char));
 	*check = 0;
-	while ((!is_space(**line) || !**line) && **line != '\'')
+	while ((!is_space(**line)) && **line != '\'')
 	{
 		if (!**line)
 		{

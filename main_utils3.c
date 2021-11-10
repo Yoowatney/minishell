@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-unsigned char	g_exit_status;
+unsigned int	g_exit_status;
 
 int	main_tokenizer(char **cmdline, t_env **env, t_list **list)
 {
@@ -21,7 +21,7 @@ int	main_tokenizer(char **cmdline, t_env **env, t_list **list)
 	if (tokenizer(*cmdline, env, list) < 0)
 	{
 		ft_putstr_fd("pasing error\n", 2);
-		g_exit_status = PARSE;
+		g_exit_status = 258;
 		if (*list != NULL)
 			(*list)->cmdline = *cmdline, all_free(list);
 		else

@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-extern unsigned char	g_exit_status;
+extern unsigned int	g_exit_status;
 
 void	rewind_env(t_env **env)
 {
@@ -84,7 +84,7 @@ int	builtin_exit(t_list **list, t_env **env, t_list **cmd_head)
 	if ((*cmd_head)->cmd_table[1])
 	{
 		if (check_exit_num((*cmd_head)->cmd_table[1]) == -1)
-			g_exit_status = error_exit2(cmd_head);
+			g_exit_status = (unsigned char)error_exit2(cmd_head);
 		else
 			g_exit_status = (unsigned char)(ft_atoi((*cmd_head)->cmd_table[1]));
 	}

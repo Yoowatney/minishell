@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-unsigned char	g_exit_status = 0;
+unsigned int	g_exit_status = 0;
 
 int	init(int argc, char *argv[], char *envp[], t_env **env)
 {

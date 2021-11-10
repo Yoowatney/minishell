@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-extern unsigned char	g_exit_status;
+extern unsigned int	g_exit_status;
 
 void	sig_handler(int signum)
 {

@@ -18,12 +18,8 @@ int	echo_util(t_list **cmd_head, char **print, int n_flag)
 	{
 		while (*print)
 		{
-			if (**print == '\0' && *(print + 1))
-				print++;
-			if (**print == '\0' && !*(print + 1))
-				return (1);
 			ft_putstr_fd(*print, (*cmd_head)->pipe[1]);
-			if (*(print + 1) && **print != '\0')
+			if (*(print + 1))
 				ft_putchar_fd(' ', (*cmd_head)->pipe[1]);
 			print++;
 			if (*print == NULL)
@@ -42,12 +38,8 @@ void	echo_util2(char **print, int n_flag)
 {
 	while (*print)
 	{
-		if (**print == '\0' && *(print + 1))
-			print++;
-		if (**print == '\0' && !(*(print + 1)))
-			return ;
 		ft_putstr_fd(*print, 1);
-		if (*(print + 1) && **print != '\0')
+		if (*(print + 1))
 			ft_putchar_fd(' ', 1);
 		print++;
 		if (*print == NULL)

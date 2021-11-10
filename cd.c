@@ -23,7 +23,7 @@ int	cd_cmd_swung(t_list **cmd_head, char **my_envp, t_env **env)
 		user_home = check_user(my_envp, user);
 		if (!user_home)
 		{
-			no_file_cd(cmd_head);
+			no_file_cd(cmd_head, NULL);
 			free(user);
 			return (1);
 		}
@@ -35,7 +35,8 @@ int	cd_cmd_swung(t_list **cmd_head, char **my_envp, t_env **env)
 	else if (!(check_home(my_envp)))
 		return (print_not_home(cmd_head));
 	save_oldpwd(env);
-	ft_chdir(check_home(my_envp));
+	if (chdir(check_home(my_envp)) < 0)
+		no_file_cd(cmd_head, check_home(my_envp));
 	return (0);
 }
 
@@ -89,7 +90,7 @@ int	cd_cmd(t_list **cmd_head, t_env **env)
 	save_oldpwd(env);
 	if (chdir((*cmd_head)->cmd_table[1]) < 0)
 	{
-		no_file_cd(cmd_head);
+		no_file_cd(cmd_head, NULL);
 		return (1);
 	}
 	return (0);
@@ -116,7 +117,8 @@ int	builtin_cd(t_list **cmd_head, char **my_envp, t_env **env)
 		if (!(check_home(my_envp)))
 			return (print_not_home(cmd_head));
 		save_oldpwd(env);
-		ft_chdir(check_home(my_envp));
+		if (chdir(check_home(my_envp)) < 0)
+			no_file_cd(cmd_head, check_home(my_envp));
 		return (0);
 	}
 	return (0);
