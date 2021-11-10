@@ -54,22 +54,28 @@ void	bin_sig_handler(int signum);
 void	init_execute_bin(void);
 
 /* token fct */
-int		open_single_quote(char **line, char **buf);
-int		open_double_quote(char **line, char **buf, t_env **env);
-int		make_string(char c, char **buf);
 int		tokenizer(char *line, t_env **env, t_list **g_list);
 void	re_parsing(t_list **g_list);
 void	make_redir_node(char **buf, int type, t_list **redir_node);
 int		all_white_space(char *cmdline);
 char	*cmdline_start(char	**cmdline);
-void	make_node(char **buf, int type, t_list **g_list);
-int		is_white_space(char **line, char **buf, int *type, t_list **g_list);
 int		make_pipe_node(char **buf, char **line, int *type, t_list **g_list);
 int		make_L_redir_node(char **buf, char **line, int *type, t_list **g_list);
 int		make_R_redir_node(char **buf, char **line, int *type, t_list **g_list);
 int		main_tokenizer(char **cmdline, t_env **env, t_list **g_list);
 void	split_list(t_list **cmd_head, t_list **redir_head,
 			t_list *g_list, char *cmdline);
+
+/* token_util */
+void	make_node(char **buf, int type, t_list **g_list);
+int	add_arg(char **buf, t_list *g_list);
+int	make_string(char c, char **buf);
+
+/* token_util2 */
+int	open_single_quote(char **line, char **buf);
+int	open_double_quote(char **line, char **buf, t_env **env);
+int	is_white_space(char **line, char **buf, int *type, t_list **g_list);
+int	is_dollar(char **line, char **buf, t_env **env);
 
 /* change_dollar */
 char	**change_dollar(char **line, char **buf, t_env *env);
