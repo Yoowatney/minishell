@@ -6,13 +6,13 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 14:48:40 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 15:23:34 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-unsigned char	g_exit_status;
+unsigned char	g_exit_status = 0;
 
 int	init(int argc, char *argv[], char *envp[], t_env **env)
 {
@@ -51,6 +51,14 @@ int	all_white_space(char *cmdline)
 	return (1);
 }
 
+void	init_main(t_list **cmd_head, t_list **g_list, t_list **redir_head, t_env **env)
+{
+	*cmd_head = NULL;
+	*g_list = NULL;
+	*redir_head = NULL;
+	*env = NULL;
+}
+
 int	main(int argc, char *av[], char *envp[])
 {
 	char	*cmdline;
@@ -59,36 +67,15 @@ int	main(int argc, char *av[], char *envp[])
 	t_list	*redir_head;
 	t_list	*g_list;
 
-	cmd_head = NULL;
-	g_list = NULL;
-	redir_head = NULL;
-	env = NULL;
-	g_exit_status = 0;
+	init_main(&cmd_head, &g_list, &redir_head, &env);
 	if (argc != 1)
 		ft_putstr_fd("Usage : \"./minishell\"\n", 2), exit(0);
 	init(argc, av, envp, &env);
 	while (1)
 	{
-		if (cmdline_start(&cmdline) == NULL)
+		if (main_tokenizer(&cmdline, &env, &g_list) == 1)
 			continue ;
-		if (tokenizer(cmdline, &env, &g_list) < 0)
-		{
-			ft_putstr_fd("pasing error\n", 2);
-			g_exit_status = 200;
-			if (g_list != NULL)
-				g_list->cmdline = cmdline, all_free(&g_list);
-			else
-				free(cmdline);
-			system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");
-			continue ;
-		}
-		reparse_rewind(&g_list);
-
-		split_cmd(&cmd_head, g_list), split_redir(&redir_head, g_list);
-		g_list->cmd_list = cmd_head;
-		g_list->redir_list = redir_head;
-		g_list->cmdline = cmdline;
-
+		split_list(&cmd_head, &redir_head, g_list, cmdline);
 		while (cmd_head != NULL)
 		{
 			int copy[2];
