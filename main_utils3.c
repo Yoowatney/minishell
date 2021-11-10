@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:36:21 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 15:36:22 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 16:12:52 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	execute_process(t_list **cmd_head, t_env **env, t_list **g_list,
 {
 	int	copy[2];
 
-	while (*cmd_head != NULL)
+	while ((*cmd_head) != NULL)
 	{
 		if (process_redir_node(*redir_head, *cmd_head, copy) < 0)
 			break ;

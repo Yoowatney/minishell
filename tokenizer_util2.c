@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer_util2.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/10 16:16:48 by yoyoo             #+#    #+#             */
+/*   Updated: 2021/11/10 16:17:09 by yoyoo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	open_single_quote(char **line, char **buf)
@@ -46,7 +58,8 @@ int	is_white_space(char **line, char **buf, int *type, t_list **g_list)
 		return (-1);
 	if (is_space(**line) == 0)
 		return (1);
-	if (*g_list && (ft_lstlast(*g_list)->type == TOKEN_END || ft_lstlast(*g_list)->type == PIPE) && *type != PIPE)
+	if (*g_list && (ft_lstlast(*g_list)->type == TOKEN_END
+			|| ft_lstlast(*g_list)->type == PIPE) && *type != PIPE)
 		add_arg(buf, *g_list);
 	if (*buf != NULL)
 	{

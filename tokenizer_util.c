@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer_util.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/10 16:16:01 by yoyoo             #+#    #+#             */
+/*   Updated: 2021/11/10 16:16:32 by yoyoo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	make_node(char **buf, int type, t_list **g_list)
 {
-	t_list *node;
+	t_list	*node;
 
 	if (*buf == NULL)
 		return ;
@@ -66,7 +78,6 @@ int	make_string(char c, char **buf)
 	temp[size] = c;
 	temp[size + 1] = '\0';
 	free(*buf);
-	
 	*buf = temp;
 	return (1);
 }

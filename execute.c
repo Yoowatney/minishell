@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:48 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 14:18:27 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 16:14:56 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int	pipe_exist(t_list *g_list)
 	return (0);
 }
 
-// envp 삭제
 void	execute_bin(t_list *cmd_head, t_env **env, t_list **g_list)
 {
 	int		pid;

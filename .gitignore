@@ -3,6 +3,7 @@
 *.out
 *.o
 *.vscode
+*.DS*
 minishell*
 libft/libft.a
 

@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/14 22:30:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/01 17:50:05 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 16:23:42 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	ft_lstclear(t_list **lst)
 	while (*lst != NULL)
 	{
 		ptr = *lst;
-
 		i = 0;
 		if (ptr->cmd_table)
 		{
@@ -38,7 +37,6 @@ void	ft_lstclear(t_list **lst)
 		if (ptr->file_type_table)
 			free(ptr->file_type_table);
 		*lst = (*lst)->next;
-		free(ptr);
-		ptr = NULL;
+		free(ptr), ptr = NULL;
 	}
 }

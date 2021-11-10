@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/11 17:56:18 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/06 10:17:09 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 16:24:14 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_strjoin_sub(char *s1, char *s2, char **ret)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (s1[i])

@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/14 16:19:06 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/06 09:48:36 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 16:23:55 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ t_list	*ft_lstnew(char *buf)
 	ret->cmd_table = malloc(sizeof(char *) * 2);
 	ret->cmd_table[0] = buf;
 	ret->cmd_table[1] = NULL;
-	/*ret->pipe[0] = 0, ret->pipe[1] = 0;*/
 	ret->prev = NULL;
 	ret->next = NULL;
 	ret->type = 0;

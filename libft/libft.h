@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 18:45:34 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/05 17:28:14 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 16:24:36 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 typedef struct s_list
 {
-	char			**cmd_table; // cmd_table
+	char			**cmd_table;
 	struct s_list	*prev;
 	struct s_list	*next;
 	int				type;
@@ -49,7 +49,6 @@ typedef struct s_dollar
 	int		double_quote;
 	char	*cmd_table;
 }	t_dollar;
-
 
 long long			ft_atoi(const char *str);
 void				ft_bzero(void *ptr, size_t size);

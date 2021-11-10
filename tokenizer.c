@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:07 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 14:33:29 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 16:14:19 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	check_token2(char **line, char **buf, t_env **env)
 		error_num = is_dollar(line, buf, env);
 	return (error_num);
 }
+
 int	check_token1(char **line, char **buf, int *type, t_list **g_list)
 {
 	int	error_num;
@@ -47,11 +48,12 @@ int	check_token1(char **line, char **buf, int *type, t_list **g_list)
 
 int	tokenizer(char *line, t_env **env, t_list **g_list)
 {
-	int		error_num;
-	static	char	*buf;
-	int		type;
+	int			error_num;
+	static char	*buf;
+	int			type;
 
-	buf = NULL, type = TOKEN_END;
+	buf = NULL;
+	type = TOKEN_END;
 	while (*line)
 	{
 		error_num = check_token2(&line, &buf, env);
@@ -64,7 +66,8 @@ int	tokenizer(char *line, t_env **env, t_list **g_list)
 		}
 		line++;
 	}
-	if (*g_list && (ft_lstlast(*g_list)->type == TOKEN_END || ft_lstlast(*g_list)->type == PIPE) && type != PIPE)
+	if (*g_list && (ft_lstlast(*g_list)->type == TOKEN_END
+			|| ft_lstlast(*g_list)->type == PIPE) && type != PIPE)
 		add_arg(&buf, *g_list);
 	make_node(&buf, type, g_list);
 	return (error_num);
