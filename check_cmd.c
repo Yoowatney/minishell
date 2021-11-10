@@ -6,7 +6,7 @@
 /*   By: jlim <jlim@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 21:15:59 by jlim              #+#    #+#             */
-/*   Updated: 2021/11/09 21:16:00 by jlim             ###   ########.fr       */
+/*   Updated: 2021/11/11 03:24:47 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	check_builtin(t_list **cmd_head)
 	return (0);
 }
 
-int	check_cmd(t_list **g_list, t_env **env, t_list **cmd_head, char **my_envp)
+int	check_cmd(t_list **list, t_env **env, t_list **cmd_head, char **my_envp)
 {
 	int		ret;
 
@@ -49,6 +49,6 @@ int	check_cmd(t_list **g_list, t_env **env, t_list **cmd_head, char **my_envp)
 	else if (ft_strcmp((*cmd_head)->cmd_table[0], "env") == 0)
 		ret = builtin_env(my_envp, cmd_head);
 	else if (ft_strcmp((*cmd_head)->cmd_table[0], "exit") == 0)
-		ret = builtin_exit(g_list, env, cmd_head);
+		ret = builtin_exit(list, env, cmd_head);
 	return (ret);
 }

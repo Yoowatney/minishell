@@ -6,19 +6,19 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 04:54:47 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 05:09:11 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/11 03:25:28 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_error(char *str, t_list **g_list)
+void	print_error(char *str, t_list **list)
 {
 	ft_putstr_fd("bash: ", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd(": command not found", 2);
 	ft_putstr_fd("\n", 2);
-	all_free(g_list);
+	all_free(list);
 	exit(NOT_FOUND);
 }
 
@@ -77,7 +77,7 @@ void	free_in_child(char **my_envp, t_env **env)
 	free_cmd_table(my_envp);
 }
 
-void	execute(t_list *cmd_head, t_list *g_list, t_env **env, char **my_envp)
+void	execute(t_list *cmd_head, t_list *list, t_env **env, char **my_envp)
 {
 	char	**prefix;
 	char	*file_name;
@@ -102,5 +102,5 @@ void	execute(t_list *cmd_head, t_list *g_list, t_env **env, char **my_envp)
 			break ;
 	}
 	free_in_child(my_envp, env);
-	print_error(cmd_head->cmd_table[0], &g_list);
+	print_error(cmd_head->cmd_table[0], &list);
 }

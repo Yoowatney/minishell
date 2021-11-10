@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 20:06:28 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/11 03:28:21 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,11 @@ int	all_white_space(char *cmdline)
 	return (1);
 }
 
-void	init_main(t_list **cmd_head, t_list **g_list,
+void	init_main(t_list **cmd_head, t_list **list,
 		t_list **redir_head, t_env **env)
 {
 	*cmd_head = NULL;
-	*g_list = NULL;
+	*list = NULL;
 	*redir_head = NULL;
 	*env = NULL;
 }

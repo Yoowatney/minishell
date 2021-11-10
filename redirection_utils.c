@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 16:03:31 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 03:26:38 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/11 03:36:17 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	close_fd(int fd, int copy[])
 {
 	if (fd != 0)
 	{
-		close(fd);
+		ft_close(fd);
 		ft_dup2(copy[1], STDOUT_FILENO);
 	}
 }
@@ -46,7 +46,7 @@ int	left_redir(t_list *redir_head, int *fd, int i, int copy[])
 		error_check(redir_head->cmd_table[i]);
 	if (errno == 2)
 	{
-		close(copy[0]);
+		ft_close(copy[0]);
 		return (-1);
 	}
 	ft_dup2(*fd, STDIN_FILENO);
@@ -72,8 +72,10 @@ void	heredoc_redir(t_list *cmd_head, t_list *redir_head, int fd, int i)
 		write(fd, str, ft_strlen(str)), write(fd, "\n", 1);
 		free(str);
 	}
-	close(fd);
+	ft_close(fd);
 	fd = open("/tmp/.heredoc", O_RDONLY);
+	if (fd == -1)
+		error_check("");
 	cmd_head->infile = fd;
 	ft_dup2(fd, STDIN_FILENO);
 }

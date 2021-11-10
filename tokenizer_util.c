@@ -6,13 +6,13 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 16:16:01 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 19:35:03 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/11 03:27:50 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	make_node(char **buf, int type, t_list **g_list)
+void	make_node(char **buf, int type, t_list **list)
 {
 	t_list	*node;
 
@@ -22,17 +22,17 @@ void	make_node(char **buf, int type, t_list **g_list)
 	node -> length = 1;
 	node -> type = type;
 	*buf = NULL;
-	if (*g_list == NULL)
+	if (*list == NULL)
 	{
-		*g_list = node;
+		*list = node;
 	}
 	else
 	{
-		ft_lstadd_back(g_list, node);
+		ft_lstadd_back(list, node);
 	}
 }
 
-int	add_arg(char **buf, t_list *g_list)
+int	add_arg(char **buf, t_list *list)
 {
 	char	**temp;
 	int		i;
@@ -40,21 +40,21 @@ int	add_arg(char **buf, t_list *g_list)
 	i = 0;
 	if (*buf == NULL)
 		return (1);
-	temp = ft_malloc(sizeof(char *) * (ft_lstlast(g_list)->length + 2));
+	temp = ft_malloc(sizeof(char *) * (ft_lstlast(list)->length + 2));
 	if (temp == NULL)
 		error_check("");
-	while (i < ft_lstlast(g_list)->length)
+	while (i < ft_lstlast(list)->length)
 	{
-		temp[i] = ft_lstlast(g_list)->cmd_table[i];
+		temp[i] = ft_lstlast(list)->cmd_table[i];
 		i++;
 	}
-	if (ft_lstlast(g_list)->length > 0)
-		free(ft_lstlast(g_list)->cmd_table);
+	if (ft_lstlast(list)->length > 0)
+		free(ft_lstlast(list)->cmd_table);
 	temp[i++] = *buf;
 	temp[i] = NULL;
 	*buf = NULL;
-	ft_lstlast(g_list)->cmd_table = temp;
-	ft_lstlast(g_list)->length++;
+	ft_lstlast(list)->cmd_table = temp;
+	ft_lstlast(list)->length++;
 	return (1);
 }
 

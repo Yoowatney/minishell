@@ -6,13 +6,13 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 16:16:48 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 20:09:02 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/11 03:28:01 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	open_single_quote(char **line, char **buf, t_list **g_list)
+int	open_single_quote(char **line, char **buf, t_list **list)
 {
 	(*line)++;
 	while (1)
@@ -22,7 +22,7 @@ int	open_single_quote(char **line, char **buf, t_list **g_list)
 			if (*buf == NULL)
 			{
 				*buf = ft_strdup("\0");
-				make_node(buf, TOKEN_END, g_list);
+				make_node(buf, TOKEN_END, list);
 			}
 			return (0);
 		}
@@ -35,7 +35,7 @@ int	open_single_quote(char **line, char **buf, t_list **g_list)
 	return (1);
 }
 
-int	open_double_quote(char **line, char **buf, t_env **env, t_list **g_list)
+int	open_double_quote(char **line, char **buf, t_env **env, t_list **list)
 {
 	(*line)++;
 	while (1)
@@ -43,7 +43,7 @@ int	open_double_quote(char **line, char **buf, t_env **env, t_list **g_list)
 		if (**line == '\"')
 		{
 			if (*buf == NULL)
-				*buf = ft_strdup("\0"), make_node(buf, TOKEN_END, g_list);
+				*buf = ft_strdup("\0"), make_node(buf, TOKEN_END, list);
 			return (0);
 		}
 		else if (**line == '\0')
@@ -63,18 +63,18 @@ int	open_double_quote(char **line, char **buf, t_env **env, t_list **g_list)
 	return (1);
 }
 
-int	is_white_space(char **line, char **buf, int *type, t_list **g_list)
+int	is_white_space(char **line, char **buf, int *type, t_list **list)
 {
 	if (**line == '\0')
 		return (-1);
 	if (is_space(**line) == 0)
 		return (1);
-	if (*g_list && (ft_lstlast(*g_list)->type == TOKEN_END
-			|| ft_lstlast(*g_list)->type == PIPE) && *type != PIPE)
-		add_arg(buf, *g_list);
+	if (*list && (ft_lstlast(*list)->type == TOKEN_END
+			|| ft_lstlast(*list)->type == PIPE) && *type != PIPE)
+		add_arg(buf, *list);
 	if (*buf != NULL)
 	{
-		make_node(buf, *type, g_list);
+		make_node(buf, *type, list);
 		*type = TOKEN_END;
 	}
 	while (is_space(**line))

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   g_list_reparsing.c                                 :+:      :+:    :+:   */
+/*   list_reparsing.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 18:56:08 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/09 15:34:40 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/11 03:26:20 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,31 +46,31 @@ void	init_reparse(t_list **cmd, char ***cmd_table)
 	*cmd_table = NULL;
 }
 
-void	re_parsing(t_list **g_list)
+void	re_parsing(t_list **list)
 {
 	t_list	*cmd;
 	char	**cmd_table;
 	int		i;
 
 	init_reparse(&cmd, &cmd_table);
-	while (*g_list)
+	while (*list)
 	{
 		i = 0;
-		if (((*g_list)->type == TOKEN_END && cmd == NULL))
-			cmd = (*g_list);
-		else if (((*g_list)->type == TOKEN_END && cmd != NULL))
+		if (((*list)->type == TOKEN_END && cmd == NULL))
+			cmd = (*list);
+		else if (((*list)->type == TOKEN_END && cmd != NULL))
 		{
 			cmd_table = ft_malloc(8 * (get_size(cmd->cmd_table) + 2));
 			while ((cmd)->cmd_table[i] != NULL)
 				cmd_table[i] = ft_strdup(cmd->cmd_table[i]), i++;
-			cmd_table[i++] = ft_strdup((*g_list)->cmd_table[0]);
+			cmd_table[i++] = ft_strdup((*list)->cmd_table[0]);
 			free_cmd_table(cmd->cmd_table), cmd->cmd_table = cmd_table;
-			cmd_table[i] = NULL, ft_lstdelone(g_list);
+			cmd_table[i] = NULL, ft_lstdelone(list);
 		}
-		else if ((*g_list)->type == PIPE)
-			cmd = (*g_list);
-		if ((*g_list)->next == NULL)
+		else if ((*list)->type == PIPE)
+			cmd = (*list);
+		if ((*list)->next == NULL)
 			return ;
-		(*g_list) = (*g_list)->next;
+		(*list) = (*list)->next;
 	}
 }
