@@ -1,34 +1,48 @@
-#include "libft/libft.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <string.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <sys/errno.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/10 15:50:27 by yoyoo             #+#    #+#             */
+/*   Updated: 2021/11/10 15:54:50 by yoyoo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef MINISHELL_H
+# define MINISHELL_H
+
+# include "libft/libft.h"
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <string.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <sys/errno.h>
 
 /* TYPE */
-#define EMPTY		497
-#define CRITERIA	498
-#define TOKEN_END	499
-#define PIPE		500
-#define L_REDIR		501
-#define R_REDIR		502
-#define HEREDOC		503
-#define A_REDIR		504
+# define EMPTY			497
+# define CRITERIA		498
+# define TOKEN_END		499
+# define PIPE			500
+# define L_REDIR		501
+# define R_REDIR		502
+# define HEREDOC		503
+# define A_REDIR		504
 
-#define NOT_EXECUTABLE	126
-#define NOT_FOUND		127
+# define NOT_EXECUTABLE	126
+# define NOT_FOUND		127
 
 typedef struct s_env
 {
-	struct	s_env	*prev;
-	struct	s_env	*next;
-	char	*key;
-	char	*value;
-	char	*env_line;
-	
+	struct s_env	*prev;
+	struct s_env	*next;
+	char			*key;
+	char			*value;
+	char			*env_line;
 }				t_env;
 
 /* sys call */
@@ -54,15 +68,16 @@ int		make_pipe_node(char **buf, char **line, int *type, t_list **g_list);
 int		make_L_redir_node(char **buf, char **line, int *type, t_list **g_list);
 int		make_R_redir_node(char **buf, char **line, int *type, t_list **g_list);
 int		main_tokenizer(char **cmdline, t_env **env, t_list **g_list);
-void	split_list(t_list **cmd_head, t_list **redir_head, t_list *g_list, char *cmdline);
+void	split_list(t_list **cmd_head, t_list **redir_head,
+			t_list *g_list, char *cmdline);
 
 /* change_dollar */
 char	**change_dollar(char **line, char **buf, t_env *env);
 
-
 /* change_dollar2 */
 char	**change_dollar2_util(char **line, char **buf);
-char	**change_dollar2_util2(char **check, t_env *env, char **buf, char **line);
+char	**change_dollar2_util2(char **check, t_env *env,
+			char **buf, char **line);
 char	**change_dollar2(char **line, char **buf, t_env *env);
 
 /* parsing fct */
@@ -79,12 +94,14 @@ void	reparse_rewind(t_list **g_list);
 void	split_cmd(t_list **cmd_head, t_list *g_list);
 void	split_redir(t_list **redir_head, t_list *g_list);
 
-
 /* execute fct */
 
 void	execute_bin(t_list *cmd_head, t_env **env, t_list **g_list);
 int		process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[]);
-void	execute(t_list *cmd_head, t_list *g_list, t_env  **env, char **my_envp);
+void	execute(t_list *cmd_head, t_list *g_list, t_env **env, char **my_envp);
+void	execute_process(t_list **cmd_head, t_env **env,
+			t_list **g_list, t_list **redir_head);
+void	wait_process(t_list **cmd_head, t_list **g_list);
 
 /* redirection utils */
 void	close_L_fd(int fd, int copy[]);
@@ -115,10 +132,10 @@ int		env_size(t_env *env);
 void	env_add_back(t_env **env, t_env *newe);
 void	free_cmd_table(char **cmd_table);
 
-
 /* check_cmd */
 int		check_builtin(t_list **cmd_head);
-int		check_cmd(t_list **g_list, t_env **env, t_list **cmd_head, char **my_envp);
+int		check_cmd(t_list **g_list, t_env **env,
+			t_list **cmd_head, char **my_envp);
 
 /* exit */
 void	all_free(t_list **g_list);
@@ -180,10 +197,10 @@ int		builtin_unset(t_list **cmd_head, t_env **env);
 void	free_env(t_env **check, t_env **tmp, t_env **env);
 
 /* builtin util */
-int	check_equal_sign(char *cmd_table);
-int	check_alpha(char *cmd_table);
-int	check_num(char *cmd_table);
-int	check_identifier(char *cmd_table, t_list **cmd_head, int *ret);
+int		check_equal_sign(char *cmd_table);
+int		check_alpha(char *cmd_table);
+int		check_num(char *cmd_table);
+int		check_identifier(char *cmd_table, t_list **cmd_head, int *ret);
 
 /* error_print */
 void	print_valid(t_list **cmd_head, char *cmd_table);
@@ -193,4 +210,6 @@ int		error_exit1(t_list **cmd_head);
 int		error_exit2(t_list **cmd_head);
 
 /* pipe_exist */
-int	pipe_exist(t_list *g_list);
+int		pipe_exist(t_list *g_list);
+
+#endif

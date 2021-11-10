@@ -6,49 +6,13 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 15:23:34 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 15:35:01 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 unsigned char	g_exit_status = 0;
-
-void	execute_process(t_list **cmd_head, t_env **env, t_list **g_list, t_list **redir_head)
-{
-	int	copy[2];
-
-	while (*cmd_head != NULL)
-	{
-		if (process_redir_node(*redir_head, *cmd_head, copy) < 0)
-			break ;
-		execute_bin(*cmd_head, env, g_list);
-		dup2(copy[0], STDIN_FILENO);
-		dup2(copy[1], STDOUT_FILENO);
-		close(copy[0]);
-		close(copy[1]);
-		if ((*cmd_head)->next)
-		{
-			(*cmd_head) = (*cmd_head)->next;
-			(*redir_head) = (*redir_head)->next;
-		}
-		else
-			break ;
-	}
-}
-
-void	wait_process(t_list **cmd_head, t_list **g_list)
-{
-	rewind_list(cmd_head);
-	while (waitpid((*cmd_head)->pid, &(*cmd_head)->exit_status, 0) > 0)
-	{
-		if ((*cmd_head)->next)
-			*cmd_head = (*cmd_head)->next;
-	}
-	if (g_exit_status == 0)
-		g_exit_status = (unsigned char)((*cmd_head)->exit_status/256);
-	all_free(g_list);
-}
 
 int	init(int argc, char *argv[], char *envp[], t_env **env)
 {
@@ -87,7 +51,8 @@ int	all_white_space(char *cmdline)
 	return (1);
 }
 
-void	init_main(t_list **cmd_head, t_list **g_list, t_list **redir_head, t_env **env)
+void	init_main(t_list **cmd_head, t_list **g_list,
+		t_list **redir_head, t_env **env)
 {
 	*cmd_head = NULL;
 	*g_list = NULL;
@@ -114,10 +79,10 @@ int	main(int argc, char *av[], char *envp[])
 		split_list(&cmd_head, &redir_head, g_list, cmdline);
 		execute_process(&cmd_head, &env, &g_list, &redir_head);
 		wait_process(&cmd_head, &g_list);
-		int fd;
-		fd = open("Makefile", O_WRONLY);
-		printf("\ncheck fd is 3 : %d\n\n", fd);
-		close(fd);
-		system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");
 	}
 }
+	/*int fd;
+		 *fd = open("Makefile", O_WRONLY);
+		 *printf("\ncheck fd is 3 : %d\n\n", fd);
+		 *close(fd);
+		 *system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");*/

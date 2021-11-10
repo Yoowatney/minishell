@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/10 15:41:19 by yoyoo             #+#    #+#             */
+/*   Updated: 2021/11/10 15:41:20 by yoyoo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	check_env_cmd(t_list **cmd_head)
@@ -43,6 +55,12 @@ int	extra_cmd(t_list **cmd_head)
 	return (1);
 }
 
+void	print_envp(char **my_envp, t_list **cmd_head)
+{
+	ft_putstr_fd(*my_envp, (*cmd_head)->pipe[1]);
+	ft_putchar_fd('\n', (*cmd_head)->pipe[1]), my_envp++;
+}
+
 int	builtin_env(char **my_envp, t_list **cmd_head)
 {
 	if (check_env_cmd(cmd_head) == -1)
@@ -51,9 +69,7 @@ int	builtin_env(char **my_envp, t_list **cmd_head)
 	{
 		while (*my_envp)
 		{
-			ft_putstr_fd(*my_envp, (*cmd_head)->pipe[1]);
-			ft_putchar_fd('\n', (*cmd_head)->pipe[1]);
-			my_envp++;
+			print_envp(my_envp, cmd_head);
 			if (*my_envp == NULL)
 				break ;
 		}
@@ -64,9 +80,7 @@ int	builtin_env(char **my_envp, t_list **cmd_head)
 	{
 		while (*my_envp)
 		{
-			ft_putstr_fd(*my_envp, 1);
-			ft_putchar_fd('\n', 1);
-			my_envp++;
+			ft_putstr_fd(*my_envp, 1), ft_putchar_fd('\n', 1), my_envp++;
 			if (*my_envp == NULL)
 				break ;
 		}
