@@ -51,6 +51,7 @@ void	*ft_malloc(int size);
 void	ft_dup2(int old, int newe);
 int		ft_dup(int fd);
 void	ft_close(int fd);
+void	ft_chdir(char *dir);
 
 /* signal fct */
 void	sig_handler(int signum);

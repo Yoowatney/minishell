@@ -43,3 +43,9 @@ void	ft_close(int fd)
 	if (close(fd) < 0)
 		error_check("");
 }
+
+void	ft_chdir(char *dir)
+{
+	if (chdir(dir) < 0)
+		error_check("");
+}
