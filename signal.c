@@ -12,29 +12,34 @@
 
 #include "minishell.h"
 
+extern unsigned char	exit_status;
+
 void	sig_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		ft_putstr_fd("\n", 1);
-		rl_on_new_line();
+		ft_putstr_fd("\n", 1); // move to new line;
+		rl_on_new_line(); // regenerate the prompt but hide
 		rl_replace_line("", 0);
-		rl_redisplay();
+		rl_redisplay(); // display prompt
+		exit_status = 1;
 	}
 }
 
 void	bin_sig_handler(int signum)
 {
-	extern const char *const	sys_siglist[];
+	extern const char *const sys_siglist[];
 
 	if (signum == SIGINT)
 	{
 		ft_putstr_fd("\n", 1);
+		exit_status = 1;
 	}
 	else if (signum == SIGQUIT)
 	{
 		ft_putstr_fd((char *)(sys_siglist[SIGQUIT]), 2);
 		ft_putstr_fd(": 3\n", 2);
+		exit_status = 131;
 	}
 }
 
