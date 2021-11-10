@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 16:03:04 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 19:48:23 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 20:16:37 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	ft_dup2(int old, int new)
 
 int	ft_dup(int fd)
 {
-	int i;
+	int	i;
 
 	i = dup(fd);
 	if (i < 0)
