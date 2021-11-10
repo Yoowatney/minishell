@@ -11,7 +11,7 @@ LIBFT_PATH	=	./libft
 LIBFT		=	$(LIBFT_PATH)/libft.a
 
 SRCS		=	./main.c ./signal.c ./execute.c ./tokenizer.c ./main_utils.c \
-				./redirection.c ./g_list_reparsing.c\
+				./redirection.c ./list_reparsing.c\
 				./split_list.c ./split_list_utils.c\
 				./check_cmd.c ./env.c ./exit.c\
 				./ft_strcmp.c ./echo.c ./pwd.c ./cd.c\

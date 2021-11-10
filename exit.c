@@ -6,7 +6,7 @@
 /*   By: jlim <jlim@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 13:59:30 by jlim              #+#    #+#             */
-/*   Updated: 2021/11/10 13:59:32 by jlim             ###   ########.fr       */
+/*   Updated: 2021/11/10 14:37:00 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	builtin_exit(t_list **g_list, t_env **env, t_list **cmd_head)
 		else
 			exit_status = (unsigned char)(ft_atoi((*cmd_head)->cmd_table[1]));
 	}
-	if (pipe_exist() == 0)
+	if (pipe_exist(*g_list) == 0)
 		ft_putstr_fd("exit\n", 2);
 	rewind_list(g_list);
 	rewind_list(&(*g_list)->cmd_list);

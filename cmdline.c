@@ -20,5 +20,3 @@ char	*cmdline_start(char **cmdline)
 	add_history(*cmdline);
 	return (*cmdline);
 }
-
-
