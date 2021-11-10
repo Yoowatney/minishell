@@ -21,7 +21,8 @@ int	main_tokenizer(char **cmdline, t_env **env, t_list **g_list)
 	return (0);
 }
 
-void	split_list(t_list **cmd_head, t_list **redir_head, t_list *g_list, char *cmdline)
+void	split_list(t_list **cmd_head, t_list **redir_head,
+		t_list *g_list, char *cmdline)
 {
 	split_cmd(cmd_head, g_list);
 	split_redir(redir_head, g_list);
