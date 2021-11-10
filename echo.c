@@ -20,8 +20,10 @@ int	echo_util(t_list **cmd_head, char **print, int n_flag)
 		{
 			if (**print == '\0' && *(print + 1))
 				print++;
+			if (**print == '\0' && !*(print + 1))
+				return (1);
 			ft_putstr_fd(*print, (*cmd_head)->pipe[1]);
-			if (*(print + 1))
+			if (*(print + 1) && **print != '\0')
 				ft_putchar_fd(' ', (*cmd_head)->pipe[1]);
 			print++;
 			if (*print == NULL)
@@ -42,8 +44,10 @@ void	echo_util2(char **print, int n_flag)
 	{
 		if (**print == '\0' && *(print + 1))
 			print++;
-		ft_putstr_fd(*print, 1);		
-		if (*(print + 1))
+		if (**print == '\0' && !(*(print + 1)))
+			return ;
+		ft_putstr_fd(*print, 1);
+		if (*(print + 1) && **print != '\0')
 			ft_putchar_fd(' ', 1);
 		print++;
 		if (*print == NULL)
@@ -53,6 +57,49 @@ void	echo_util2(char **print, int n_flag)
 			break ;
 		}
 	}
+}
+
+int	delete_null_util(t_list **cmd_head)
+{
+	int	count;
+	int	i;
+
+	count = 0;
+	i = 0;
+	while (1)
+	{
+		if (!(*cmd_head)->cmd_table[i])
+			break ;
+		if ((*cmd_head)->cmd_table[i][0] != '\0')
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+char	**delete_null(t_list **cmd_head)
+{
+	char	**cmd;
+	int		count;
+	int		i;
+
+	count = delete_null_util(cmd_head);
+	i = 0;
+	cmd = malloc(sizeof(char *) * (count + 1));
+	count = 0;
+	while (1)
+	{
+		if (!(*cmd_head)->cmd_table[i])
+			break ;
+		if ((*cmd_head)->cmd_table[i][0] != '\0')
+		{
+			cmd[count] = ft_strdup((*cmd_head)->cmd_table[i]);
+			count++;
+		}
+		i++;
+	}
+	cmd[count] = NULL;
+	return (cmd);
 }
 
 int	builtin_echo(t_list **cmd_head)
@@ -66,6 +113,8 @@ int	builtin_echo(t_list **cmd_head)
 	else
 		return (0);
 	n_flag = 0;
+	print = delete_null(cmd_head);
+	print++;
 	if (ft_strcmp(*print, "-n") == 0)
 	{
 		while (ft_strcmp(*print, "-n") == 0 && *(print + 1))
