@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:50:27 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 20:07:24 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 20:19:28 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,15 @@ void	split_list(t_list **cmd_head, t_list **redir_head,
 
 /* token_util */
 void	make_node(char **buf, int type, t_list **g_list);
-int	add_arg(char **buf, t_list *g_list);
-int	make_string(char c, char **buf);
+int		add_arg(char **buf, t_list *g_list);
+int		make_string(char c, char **buf);
 
 /* token_util2 */
-int	open_single_quote(char **line, char **buf, t_list **g_list);
-int	open_double_quote(char **line, char **buf, t_env **env, t_list **g_list);
-int	is_white_space(char **line, char **buf, int *type, t_list **g_list);
-int	is_dollar(char **line, char **buf, t_env **env);
+int		open_single_quote(char **line, char **buf, t_list **g_list);
+int		open_double_quote(char **line, char **buf, t_env **env,
+			t_list **g_list);
+int		is_white_space(char **line, char **buf, int *type, t_list **g_list);
+int		is_dollar(char **line, char **buf, t_env **env);
 
 /* change_dollar */
 char	**change_dollar(char **line, char **buf, t_env *env);
