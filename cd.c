@@ -28,14 +28,14 @@ int	cd_cmd_swung(t_list **cmd_head, char **my_envp, t_env **env)
 			return (1);
 		}
 		save_oldpwd(env);
-		chdir(user_home);
+		ft_chdir(user_home);
 		free(user);
 		free(user_home);
 	}
 	else if (!(check_home(my_envp)))
 		return (print_not_home(cmd_head));
 	save_oldpwd(env);
-	chdir(check_home(my_envp));
+	ft_chdir(check_home(my_envp));
 	return (0);
 }
 
@@ -57,7 +57,7 @@ int	cd_cmd_dot(t_list **cmd_head, t_env **env)
 			return (0);
 		}
 		save_oldpwd(env);
-		chdir(updir);
+		ft_chdir(updir);
 		free(updir);
 		return (0);
 	}
@@ -72,13 +72,13 @@ int	cd_hyphen_slash(t_list **cmd_head, t_env **env, char **my_envp)
 	{
 		oldpwd = check_oldpwd_value(my_envp);
 		save_oldpwd(env);
-		chdir(oldpwd);
+		ft_chdir(oldpwd);
 		return (0);
 	}
 	else if (ft_strcmp((*cmd_head)->cmd_table[1], "/") == 0)
 	{
 		save_oldpwd(env);
-		chdir("/");
+		ft_chdir("/");
 		return (0);
 	}
 	return (1);
@@ -116,7 +116,7 @@ int	builtin_cd(t_list **cmd_head, char **my_envp, t_env **env)
 		if (!(check_home(my_envp)))
 			return (print_not_home(cmd_head));
 		save_oldpwd(env);
-		chdir(check_home(my_envp));
+		ft_chdir(check_home(my_envp));
 		return (0);
 	}
 	return (0);
