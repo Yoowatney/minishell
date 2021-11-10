@@ -12,18 +12,18 @@
 
 #include "minishell.h"
 
-int	cd_cmd_swung(t_list **cmd_head, char **my_envp, t_env **env)
+int	cd_cmd_swung(char **cd_cmd, char **my_envp, t_env **env)
 {
 	char	*user;
 	char	*user_home;
 
-	if (ft_strlen((*cmd_head)->cmd_table[1]) > 1)
+	if (ft_strlen(cd_cmd[1]) > 1)
 	{
-		user = ft_strdup(&(*cmd_head)->cmd_table[1][1]);
+		user = ft_strdup(&(cd_cmd[1][1]));
 		user_home = check_user(my_envp, user);
 		if (!user_home)
 		{
-			no_file_cd(cmd_head, NULL);
+			no_file_cd(cd_cmd, NULL);
 			free(user);
 			return (1);
 		}
@@ -33,23 +33,23 @@ int	cd_cmd_swung(t_list **cmd_head, char **my_envp, t_env **env)
 		free(user_home);
 	}
 	else if (!(check_home(my_envp)))
-		return (print_not_home(cmd_head));
+		return (print_not_home(cd_cmd));
 	save_oldpwd(env);
 	if (chdir(check_home(my_envp)) < 0)
-		no_file_cd(cmd_head, check_home(my_envp));
+		no_file_cd(cd_cmd, check_home(my_envp));
 	return (0);
 }
 
-int	cd_cmd_dot(t_list **cmd_head, t_env **env)
+int	cd_cmd_dot(char **cd_cmd, t_env **env)
 {
 	char	*updir;
 
-	if (ft_strcmp((*cmd_head)->cmd_table[1], ".") == 0)
+	if (ft_strcmp(cd_cmd[1], ".") == 0)
 	{
 		save_oldpwd(env);
 		return (0);
 	}
-	else if (ft_strcmp((*cmd_head)->cmd_table[1], "..") == 0)
+	else if (ft_strcmp(cd_cmd[1], "..") == 0)
 	{
 		updir = check_updir();
 		if (!updir)
@@ -65,32 +65,37 @@ int	cd_cmd_dot(t_list **cmd_head, t_env **env)
 	return (1);
 }
 
-int	cd_hyphen_slash(t_list **cmd_head, t_env **env, char **my_envp)
+int	cd_hyphen_slash(char **cd_cmd, t_env **env, char **my_envp)
 {
 	char	*oldpwd;
 
-	if (ft_strcmp((*cmd_head)->cmd_table[1], "-") == 0)
+	if (ft_strcmp(cd_cmd[1], "-") == 0)
 	{
 		oldpwd = check_oldpwd_value(my_envp);
+		if (oldpwd == NULL)
+		{
+			ft_putstr_fd("bash: cd: OLDPWD not set\n", 2);
+			return (1);
+		}
 		save_oldpwd(env);
-		ft_chdir(oldpwd);
+		chdir(oldpwd);
 		return (0);
 	}
-	else if (ft_strcmp((*cmd_head)->cmd_table[1], "/") == 0)
+	else if (ft_strcmp(cd_cmd[1], "/") == 0)
 	{
 		save_oldpwd(env);
 		ft_chdir("/");
 		return (0);
 	}
-	return (1);
+	return (-1);
 }
 
-int	cd_cmd(t_list **cmd_head, t_env **env)
+int	cd_path(char **cd_cmd, t_env **env)
 {
 	save_oldpwd(env);
-	if (chdir((*cmd_head)->cmd_table[1]) < 0)
+	if (chdir(cd_cmd[1]) < 0)
 	{
-		no_file_cd(cmd_head, NULL);
+		no_file_cd(cd_cmd, NULL);
 		return (1);
 	}
 	return (0);
@@ -99,27 +104,26 @@ int	cd_cmd(t_list **cmd_head, t_env **env)
 int	builtin_cd(t_list **cmd_head, char **my_envp, t_env **env)
 {
 	int		i;
+	char	**cd_cmd;
+	int		ret;
 
-	i = 1;
-	if ((*cmd_head)->cmd_table[1])
+	cd_cmd = delete_null(cmd_head);
+	if (cd_cmd[1])
 	{
-		if (ft_strncmp((*cmd_head)->cmd_table[1], "~", 1) == 0)
-			return (cd_cmd_swung(cmd_head, my_envp, env));
-		else if (cd_hyphen_slash(cmd_head, env, my_envp) == 0)
-			return (0);
-		else if (cd_cmd_dot(cmd_head, env) == 0)
-			return (0);
+		i = cd_hyphen_slash(cd_cmd, env, my_envp);
+		if (i == 0)
+			ret = i;
+		else if (i == 1)
+			ret = i;
+		else if (ft_strncmp(cd_cmd[1], "~", 1) == 0)
+			ret = cd_cmd_swung(cd_cmd, my_envp, env);
+		else if (cd_cmd_dot(cd_cmd, env) == 0)
+			ret = 0;
 		else
-			return (cd_cmd(cmd_head, env));
+			ret = cd_path(cd_cmd, env);
 	}
 	else
-	{
-		if (!(check_home(my_envp)))
-			return (print_not_home(cmd_head));
-		save_oldpwd(env);
-		if (chdir(check_home(my_envp)) < 0)
-			no_file_cd(cmd_head, check_home(my_envp));
-		return (0);
-	}
-	return (0);
+		ret = only_cd(cd_cmd, my_envp, env);
+	free_cmd_table(cd_cmd);
+	return (ret);
 }

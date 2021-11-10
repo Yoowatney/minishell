@@ -164,6 +164,8 @@ char	*ft_strjoin_ch(char *s1, char c);
 char	*ft_strjoin_not(char *s1, char *s2);
 
 /* echo */
+int		delete_null_util(t_list **cmd_head);
+char	**delete_null(t_list **cmd_head);
 int		builtin_echo(t_list **cmd_head);
 
 /* echo_util */
@@ -176,6 +178,9 @@ int		builtin_pwd(t_list **cmd_head);
 /* cd */
 int		builtin_cd(t_list **cmd_head, char **my_envp, t_env **env);
 
+/* cd_only */
+int		only_cd(char **cd_cmd, char **my_envp, t_env **env);
+
 /* cd_oldpwd */
 char	*check_oldpwd_value(char **my_envp);
 t_env	*check_oldpwd(t_env **env);
@@ -186,7 +191,7 @@ char	*check_home(char **my_envp);
 char	*check_updir(void);
 int		check_end_slash(char *value);
 char	*check_user(char **my_envp, char *user);
-int		print_not_home(t_list **cmd_head);
+int		print_not_home(char **cd_cmd);
 
 /* export */
 int		builtin_export(t_list **cmd_head, t_env **env);
@@ -222,7 +227,7 @@ int		check_identifier(char *cmd_table, t_list **cmd_head, int *ret);
 
 /* error_print */
 void	print_valid(t_list **cmd_head, char *cmd_table);
-void	no_file_cd(t_list **cmd_head, char *check_home);
+void	no_file_cd(char **cd_cmd, char *check_home);
 void	no_file_env(t_list **cmd_head, char *cmd_table);
 int		error_exit1(t_list **cmd_head);
 int		error_exit2(t_list **cmd_head);

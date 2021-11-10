@@ -94,10 +94,10 @@ char	*check_user(char **my_envp, char *user)
 	return (NULL);
 }
 
-int	print_not_home(t_list **cmd_head)
+int	print_not_home(char **cd_cmd)
 {
 	ft_putstr_fd("bash: ", 2);
-	ft_putstr_fd((*cmd_head)->cmd_table[0], 2);
+	ft_putstr_fd(*cd_cmd, 2);
 	ft_putstr_fd(": HOME not set\n", 2);
 	return (1);
 }

@@ -52,6 +52,29 @@ t_env	*check_oldpwd(t_env **env)
 	return (tmp);
 }
 
+void	save_oldpwd_util(t_env **tmp, t_env **oldpwd)
+{
+	if ((*tmp)->prev && (*tmp)->next)
+	{
+		(*tmp)->prev->next = (*oldpwd);
+		(*tmp)->next->prev = (*oldpwd);
+		(*oldpwd)->next = (*tmp)->next;
+		(*oldpwd)->prev = (*tmp)->prev;
+	}
+	else if ((*tmp)->prev)
+	{
+		(*tmp)->prev->next = (*oldpwd);
+		(*oldpwd)->next = NULL;
+		(*oldpwd)->prev = (*tmp)->prev;
+	}
+	else
+	{
+		(*tmp)->next->prev = (*oldpwd);
+		(*oldpwd)->next = (*tmp)->next;
+		(*oldpwd)->prev = (*tmp)->prev;
+	}
+}
+
 void	save_oldpwd(t_env **env)
 {
 	char	*pwd;
@@ -61,13 +84,16 @@ void	save_oldpwd(t_env **env)
 	pwd = getcwd(NULL, BUFSIZ);
 	oldpwd = ft_malloc(sizeof(t_env));
 	tmp = check_oldpwd(env);
+	if (tmp == NULL)
+	{
+		free(pwd);
+		free(oldpwd);
+		return ;
+	}
 	oldpwd->env_line = ft_strjoin(ft_strdup("OLDPWD="), pwd);
 	oldpwd->key = ft_strdup("OLDPWD");
 	oldpwd->value = pwd;
-	(tmp)->prev->next = oldpwd;
-	(tmp)->next->prev = oldpwd;
-	oldpwd->next = (tmp)->next;
-	oldpwd->prev = (tmp)->prev;
+	save_oldpwd_util(&tmp, &oldpwd);
 	free((tmp)->env_line);
 	free((tmp)->key);
 	free((tmp)->value);
