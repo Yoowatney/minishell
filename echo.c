@@ -18,6 +18,8 @@ int	echo_util(t_list **cmd_head, char **print, int n_flag)
 	{
 		while (*print)
 		{
+			if (**print == '\0' && *(print + 1))
+				print++;
 			ft_putstr_fd(*print, (*cmd_head)->pipe[1]);
 			if (*(print + 1))
 				ft_putchar_fd(' ', (*cmd_head)->pipe[1]);
@@ -38,7 +40,9 @@ void	echo_util2(char **print, int n_flag)
 {
 	while (*print)
 	{
-		ft_putstr_fd(*print, 1);
+		if (**print == '\0' && *(print + 1))
+			print++;
+		ft_putstr_fd(*print, 1);		
 		if (*(print + 1))
 			ft_putchar_fd(' ', 1);
 		print++;
@@ -66,6 +70,8 @@ int	builtin_echo(t_list **cmd_head)
 	{
 		while (ft_strcmp(*print, "-n") == 0 && *(print + 1))
 			print++;
+		if (ft_strcmp(*print, "-n") == 0)
+			return (0);
 		n_flag = 1;
 	}
 	if (echo_util(cmd_head, print, n_flag) == 1)
