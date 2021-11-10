@@ -80,7 +80,7 @@ void	split_redir(t_list **redir_head, t_list *g_list);
 
 /* execute fct */
 
-void	execute_bin(t_list *g_list, t_env **env);
+void	execute_bin(t_list *cmd_head, t_env **env, t_list **g_list);
 int		process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[]);
 void	execute(t_list *cmd_head, t_list *g_list, t_env  **env, char **my_envp);
 
@@ -191,4 +191,4 @@ int		error_exit1(t_list **cmd_head);
 int		error_exit2(t_list **cmd_head);
 
 /* pipe_exist */
-int		pipe_exist(void);
+int	pipe_exist(t_list *g_list);

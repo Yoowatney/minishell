@@ -93,7 +93,7 @@ int	main(int argc, char *av[], char *envp[])
 
 			if (process_redir_node(redir_head, cmd_head, copy) < 0)
 				break ;
-			execute_bin(cmd_head, &env);
+			execute_bin(cmd_head, &env, &g_list);
 			dup2(copy[0], STDIN_FILENO);
 			dup2(copy[1], STDOUT_FILENO);
 			close(copy[0]);
