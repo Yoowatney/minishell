@@ -6,19 +6,26 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 16:16:48 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 16:17:09 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 20:09:02 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	open_single_quote(char **line, char **buf)
+int	open_single_quote(char **line, char **buf, t_list **g_list)
 {
 	(*line)++;
 	while (1)
 	{
 		if (**line == '\'')
+		{
+			if (*buf == NULL)
+			{
+				*buf = ft_strdup("\0");
+				make_node(buf, TOKEN_END, g_list);
+			}
 			return (0);
+		}
 		else if (**line == '\0')
 			return (-1);
 		else
@@ -28,13 +35,17 @@ int	open_single_quote(char **line, char **buf)
 	return (1);
 }
 
-int	open_double_quote(char **line, char **buf, t_env **env)
+int	open_double_quote(char **line, char **buf, t_env **env, t_list **g_list)
 {
 	(*line)++;
 	while (1)
 	{
 		if (**line == '\"')
+		{
+			if (*buf == NULL)
+				*buf = ft_strdup("\0"), make_node(buf, TOKEN_END, g_list);
 			return (0);
+		}
 		else if (**line == '\0')
 			return (-1);
 		else if (**line == '$')

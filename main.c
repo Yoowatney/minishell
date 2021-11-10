@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:24 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/10 19:32:25 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/10 20:06:28 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,10 @@ int	main(int argc, char *av[], char *envp[])
 		split_list(&cmd_head, &redir_head, list, cmdline);
 		execute_process(&cmd_head, &env, &list, &redir_head);
 		wait_process(&cmd_head, &list);
-		/*int fd;
-		 *fd = open("Makefile", O_WRONLY);
-		 *printf("\ncheck fd is 3 : %d\n\n", fd);
-		 *close(fd);
-		 *system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");*/
+		int fd;
+		fd = open("Makefile", O_WRONLY);
+		printf("\ncheck fd is 3 : %d\n\n", fd);
+		close(fd);
+		system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");
 	}
 }
