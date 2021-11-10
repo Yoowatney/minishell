@@ -46,12 +46,11 @@ void	init_execute_bin(void);
 /* token fct */
 
 int		open_single_quote(char **line, char **buf);
-int		open_double_quote(char **line, char **buf, t_env **env, unsigned char exit_status);
+int		open_double_quote(char **line, char **buf, t_env **env);
 int		make_string(char c, char **buf);
-int		tokenizer(char *line, t_env **env, unsigned char exit_status);
+int		tokenizer(char *line, t_env **env);
 void	re_parsing(t_list **g_list);
 void	make_redir_node(char **buf, int type, t_list **redir_node);
-char	**change_dollar(char **line, char **buf, t_env *env, unsigned char exit_status);
 int		all_white_space(char *cmdline);
 char	*cmdline_start(char	**cmdline);
 void	make_node(char **buf, int type);
@@ -60,6 +59,14 @@ int		make_pipe_node(char **buf, t_list **g_list, char **line, int *type);
 int		make_L_redir_node(char **buf, char **line, int *type);
 int		make_R_redir_node(char **buf, char **line, int *type);
 
+/* change_dollar */
+char	**change_dollar(char **line, char **buf, t_env *env);
+
+
+/* change_dollar2 */
+char	**change_dollar2_util(char **line, char **buf);
+char	**change_dollar2_util2(char **check, t_env *env, char **buf, char **line);
+char	**change_dollar2(char **line, char **buf, t_env *env);
 
 /* parsing fct */
 
@@ -79,7 +86,7 @@ void	split_redir(t_list **redir_head, t_list *g_list);
 
 /* execute fct */
 
-void	execute_bin(t_list *g_list, t_env **env, unsigned char *exit_status);
+void	execute_bin(t_list *g_list, t_env **env);
 int		process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[]);
 void	execute(t_list *cmd_head, t_list *g_list, t_env  **env, char **my_envp);
 
@@ -116,7 +123,7 @@ void	free_cmd_table(char **cmd_table);
 
 /* check_cmd */
 int		check_builtin(t_list **cmd_head);
-int		check_cmd(t_list **g_list, t_env **env, t_list **cmd_head);
+int		check_cmd(t_list **g_list, t_env **env, t_list **cmd_head, char **my_envp);
 
 /* exit */
 void	all_free(t_list **g_list);
@@ -137,10 +144,36 @@ int		builtin_echo(t_list **cmd_head);
 int		builtin_pwd(t_list **cmd_head);
 
 /* cd */
-int		builtin_cd(t_list **g_list, t_list **cmd_head, char **my_envp, t_env **env);
+int		builtin_cd(t_list **cmd_head, char **my_envp, t_env **env);
+
+/* cd_oldpwd */
+char	*check_oldpwd_value(char **my_envp);
+t_env	*check_oldpwd(t_env **env);
+void	save_oldpwd(t_env **env);
+
+/* cd_util */
+char	*check_home(char **my_envp);
+char	*check_updir(void);
+int		check_end_slash(char *value);
+char	*check_user(char **my_envp, char *user);
+int		print_not_home(t_list **cmd_head);
 
 /* export */
 int		builtin_export(t_list **cmd_head, t_env **env);
+
+/* export_str */
+void	export_string_util(t_env *change, char **str);
+char	**export_string(t_env *env);
+char	**sort_list(char **export_str, int size);
+void	print_export_fd(t_list **cmd_head, char **export_str);
+void	print_export(t_env **env, t_list **cmd_head);
+
+/* export_util */
+int		check_plus_equal(char *cmd_table);
+t_env	*check_key(t_env *env, char *key);
+void	free_str(char **export_str);
+char	*get_export_key(char *cmd_table);
+char	*get_export_value(char *cmd_table);
 
 /* env관련 main */
 char	*get_key(char *envp);
@@ -149,13 +182,13 @@ void	env_add_back(t_env **env, t_env *newe);
 
 /* unset */
 int		builtin_unset(t_list **cmd_head, t_env **env);
-void	free_env(t_env **check, t_env **tmp);
+void	free_env(t_env **check, t_env **tmp, t_env **env);
 
 /* builtin util */
 int	check_equal_sign(char *cmd_table);
 int	check_alpha(char *cmd_table);
 int	check_num(char *cmd_table);
-int	check_identifier(char *cmd_table);
+int	check_identifier(char *cmd_table, t_list **cmd_head, int *ret);
 
 /* error_print */
 void	print_valid(t_list **cmd_head, char *cmd_table);

@@ -13,6 +13,7 @@
 #include "minishell.h"
 
 extern t_list	*g_list;
+extern unsigned char	exit_status;
 
 int	pipe_exist(void)
 {
@@ -32,7 +33,7 @@ int	pipe_exist(void)
 }
 
 // envp 삭제
-void	execute_bin(t_list *cmd_head, t_env **env, unsigned char *exit_status)
+void	execute_bin(t_list *cmd_head, t_env **env)
 {
 	int		pid;
 	int		pipe_open;
@@ -81,9 +82,9 @@ void	execute_bin(t_list *cmd_head, t_env **env, unsigned char *exit_status)
 			
 			if (pipe == 1)
 			{
-				*exit_status = (unsigned char)check_cmd(&g_list, env, &cmd_head);
+				exit_status = (unsigned char)check_cmd(&g_list, env, &cmd_head, my_envp);
 				all_free(&g_list);
-				exit((int)(*exit_status));
+				exit((int)(exit_status));
 			}			
 			all_free(&g_list);
 			exit(0);
@@ -99,7 +100,7 @@ void	execute_bin(t_list *cmd_head, t_env **env, unsigned char *exit_status)
 
 		pipe = pipe_exist();
 		if (pipe != 1 && cmd_head->type != PIPE && cmd_head->cmd_table)
-			*exit_status = (unsigned char)check_cmd(&g_list, env, &cmd_head);
+			exit_status = (unsigned char)check_cmd(&g_list, env, &cmd_head, my_envp);
 		if (pipe_open)
 			close(cmd_head->pipe[1]);
 		if (cmd_head->type == PIPE && cmd_head->prev)

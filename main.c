@@ -13,6 +13,7 @@
 #include "minishell.h"
 
 t_list	*g_list = NULL;
+unsigned char	exit_status;
 
 int	init(int argc, char *argv[], char *envp[], t_env **env)
 {
@@ -57,7 +58,6 @@ int	main(int argc, char *av[], char *envp[])
 	t_env	*env;
 	t_list	*cmd_head;
 	t_list	*redir_head;
-	unsigned char	exit_status;
 
 	cmd_head = NULL;
 	redir_head = NULL;
@@ -70,7 +70,7 @@ int	main(int argc, char *av[], char *envp[])
 	{
 		if (cmdline_start(&cmdline) == NULL)
 			continue ;
-		if (tokenizer(cmdline, &env, exit_status) < 0)
+		if (tokenizer(cmdline, &env) < 0)
 		{
 			ft_putstr_fd("pasing error\n", 2);
 			if (g_list != NULL)
@@ -93,7 +93,7 @@ int	main(int argc, char *av[], char *envp[])
 
 			if (process_redir_node(redir_head, cmd_head, copy) < 0)
 				break ;
-			execute_bin(cmd_head, &env, &exit_status);
+			execute_bin(cmd_head, &env);
 			dup2(copy[0], STDIN_FILENO);
 			dup2(copy[1], STDOUT_FILENO);
 			close(copy[0]);
