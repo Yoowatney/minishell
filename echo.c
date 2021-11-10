@@ -12,53 +12,6 @@
 
 #include "minishell.h"
 
-int	echo_util(t_list **cmd_head, char **print, int n_flag)
-{
-	if ((*cmd_head)->next && (*cmd_head)->next->type == PIPE)
-	{
-		while (*print)
-		{
-			if (**print == '\0' && *(print + 1))
-				print++;
-			if (**print == '\0' && !*(print + 1))
-				return (1);
-			ft_putstr_fd(*print, (*cmd_head)->pipe[1]);
-			if (*(print + 1) && **print != '\0')
-				ft_putchar_fd(' ', (*cmd_head)->pipe[1]);
-			print++;
-			if (*print == NULL)
-			{
-				if (n_flag == 0)
-					ft_putchar_fd('\n', (*cmd_head)->pipe[1]);
-				break ;
-			}
-		}
-		return (1);
-	}
-	return (0);
-}
-
-void	echo_util2(char **print, int n_flag)
-{
-	while (*print)
-	{
-		if (**print == '\0' && *(print + 1))
-			print++;
-		if (**print == '\0' && !(*(print + 1)))
-			return ;
-		ft_putstr_fd(*print, 1);
-		if (*(print + 1) && **print != '\0')
-			ft_putchar_fd(' ', 1);
-		print++;
-		if (*print == NULL)
-		{
-			if (n_flag == 0)
-				ft_putchar_fd('\n', 1);
-			break ;
-		}
-	}
-}
-
 int	delete_null_util(t_list **cmd_head)
 {
 	int	count;
@@ -102,6 +55,24 @@ char	**delete_null(t_list **cmd_head)
 	return (cmd);
 }
 
+int	only_echo(t_list **cmd_head)
+{
+	if ((*cmd_head)->cmd_table[1] == NULL)
+	{
+		if ((*cmd_head)->next && (*cmd_head)->next->type == PIPE)
+		{
+			ft_putchar_fd('\n', (*cmd_head)->pipe[1]);
+			return (0);
+		}
+		else
+		{
+			ft_putchar_fd('\n', 1);
+			return (0);
+		}
+	}
+	return (1);
+}
+
 int	builtin_echo(t_list **cmd_head)
 {
 	char	**print;
@@ -109,11 +80,8 @@ int	builtin_echo(t_list **cmd_head)
 	int		i;
 
 	i = 0;
-	if ((*cmd_head)->cmd_table[1] == NULL)
-	{
-		ft_putstr_fd("\n", 1);
+	if (only_echo(cmd_head) == 0)
 		return (0);
-	}
 	n_flag = 0;
 	print = delete_null(cmd_head), print++, i++;
 	while (ft_strcmp(*print, "-n") == 0)
