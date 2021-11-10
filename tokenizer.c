@@ -12,9 +12,6 @@
 
 #include "minishell.h"
 
-/*extern t_list *g_list;*/
-extern unsigned char	exit_status;
-
 void	make_node(char **buf, int type, t_list **g_list)
 {
 	t_list *node;
