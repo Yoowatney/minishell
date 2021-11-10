@@ -165,6 +165,10 @@ char	*ft_strjoin_not(char *s1, char *s2);
 /* echo */
 int		builtin_echo(t_list **cmd_head);
 
+/* echo_util */
+int		echo_util(t_list **cmd_head, char **print, int n_flag);
+void	echo_util2(char **print, int n_flag);
+
 /* pwd */
 int		builtin_pwd(t_list **cmd_head);
 
