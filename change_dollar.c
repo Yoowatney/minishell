@@ -6,7 +6,7 @@
 /*   By: jlim <jlim@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:11:29 by jlim              #+#    #+#             */
-/*   Updated: 2021/11/10 09:11:30 by jlim             ###   ########.fr       */
+/*   Updated: 2021/11/10 15:06:06 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,7 @@ char	**change_dollar_util(char **line, char **buf)
 		(*line)--;
 	}
 	if (is_space(**line))
-	{
-		make_string('$', buf);
-		(*line)--;
-	}
+		make_string('$', buf), (*line)--;
 	if (**line == '?')
 	{
 		if (g_exit_status == 200)
@@ -38,8 +35,7 @@ char	**change_dollar_util(char **line, char **buf)
 			exit_str = ft_itoa((int)g_exit_status);
 		while (exit_str[i])
 		{
-			make_string(exit_str[i], buf);
-			i++;
+			make_string(exit_str[i++], buf);
 		}
 		free(exit_str);
 	}
