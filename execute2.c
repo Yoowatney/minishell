@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 04:54:47 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/11 03:25:28 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/11 18:35:16 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*select_cmd_table(t_list *cmd_head, char **prefix, int *i)
 			j++;
 		j--;
 		file_name = cmd_head->cmd_table[0];
-		cmd_head->cmd_table[0] = check[j];
+		cmd_head->cmd_table[0] = ft_strdup(check[j]);
 	}
 	(*i)++;
 	free_cmd_table(check);

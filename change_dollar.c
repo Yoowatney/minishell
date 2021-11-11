@@ -6,7 +6,7 @@
 /*   By: jlim <jlim@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:11:29 by jlim              #+#    #+#             */
-/*   Updated: 2021/11/10 19:36:15 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/11 18:22:37 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ char	**change_dollar_util2(char **check, t_env *env, char **buf, char **line)
 		if (ft_strcmp(*check, env->key) == 0)
 		{
 			*buf = ft_strjoin(*buf, env->value);
-			free(check);
-			check = NULL;
+			free(*check);
+			*check = NULL;
 			(*line)--;
 			return (line);
 		}
@@ -58,8 +58,8 @@ char	**change_dollar_util2(char **check, t_env *env, char **buf, char **line)
 	}
 	if (*buf == NULL)
 		make_string('\0', buf);
-	free(check);
-	check = NULL;
+	free(*check);
+	*check = NULL;
 	(*line)--;
 	return (line);
 }
