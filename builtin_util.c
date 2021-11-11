@@ -35,7 +35,8 @@ int	check_alpha(char *cmd_table)
 	{
 		if ((cmd_table[i] >= 65 && cmd_table[i] <= 90)
 			|| (cmd_table[i] >= 97 && cmd_table[i] <= 122)
-			|| (cmd_table[i] >= 48 && cmd_table[i] <= 57))
+			|| (cmd_table[i] >= 48 && cmd_table[i] <= 57)
+			|| (cmd_table[i] == '_'))
 		{
 			i++;
 			continue ;
