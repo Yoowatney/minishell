@@ -79,10 +79,5 @@ int	main(int argc, char *av[], char *envp[])
 		split_list(&cmd_head, &redir_head, list, cmdline);
 		execute_process(&cmd_head, &env, &list, &redir_head);
 		wait_process(&cmd_head, &list);
-		int fd;
-		fd = open("Makefile", O_WRONLY);
-		printf("\ncheck fd is 3 : %d\n\n", fd);
-		close(fd);
-		system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");
 	}
 }

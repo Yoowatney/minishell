@@ -29,10 +29,7 @@ char	**change_dollar_util(char **line, char **buf)
 		make_string('$', buf), (*line)--;
 	if (**line == '?')
 	{
-		//if (g_exit_status == 200)
-		//	exit_str = ft_itoa(258);
-		//else
-			exit_str = ft_itoa((int)g_exit_status);
+		exit_str = ft_itoa((int)g_exit_status);
 		while (exit_str[i])
 		{
 			make_string(exit_str[i++], buf);
@@ -49,8 +46,8 @@ char	**change_dollar_util2(char **check, t_env *env, char **buf, char **line)
 		if (ft_strcmp(*check, env->key) == 0)
 		{
 			*buf = ft_strjoin(*buf, env->value);
-			free(*check);
-			*check = NULL;
+			free(check);
+			check = NULL;
 			(*line)--;
 			return (line);
 		}
@@ -61,8 +58,8 @@ char	**change_dollar_util2(char **check, t_env *env, char **buf, char **line)
 	}
 	if (*buf == NULL)
 		make_string('\0', buf);
-	free(*check);
-	*check = NULL;
+	free(check);
+	check = NULL;
 	(*line)--;
 	return (line);
 }

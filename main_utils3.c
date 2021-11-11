@@ -26,7 +26,6 @@ int	main_tokenizer(char **cmdline, t_env **env, t_list **list)
 			(*list)->cmdline = *cmdline, all_free(list);
 		else
 			free(*cmdline);
-		system("leaks minishell > leaks_result; cat leaks_result | grep leaked; rm -rf leaks_result");
 		return (1);
 	}
 	reparse_rewind(list);
