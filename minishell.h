@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:50:27 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/13 20:27:37 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/14 02:45:22 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,28 +58,28 @@ void	bin_sig_handler(int signum);
 void	init_execute_bin(void);
 
 /* token fct */
-int		tokenizer(char *line, t_env **env, t_list **g_list);
-void	re_parsing(t_list **g_list);
+int		tokenizer(char *line, t_env **env, t_list **list);
+void	re_parsing(t_list **list);
 void	make_redir_node(char **buf, int type, t_list **redir_node);
 int		all_white_space(char *cmdline);
 char	*cmdline_start(char	**cmdline);
-int		make_pipe_node(char **buf, char **line, int *type, t_list **g_list);
-int		make_L_redir_node(char **buf, char **line, int *type, t_list **g_list);
-int		make_R_redir_node(char **buf, char **line, int *type, t_list **g_list);
-int		main_tokenizer(char **cmdline, t_env **env, t_list **g_list);
+int		make_pipe_node(char **buf, char **line, int *type, t_list **list);
+int		make_L_redir_node(char **buf, char **line, int *type, t_list **list);
+int		make_R_redir_node(char **buf, char **line, int *type, t_list **list);
+int		main_tokenizer(char **cmdline, t_env **env, t_list **list);
 void	split_list(t_list **cmd_head, t_list **redir_head,
-			t_list *g_list, char *cmdline);
+			t_list *list, char *cmdline);
 
 /* token_util */
-void	make_node(char **buf, int type, t_list **g_list);
-int		add_arg(char **buf, t_list *g_list);
+void	make_node(char **buf, int type, t_list **list);
+int		add_arg(char **buf, t_list *list);
 int		make_string(char c, char **buf);
 
 /* token_util2 */
-int		open_single_quote(char **line, char **buf, t_list **g_list);
+int		open_single_quote(char **line, char **buf, t_list **list);
 int		open_double_quote(char **line, char **buf, t_env **env,
-			t_list **g_list);
-int		is_white_space(char **line, char **buf, int *type, t_list **g_list);
+			t_list **list);
+int		is_white_space(char **line, char **buf, int *type, t_list **list);
 int		is_dollar(char **line, char **buf, t_env **env);
 
 /* change_dollar */
@@ -93,7 +93,7 @@ char	**change_dollar2(char **line, char **buf, t_env *env);
 
 /* parsing fct */
 int		get_size(char **cmd_table);
-void	re_parsing(t_list **g_list);
+void	re_parsing(t_list **list);
 void	split_cmd_node(t_list *go, t_list *ret);
 void	split_redir_node(t_list *go, t_list *ret);
 char	**duplicate_table(char **cmd_table);
@@ -101,18 +101,18 @@ int		get_file_size(int *files);
 t_list	*create_list(t_list *go);
 int		choice_condition(int type);
 void	init_redir_node(char ***redir_table, int **redir_type_table);
-void	reparse_rewind(t_list **g_list);
-void	split_cmd(t_list **cmd_head, t_list *g_list);
-void	split_redir(t_list **redir_head, t_list *g_list);
+void	reparse_rewind(t_list **list);
+void	split_cmd(t_list **cmd_head, t_list *list);
+void	split_redir(t_list **redir_head, t_list *list);
 
 /* execute fct */
 
-void	execute_bin(t_list *cmd_head, t_env **env, t_list **g_list);
+void	execute_bin(t_list *cmd_head, t_env **env, t_list **list);
 int		process_redir_node(t_list *redir_head, t_list *cmd_head, int copy[]);
-void	execute(t_list *cmd_head, t_list *g_list, t_env **env, char **my_envp);
+void	execute(t_list *cmd_head, t_list *list, t_env **env, char **my_envp);
 void	execute_process(t_list **cmd_head, t_env **env,
-			t_list **g_list, t_list **redir_head);
-void	wait_process(t_list **cmd_head, t_list **g_list);
+			t_list **list, t_list **redir_head);
+void	wait_process(t_list **cmd_head, t_list **list);
 
 /* execute utils */
 void	execute_init(int *pipe_open, int *fd);
@@ -148,12 +148,12 @@ void	free_cmd_table(char **cmd_table);
 
 /* check_cmd */
 int		check_builtin(t_list **cmd_head);
-int		cmd_builtin(t_list **g_list, t_env **env,
+int		cmd_builtin(t_list **list, t_env **env,
 			t_list **cmd_head, char **my_envp);
 
 /* exit */
-void	all_free(t_list **g_list);
-int		builtin_exit(t_list **g_list, t_env **env, t_list **cmd_head);
+void	all_free(t_list **list);
+int		builtin_exit(t_list **list, t_env **env, t_list **cmd_head);
 
 /* env */
 int		builtin_env(char **my_envp, t_list **cmd_head);
@@ -233,6 +233,6 @@ int		error_exit1(t_list **cmd_head);
 int		error_exit2(t_list **cmd_head);
 
 /* pipe_exist */
-int		pipe_exist(t_list *g_list);
+int		pipe_exist(t_list *list);
 
 #endif
