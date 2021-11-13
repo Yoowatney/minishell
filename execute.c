@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 00:54:48 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/11 18:33:33 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/13 20:25:41 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	child_process(t_list **cmd_head, t_list **list,
 	else if (check_builtin(cmd_head) == 1)
 		execute_builtin(cmd_head, list, env, my_envp);
 	else
-	    execute((*cmd_head), *list, env, my_envp);
+		execute((*cmd_head), *list, env, my_envp);
 }
 
 void	execute_bin(t_list *cmd_head, t_env **env, t_list **list)

@@ -4,7 +4,7 @@
 *.o
 *.vscode
 .DS*
-minishell*
+minishell
 libft/libft.a
 
 *.gch

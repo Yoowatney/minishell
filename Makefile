@@ -23,7 +23,7 @@ SRCS		=	./main.c ./signal.c ./execute.c ./tokenizer.c ./main_utils.c \
 				./cd_oldpwd.c ./cd_util.c ./change_dollar.c\
 				./change_dollar2.c ./main_utils3.c\
 				./tokenizer_util.c ./tokenizer_util2.c ./execute_utils.c\
-				./echo_util.c ./cd_only.c\
+				./echo_util.c ./cd_only.c
 
 OBJ			=	$(SRCS:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: yoyoo <yoyoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 16:14:41 by yoyoo             #+#    #+#             */
-/*   Updated: 2021/11/11 03:27:37 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/13 20:26:17 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 
 int	make_pipe_node(char **buf, char **line, int *type, t_list **list)
 {
-	int	error_num;
+	int		error_num;
+	char	*temp;
 
+	temp = *line;
 	error_num = 0;
-	if ((*buf == NULL && list == NULL) || **(line + 1) == '|')
+	if ((*buf == NULL && *list == NULL) || *(temp + 1) == '|')
 		return (-1);
 	else if (*buf != NULL)
 		make_node(buf, TOKEN_END, list);
