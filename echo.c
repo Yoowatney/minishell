@@ -6,7 +6,7 @@
 /*   By: jlim <jlim@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 17:30:05 by jlim              #+#    #+#             */
-/*   Updated: 2021/11/10 19:45:02 by yoyoo            ###   ########.fr       */
+/*   Updated: 2021/11/14 18:22:45 by jlim             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,30 +73,54 @@ int	only_echo(t_list **cmd_head)
 	return (1);
 }
 
+void	check_n_flag(char ***print, int *n_flag, int *print_i)
+{
+	int	i;
+	int	flag;
+
+	i = 2;
+	flag = 0;
+	while (ft_strncmp(**print, "-n", 2) == 0)
+	{
+		i = 2;
+		while ((**print)[i] != '\0')
+		{
+			if ((**print)[i] == 'n')
+				i++;
+			else if ((**print)[i] != '\0')
+			{
+				flag = 1;
+				break ;
+			}
+		}
+		if (flag == 1)
+			break ;
+		*n_flag = 1;
+		(*print)++, (*print_i)++;
+	}
+}
+
 int	builtin_echo(t_list **cmd_head)
 {
 	char	**print;
 	int		n_flag;
-	int		i;
+	int		print_i;
 
-	i = 0;
+	print_i = 0;
 	if (only_echo(cmd_head) == 0)
 		return (0);
 	n_flag = 0;
-	print = delete_null(cmd_head), print++, i++;
-	while (ft_strcmp(*print, "-n") == 0)
+	print = delete_null(cmd_head), print++, print_i++;
+	check_n_flag(&print, &n_flag, &print_i);
+	if (*print == NULL)
 	{
-		n_flag = 1, print++, i++;
-		if (*print == NULL)
-		{
-			free_cmd_table(print - i);
-			return (0);
-		}
+		free_cmd_table(print - print_i);
+		return (0);
 	}
 	if (echo_util(cmd_head, print, n_flag) == 1)
 		return (0);
 	else
 		echo_util2(print, n_flag);
-	free_cmd_table(print - i);
+	free_cmd_table(print - print_i);
 	return (0);
 }
