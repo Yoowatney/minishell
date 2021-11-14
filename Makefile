@@ -4,7 +4,7 @@ CC			=	gcc
 
 INC			=	-I./includes/ -I/Users/$(USER)/.brew/opt/readline/include
 
-FLAGS		=	-Wall -Wextra -Werror -g #-fsanitize=address
+FLAGS		=	-Wall -Wextra -Werror #-g #-fsanitize=address
 
 LIBFT_PATH	=	./libft
 

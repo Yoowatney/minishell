@@ -6,7 +6,7 @@
 /*   By: jlim <jlim@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 17:30:05 by jlim              #+#    #+#             */
-/*   Updated: 2021/11/14 18:22:45 by jlim             ###   ########.fr       */
+/*   Updated: 2021/11/14 18:52:43 by yoyoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,8 @@ void	check_n_flag(char ***print, int *n_flag, int *print_i)
 		if (flag == 1)
 			break ;
 		*n_flag = 1;
-		(*print)++, (*print_i)++;
+		(*print)++;
+		(*print_i)++;
 	}
 }
 
